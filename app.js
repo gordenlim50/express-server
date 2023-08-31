@@ -67,8 +67,6 @@ app.post('/get_selfcali', async function(req, res) {
     var cct_max = req.body.inputcct_max;
     var cct_step = req.body.inputcct_step;
 
-   
-    
     if (bri_min != "" && bri_min >= 5 && bri_min <= 250 && bri_min != bri_max){
         console.log("Bri min: " + bri_min);
 
@@ -207,7 +205,7 @@ app.post("/getCRI_OL", async function(req, res){
 
 app.post("/getCRI_CL", async function(req, res){
     var cri = req.body.data;
-    console.log("Target CRI: ", cri);
+    console.log("Target CRI CL: ", cri);
 
     try {
         const processedData = await executePython('python/P_Controller(CRI).py', [cri]);
@@ -238,7 +236,6 @@ app.post("/getMEDI_MDER_OL", async function(req, res) {
                 const processedData = await executePython('python/Open_loop(Medi_Mder).py', [medi, mder]);
                 res.json({ processedData }); 
                 console.log(processedData)
-    
             } catch (error) {
                 res.status(500).json({ error: error }); 
             }

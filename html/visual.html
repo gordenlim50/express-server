@@ -260,7 +260,9 @@
               criInputDisplay(inputCRI.value);
               const result = await response.json();
               updateResults(result.processedData, 'cri'); 
-              covering.style.display = 'none'; 
+              covering.style.display = 'none';
+              close_loop.style.display = 'block';
+              toggle_switch.style.display = 'block'; 
             });
 
             if (inputCCT.value != "" && inputPlux.value == "" && inputCRI.value == ""){
