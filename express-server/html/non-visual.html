@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Set Light Spectrum</title>
+    <!-- Link To CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Box Icons -->
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="nav container">
+            <!-- Menu Icon -->
+            <div class="bulb-icon">
+                <i class='bx bx-bulb' id="bulb-icon"></i>
+            </div>
+            
+            <!-- Logo -->
+            <div class = "log">
+                <ul>
+                    <li><a class="logo">Intelligent Lighting Laboratory</a></li>
+                </ul>
+            </div>
+        </div> 
+    </header>
+    <section id="ovrflw" class="backgrd">
+        <div class = "nvm">
+            <h1>Non-Visual Metrics:</h1>
+        </div>
+
+        <div class = "MEDI_MDER">
+            <h1>Melanopic Equivalent Daylight Illuminance (MEDI)</h1>
+            <p>(Suggested range: 0lux - 200lux)</p>
+            <p> & </p>
+            <h1>Melanopic Daylight Efficacy Ratio (MDER)</h1>
+            <p>(Suggested range: 0 - 1)</p>
+            <input type="text" name="get_medi", id="get_medi", class="input-field-medi", placeholder="Set Desired MEDI", min="50", max="250"> 
+            <button id="set-button-medi-mder" class="set-button-medi-mder">Set</button>    
+            <input type="text" name="get_mder", id="get_mder", class="input-field-mder", placeholder="Set Desired MDER", min="0", max ="1" >   
+        </div>
+    
+        <div class ="back">
+            <a href="/metrics" class="home-btn"> Back </a> 
+        </div>
+        <div class ="cover">
+            <h1>Illuminating Life Intelligently</h1>
+            <p>We aim to fulfill all the choices and preferences of our customers.</p>
+            <img src="/image/blue-hourglass.gif" alt="name" class="glasshour"/> 
+            <img src="/image/logo.png" alt="uni_logo" class="uni_logo"/> 
+        </div>
+        <div class = "vl"></div>
+        <div class ="clear">
+            <button id="clearbutton" class="clearbutton">Clear Results</button>
+        </div>
+
+        <div class ="target-content">
+            <h1>Target Metrics</h1>
+            <p id="inputDisplay"> </p>
+        </div>
+        <div class = "close-loop">
+            <h1> Close-Loop P Control:</h1>  
+        </div>
+        <label class="switch">
+            <input id="toggle" type="checkbox">
+            <span class="slider round"></span>
+        </label>
+
+        <div class = "result-content" >
+            <h1>Measured Results:</h1>
+            <div  id="result-box" class="result-box"></div>
+        </div>
+        <div class= "plot" id='myDiv'></div>
+        <div class = "energy-content" >
+            <h1> Estimated Energy Usage </h1>
+            <div id="result-box2" class="result-box2"> </div>
+        </div>
+        <div class = "occupancy" >
+            <h1> Occupancy Status </h1>
+            <div class = "result-box3">
+                <div class="Presence"> Presence: </div>
+                <div class="Detected"> Person Detected: </div>
+            </div>
+        </div>
+
+        <script>
+            // Button Constant
+            const medi_mderButton = document.getElementById('set-button-medi-mder');
+            const clearButton = document.getElementById('clearbutton');
+            const closeloopctrl = document.getElementById('toggle');
+
+            // Input Constant of Visual metrics
+            const inputMedi = document.getElementById('get_medi');
+            const inputMder = document.getElementById('get_mder');
+
+            // Result Boxes Constant
+            const dataResult = document.getElementById('result-box');
+            const dataResult2 = document.getElementById('result-box2');
+
+            // Display constant
+            const sliderInput = document.querySelector('.switch input');
+            const glasshourGif = document.querySelector('.glasshour');
+            const covering = document.querySelector('.cover');
+            const close_loop = document.querySelector('.close-loop');
+            const toggle_switch = document.querySelector('.switch');
+
+
+            // Create SPD plot
+            function createPlot(yValues) {
+                var SPM_return = {
+                x: [380, 385, 390, 395, 400, 405, 410, 415, 420, 425, 430, 435, 440, 445, 450, 455, 
+                460, 465, 470, 475, 480, 485, 490, 495, 500, 505, 510, 515, 520, 525, 530, 535, 540, 
+                545, 550, 555, 560, 565, 570, 575, 580, 585, 590, 595, 600, 605, 610, 615, 620, 625, 
+                630, 635, 640, 645, 650, 655, 660, 665, 670, 675, 680, 685, 690, 695, 700, 705, 710, 
+                715, 720, 725, 730, 735, 740, 745, 750, 755, 760, 765, 770, 775, 780],
+                y: yValues,
+                type: 'scatter'
+            };
+
+            var data = [SPM_return];
+            var layout = {
+                height: 400,
+                width: 500,
+                margin: {
+                t: 50,  // Top margin
+                b: 60,  // Bottom margin
+                l: 50,  // Left margin
+                r: 20   // Right margin
+                },
+                title: {text: 'Plot of SPD', 
+                font: {
+                    size: 23, 
+                    weight: 'bolder'
+                }
+                },
+                xaxis: {
+                title: 'Wavelength (nm)',
+                titlefont: {size: 12},
+                tickfont: { size: 10}
+                },
+                yaxis: {
+                title: 'Spectral Power Density (mW/m^2/nm)',
+                titlefont: {size: 12},
+                tickfont: { size: 10}
+                }
+            };
+
+            Plotly.newPlot('myDiv', data, layout);
+            }
+
+            
+
+            // Assuming you have a function to update the results on the HTML page
+            function updateResults(results, buttonClicked) {
+            const medi_mderColor = buttonClicked === 'medi_mder' ? 'rgba(11, 73, 241, 0.615); font-weight: bold;' : 'white';
+           
+            dataResult.innerHTML = `
+                <p> CCT: ${results['Measured CCT']} K</p>
+                <p> Plux: ${results['Measured plux']} lux</p>
+                <p> CRI: ${results['Measured CRI']}</p> 
+                <p> MEDI: <span style="color: ${medi_mderColor}"> ${results['Measured medi']} lux </span></p>
+                <p> MDER: <span style="color: ${medi_mderColor}"> ${results['Measured mder']} </span></p>
+            `;
+
+            dataResult2.innerHTML = `
+                <p> LER: ${results['Measured LER']} lm/W</p>
+                <p> Lumen: ${results['Measured Lumen']} lm</p>
+            `;
+
+            createPlot(results['SPM_interpolated']);
+
+            }
+
+            function mediInputDisplay(medi, mder) {
+                const inputDisplay = document.getElementById('inputDisplay');
+                inputDisplay.innerHTML = `Target MEDI: <span style="color: rgba(11, 73, 241, 0.615); font-weight: bold;"> ${medi} lux </span>,
+                Target MDER: <span style="color: rgba(11, 73, 241, 0.615); font-weight: bold;"> ${mder} lux </span>`;
+            }
+
+            clearButton.addEventListener('click', async () => {
+                glasshourGif.style.display = 'none';
+                covering.style.display = 'flex';
+                inputMedi.value = '';
+                inputMder.value = '';
+            });
+
+            medi_mderButton.addEventListener('click', async () => {
+                glasshourGif.style.display = 'block';
+                const requestData = {
+                    inputmedi: inputMedi.value,
+                    inputmder: inputMder.value
+                };
+
+                const response = await fetch('/getMEDI_MDER_OL', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestData)
+              });
+              medi_mderInputDisplay(inputMedi.value, inputMder.value)
+              const result = await response.json();
+              updateResults(result.processedData, 'medi_mder');  
+              covering.style.display = 'none';
+            });
+
+            closeloopctrl.addEventListener('click', async ()=>{
+                covering.style.display = 'flex';
+                glasshourGif.style.display = 'block';
+
+                const requestData = {
+                    inputmedi: inputMedi.value,
+                    inputmder: inputMder.value
+                };
+
+                const response = await fetch('/getMEDI_MDER_CL', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestData)
+              });
+              medi_mderInputDisplay(inputMedi.value, inputMder.value)
+              const result = await response.json();
+              updateResults(result.processedData, 'medi_mder');  
+              covering.style.display = 'none';
+
+            });
+
+        </script>
+
+
+    </section>
+    <!-- Link To JS -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src='https://cdn.plot.ly/plotly-2.25.2.min.js'></script>
+</body>
+</html>

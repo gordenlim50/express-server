@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Set Light Spectrum</title>
+    <!-- Link To CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- Box Icons -->
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="nav container">
+            <!-- Menu Icon -->
+            <div class="bulb-icon">
+                <i class='bx bx-bulb' id="bulb-icon"></i>
+            </div>
+            <!-- Logo -->
+            <div class = "log">
+                <ul>
+                    <li><a class="logo" id="logo">Intelligent Lighting Laboratory</a></li>
+                </ul>
+            </div>
+        </div> 
+    </header>
+
+    <!-- Banner -->
+    <section id="ovrflw" class="backgrd">
+        <div class ="note">
+            <h1> Important Note* </h1>
+            <p> 1. Ensure the sensor is correctly positioned at the designated location. </p>
+            <p> 2. The calibration process may exceed the estimated time collection; kindly do not interupt the process</p>
+            <p> 3. Ensure nobody enters the room during the calibration process.</p>
+            <p> 4. Tuning of light is prohibited once the calibration process is started. </p>
+            <p> 5. The measured data will be saved in an excel file. </p>
+            <p> 6. Repeat the calibration process, if there are errors in the data collected. </p>
+        </div>
+
+        <div class ="setting">
+            <h1>Self-Calibration</h1>
+            <p>(Suggested bri range: 5-250)</p>
+            <input type="text" name="get_bri_min", id="get_bri_min", class="get_bri_min", placeholder="Min Bri", min="5", max="250">
+            <span> to</span>
+            <input type="text" name="get_bri_max", id="get_bri_max", class="get_bri_max", placeholder="Max Bri", min="5", max="250"> 
+            <input list="bri_step" name="get_bri_step", id="get_bri_step", class="get_bri_step", placeholder="Steps", min="5", max="10">
+            <datalist id="bri_step">
+                <option value="5">
+                <option value="10">
+                <option value="15">
+                <option value="20">
+            </datalist>
+            <p>(Suggested CCT range: 2000K - 6500K)</p>
+            <input type="text" name="get_cct_min", id="get_cct_min", class="get_cct_min", placeholder="Min CCT", min="2000", max="6500"> 
+            <span>to</span>
+            <input type="text" name="get_cct_max", id="get_cct_max", class="get_cct_max", placeholder="Max CCT", min="2000", max="6500"> 
+            <input list="cct_step" name="get_cct_step", id="get_cct_step", class="get_cct_step", placeholder="Steps", min="50", max="100">
+            <datalist id="cct_step">
+                <option value="50">
+                <option value="100">
+                <option value="150">
+                <option value="200">
+            </datalist>
+            <button id="set-calibration" class="set-calibration"> Start Collection </button> 
+        </div>
+
+        <div class ="resultcali">
+            <h1> Done Collecting for </h1>
+            <div id="result-cali" class="result-cali"></div>
+        </div>
+        <div class ="home">
+            <a href='/' class="home-btn"> Home</a> 
+        </div>
+
+        <script>
+            // Button Constant 
+            const caliButton = document.getElementById('set-calibration');
+
+            // Input Constant
+            const bri_min = document.getElementById('get_bri_min');
+            const bri_max = document.getElementById('get_bri_max');
+            const bri_step = document.getElementById('get_bri_step');
+            const cct_min = document.getElementById('get_cct_min');
+            const cct_max = document.getElementById('get_cct_max');
+            const cct_step = document.getElementById('get_cct_step');
+
+             // Result Boxes Constant
+             const dataResult = document.getElementById('result-cali');
+
+            function updateResults(results) {
+            dataResult.innerHTML = `
+                <p> Bri: ${results['bri']} </p>
+                <p> CCT: ${results['cct']} </p>
+            `;
+            }
+            caliButton.addEventListener('click', async () =>{
+                const requestData = {
+                    inputbri_min: bri_min.value,
+                    inputbri_max: bri_max.value,
+                    inputbri_step: bri_step.value,
+                    inputcct_min: cct_min.value,
+                    inputcct_max: cct_max.value,
+                    inputcct_step: cct_step.value,
+                };
+
+                const response = await fetch('/get_selfcali', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestData)
+            });
+                const result = await response.json();
+                updateResults(result.processedData); 
+                
+                bri_min.value = '';
+                bri_max.value = '';
+                bri_step.value = '';
+                cct_min.value = '';
+                cct_max.value = '';
+                cct_step.value = '';
+
+            });
+
+        </script>        
+    </section> 
+</body>
+</html>
