@@ -52,6 +52,8 @@ app.get('/ja', (req, res)=>{
 })
 
 
+
+
 /// ==================================================== Data Collection.html ======================================================================= ///
 app.get('/selfcali', (req, res)=>{
     res.sendFile(__dirname + '/html/selfcali.html')

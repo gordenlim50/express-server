@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Set Light Spectrum</title>
     <!-- Link To CSS -->
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/style_ja.css">
     <!-- Box Icons -->
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
@@ -33,14 +33,24 @@
             <h1> -> Light Simulator with Indoor Daylight Prediction <- </h1>
         </div>
         
-        <div class = "CCT">
-            <h1>Corelated Colour Temperature (CCT)</h1>
-            <p>(Suggested range: 2500K - 6500K)</p>
-            <input type="text" name ="get_cct", id="get_cct", class="input-field-cct", placeholder="Set Desired CCT", min="2500", max="6000" > 
-            <button id="set-button-cct" class="set-button-cct">Set</button>
+        <div class = "ja_input_box">
+            <h1>Set Your Inputs</h1>
+            <!-- <p>(Suggested range: 2500K - 6500K)</p> -->
+            <label for="curtainInput" class="ja_input_select_text">Curtain Opened Percentage: </label>
+            <select id="curtainInput" name="curtainInput" class="ja_input_select">
+                <option value="0">0%</option>
+                <option value="10">10%</option>
+                <option value="25">25%</option>
+                <option value="50">50%</option>
+                <option value="75">75%</option>
+                <option value="90">90%</option>
+                <option value="100">100%</option>
+            </select><br>
+            <input type="text" name ="get_cct", id="get_cct", class="ja_input_text", placeholder="Set", min="2500", max="6000" ><br>
+            <button id="ja_input_set" class="ja_input_button">Set</button>
         </div>
 
-        <div class = "Plux">
+        <!-- <div class = "Plux">
             <h1>Photopic Illuminance (Plux)</h1>
             <p>(Suggested range: 0lux - 250lux)</p>
             <input type="text" name="get_plux", id="get_plux", class="input-field-plux", placeholder="Set Desired Plux",min="50", max="250" > 
@@ -52,7 +62,7 @@
             <p>(Suggested range: 0-100)</p>
             <input type = "text" name = "get_cri", id = "get_cri", class = "input-field-cri", placeholder="Set Desired CRI", min="0", max="100"> 
             <button id="set-button-cri" class="set-button-cri">Set</button>            
-        </div>
+        </div> -->
         
         <div class ="back">
             <a href="/" class="back-btn"> Home </a> 
