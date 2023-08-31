@@ -32,11 +32,15 @@
         <div class = "vm">
             <h1> -> Light Simulator with Indoor Daylight Prediction <- </h1>
         </div>
+
+        <div class = "ja_time">
+            <h1 id="dateTime"></h1>
+        </div>
         
         <div class = "ja_input_box">
             <h1>Set Your Inputs</h1>
             <!-- <p>(Suggested range: 2500K - 6500K)</p> -->
-            <label for="curtainInput" class="ja_input_select_text">Curtain Opened Percentage: </label>
+            <label for="curtainInput" class="ja_input_select_text">Curtain opened percentage: </label>
             <select id="curtainInput" name="curtainInput" class="ja_input_select">
                 <option value="0">0%</option>
                 <option value="10">10%</option>
@@ -46,44 +50,71 @@
                 <option value="90">90%</option>
                 <option value="100">100%</option>
             </select><br>
-            <input type="text" name ="get_cct", id="get_cct", class="ja_input_text", placeholder="Set", min="2500", max="6000" ><br>
-            <button id="ja_input_set" class="ja_input_button">Set</button>
+            <label for="metricsInput" class="ja_input_select_text">Desired pair metrics: </label>
+            <select id="metricsInput" name="metricsInput" class="ja_input_select">
+                <option value="-1">None</option>
+                <option value="0">CCT & Photopic Lux</option>
+                <option value="1">CCT & MEDI</option>
+            </select><br>
+            <div id="ja_selected_pair1" style="display: none;">
+                <label for="ja_get_cct" class="ja_input_select_text">Desired CCT: </label>
+                <input type="text" name ="ja_get_cct", id="ja_get_cct", class="ja_input_text", placeholder="2000K ~ 6500K", min="2000", max="6500" ><br>
+                <label for="ja_get_plux" class="ja_input_select_text">Desired Plux: </label>
+                <input type="text" name ="ja_get_plux", id="ja_get_plux", class="ja_input_text", placeholder="0lx ~ 250lx", min="0", max="250" ><br>
+            </div>
+            <div id="ja_selected_pair2" style="display: none;">
+                <label for="ja_get_cct" class="ja_input_select_text">Desired CCT: </label>
+                <input type="text" name ="ja_get_cct", id="ja_get_cct", class="ja_input_text", placeholder="2000K ~ 6500K", min="2000", max="6500" ><br>
+                <label for="ja_get_medi" class="ja_input_select_text">Desired MEDI: </label>
+                <input type="text" name ="ja_get_medi", id="ja_get_medi", class="ja_input_text", placeholder="0lx ~ 200lx", min="0", max="200" ><br>
+            </div>
+            
+            <br><button id="openPopup" class="ja_input_button">Select Target Zone</button>
+            <span class="ja_text" id="selectedZone" style="display: none;"></span>
+            <div class="popup" id="popup">
+                <div class="popup-content">
+                <!-- Create a 6x4 matrix of buttons -->
+                <!-- You can replace the text with your own content -->
+                <button class="popup-button">Zone 1</button>
+                <button class="popup-button">Zone 2</button>
+                <button class="popup-button">Zone 3</button>
+                <button class="popup-button">Zone 4</button>
+                <button class="popup-button">Zone 5</button>
+                <button class="popup-button">Zone 6</button>
+                <button class="popup-button">Zone 7</button>
+                <button class="popup-button">Zone 8</button>
+                <button class="popup-button">Zone 9</button>
+                <button class="popup-button">Zone 10</button>
+                <button class="popup-button">Zone 11</button>
+                <button class="popup-button">Zone 12</button>
+                <button class="popup-button">Zone 13</button>
+                <button class="popup-button">Zone 14</button>
+                <button class="popup-button">Zone 15</button>
+                <button class="popup-button">Zone 16</button>
+                <button class="popup-button">Zone 17</button>
+                <button class="popup-button">Zone 18</button>
+                <button class="popup-button">Zone 19</button>
+                <button class="popup-button">Zone 20</button>
+                <button class="popup-button">Zone 21</button>
+                <button class="popup-button">Zone 22</button>
+                <button class="popup-button">Zone 23</button>
+                <button class="popup-button">Zone 24</button>
+                </div>
+            </div>
+            
+            <br><br><button id="ja_input_set" class="ja_input_button">Set</button>
         </div>
 
-        <!-- <div class = "Plux">
-            <h1>Photopic Illuminance (Plux)</h1>
-            <p>(Suggested range: 0lux - 250lux)</p>
-            <input type="text" name="get_plux", id="get_plux", class="input-field-plux", placeholder="Set Desired Plux",min="50", max="250" > 
-            <button id="set-button-plux" class="set-button-plux">Set</button>     
-        </div>
-
-        <div class = "CRI">
-            <h1>Colour Rendering Index (CRI)</h1>
-            <p>(Suggested range: 0-100)</p>
-            <input type = "text" name = "get_cri", id = "get_cri", class = "input-field-cri", placeholder="Set Desired CRI", min="0", max="100"> 
-            <button id="set-button-cri" class="set-button-cri">Set</button>            
-        </div> -->
+        
         
         <div class ="back">
             <a href="/" class="back-btn"> Home </a> 
-        </div>
-        
-        
-        <div class ="clear">
-            <button id="clearbutton" class="clearbutton">Clear Results</button>
         </div>
         
         <div class ="target-content">
             <h1>Target Metrics</h1>
             <p id="inputDisplay"> </p>
         </div>
-        <div class = "close-loop">
-            <h1> Close-Loop P Control:</h1>  
-        </div>
-        <label class="switch">
-            <input id="toggle" type="checkbox">
-            <span class="slider round"></span>
-        </label>
 
         <div class = "result-content" >
             <h1>Measured Metrics Results:</h1>
@@ -103,6 +134,52 @@
         </div>
 
         <script>
+            function updateDateTime() {
+                const dateTimeElement = document.getElementById('dateTime');
+                const now = new Date();
+                const formattedDateTime = now.toLocaleString(); // Format the date and time
+                
+                dateTimeElement.textContent = formattedDateTime;
+            }
+            // Update the date and time initially
+            updateDateTime();
+            // Update the date and time every second
+            setInterval(updateDateTime, 1000);
+
+
+            const openPopupButton = document.getElementById("openPopup");
+            const popup = document.getElementById("popup");
+            const selectedZone = document.getElementById("selectedZone");
+            openPopupButton.addEventListener("click", () => {
+            popup.style.display = "flex";
+            });
+            // Add event listeners to each popup button
+            const popupButtons = document.querySelectorAll(".popup-button");
+            popupButtons.forEach(button => {
+            button.addEventListener("click", () => {
+                selectedZone.innerText = "Selected zone: " + button.innerText;
+                selectedZone.style.display = "block";
+                popup.style.display = "none";
+            });
+            });
+
+            const metricsInput = document.getElementById("metricsInput");
+            const selectedPair1Div = document.getElementById("ja_selected_pair1");
+            const selectedPair2Div = document.getElementById("ja_selected_pair2");
+            metricsInput.addEventListener("change", function () {
+                if (metricsInput.value === "0") {
+                    selectedPair1Div.style.display = "block";
+                    selectedPair2Div.style.display = "none";
+                } else if (metricsInput.value === "1") {
+                    selectedPair1Div.style.display = "none";
+                    selectedPair2Div.style.display = "block";
+                }
+            });
+            
+
+
+            
+            ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // Button Constant
             const cctButton = document.getElementById('set-button-cct');
             const pluxButton = document.getElementById('set-button-plux');
