@@ -398,6 +398,9 @@ app.post("/get_Plux_MEDI_CL", async function(req, res){
     var plux = req.body.inputplux;
     var medi = req.body.inputmedi;
 
+    console.log("Target Plux: " + plux);
+    console.log("Target Medi: " + medi);
+
     try {
         const processedData  = await executePython('python/P_Controller(Plux_Medi).py', [plux, medi]);
         res.json({ processedData }); 
