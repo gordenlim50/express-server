@@ -63,10 +63,14 @@ app.post('/predict', async function(req, res) {
         res.status(500).json({ error: error }); 
     }
 });
+/// ==================================================== Music & Light.html ======================================================================= ///
+app.get('/audio', (req, res)=>{
+    res.sendFile(__dirname + '/html/music.html')
+})
 
 
 /// ==================================================== Data Collection.html ======================================================================= ///
-app.get('/selfcali', (req, res)=>{
+app.get('/collect', (req, res)=>{
     res.sendFile(__dirname + '/html/collect.html')
 })
 
