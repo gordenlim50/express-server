@@ -220,6 +220,10 @@
                 toggle_switch.style.display = 'none';
                 inputCCT_cp.value = ''; 
                 inputPlux_cp.value = '';
+                inputCCT_cm.value = '';
+                inputMedi_cm,value = '';
+                inputPlux_cp.value = '';
+                inputMedi_pm.value = '';
             });
 
             cct_pluxButton.addEventListener('click', async () => {
@@ -244,27 +248,6 @@
               toggle_switch.style.display = 'block';
             });
 
-            closeloopctrl.addEventListener('click', async ()=>{
-                covering.style.display = 'flex';
-                glasshourGif.style.display = 'block';
-                const requestData = {
-                    inputcct: inputCCT_cp.value,
-                    inputplux: inputPlux_cp.value
-                };
-                const response = await fetch('/get_CCT_Plux_CL', {
-                method: 'POST',
-                headers: {
-                'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(requestData)
-             });
-             cct_pluxInputDisplay(inputCCT_cp.value, inputPlux_cp.value)
-             const result = await response.json();
-             updateResults(result.processedData, 'cct_plux'); 
-             covering.style.display = 'none';
-            });
-
-
             cct_mediButton.addEventListener('click', async () => {
                 glasshourGif.style.display = 'block';
                 const requestData = {
@@ -272,7 +255,7 @@
                     inputmedi: inputMedi_cm.value
                 };
                 
-                const response = await fetch('/get_CCT_MEDI', {
+                const response = await fetch('/get_CCT_MEDI_OL', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json'
@@ -283,9 +266,8 @@
               const result = await response.json();
               updateResults(result.processedData, 'cct_medi'); 
               covering.style.display = 'none';
-              
-              inputCCT_cm.value = ''; 
-              inputMedi_cm.value = ''; 
+              close_loop.style.display = 'block';
+              toggle_switch.style.display = 'block';
             });
 
             plux_mediButton.addEventListener('click', async () => {
@@ -295,7 +277,7 @@
                     inputmedi: inputMedi_pm.value
                 };
 
-                const response = await fetch('/get_Plux_MEDI', {
+                const response = await fetch('/get_Plux_MEDI_OL', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json'
@@ -306,8 +288,70 @@
               const result = await response.json();
               updateResults(result.processedData, 'plux_medi');  
               covering.style.display = 'none';
-              inputPlux_pm.value = ''; 
-              inputMedi_pm.value = ''; 
+              close_loop.style.display = 'block';
+              toggle_switch.style.display = 'block';
+            });
+
+            closeloopctrl.addEventListener('click', async ()=>{
+                if(inputCCT_cp.value !== "" && inputPlux_cp.value !== ""){
+                    covering.style.display = 'flex';
+                    glasshourGif.style.display = 'block';
+                    const requestData = {
+                        inputcct: inputCCT_cp.value,
+                        inputplux: inputPlux_cp.value
+                    };
+                    const response = await fetch('/get_CCT_Plux_CL', {
+                    method: 'POST',
+                    headers: {
+                    'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestData)
+                    });
+                    cct_pluxInputDisplay(inputCCT_cp.value, inputPlux_cp.value)
+                    const result = await response.json();
+                    updateResults(result.processedData, 'cct_plux'); 
+                    covering.style.display = 'none';
+
+                } else if(inputCCT_cm.value !== "" && inputMedi_cm !== ""){
+                    covering.style.display = 'flex';
+                    glasshourGif.style.display = 'block';
+                    const requestData = {
+                        inputcct: inputCCT_cm.value,
+                        inputmedi: inputMedi_cm.value
+                    };
+                    
+                    const response = await fetch('/get_CCT_MEDI_CL', {
+                    method: 'POST',
+                    headers: {
+                    'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestData)
+                    });
+                    cct_mediInputDisplay(inputCCT_cm.value, inputMedi_cm.value)
+                    const result = await response.json();
+                    updateResults(result.processedData, 'cct_medi'); 
+                    covering.style.display = 'none';
+
+                } else if(inputPlux_pm.value !== "" && inputMedi_pm.value !== ""){
+                    glasshourGif.style.display = 'block';
+                    const requestData = {
+                        inputplux: inputPlux_pm.value,
+                        inputmedi: inputMedi_pm.value
+                    };
+
+                    const response = await fetch('/get_Plux_MEDI_CL', {
+                    method: 'POST',
+                    headers: {
+                    'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestData)
+                });
+                plux_mediInputDisplay(inputPlux_pm.value, inputMedi_pm.value)
+                const result = await response.json();
+                updateResults(result.processedData, 'plux_medi');  
+                covering.style.display = 'none';
+
+                } 
             });
         </script>
 

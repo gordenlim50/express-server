@@ -318,7 +318,8 @@ app.post("/get_CCT_Plux_CL", async function(req, res){
 })
 
 
-// --- GET desired CCT & Medi --- // 
+// --- GET desired CCT & Medi --- //
+// Open Loop  
 app.post("/get_CCT_MEDI", async function(req, res){
     var cct = req.body.inputcct;
     var medi = req.body.inputmedi;
@@ -328,7 +329,7 @@ app.post("/get_CCT_MEDI", async function(req, res){
         if(medi != "" && medi >= 0 && medi <= 200 ){
             console.log("Target MEDI: " + medi);
             try {
-                const processedData = await executePython('python/P_Controller(CCT_Medi).py', [cct, medi]);
+                const processedData = await executePython('python/Open_loop(CCT_Medi).py', [cct, medi]);
                 res.json({ processedData }); 
                 console.log(processedData) 
     
@@ -345,9 +346,25 @@ app.post("/get_CCT_MEDI", async function(req, res){
     } 
 })
 
+// Close Loop 
+app.post("/get_CCT_MEDI_CL", async function(req,res){
+    var cct = req.body.inputcct;
+    var medi = req.body.inputmedi;
+
+    try {
+        const processedData = await executePython('python/P_Controller(CCT_Medi).py', [cct, medi]);
+        res.json({ processedData }); 
+        console.log(processedData) 
+
+    } catch (error) {
+        res.status(500).json({ error: error }); 
+    }
+    
+})
 
 // --- GET desired Plux & Medi --- // 
-app.post("/get_Plux_MEDI", async function(req, res){
+// Open Loop
+app.post("/get_Plux_MEDI_OL", async function(req, res){
     var plux = req.body.inputplux;
     var medi = req.body.inputmedi;
 
@@ -356,7 +373,7 @@ app.post("/get_Plux_MEDI", async function(req, res){
         if(medi != "" && medi >= 0 && medi <= 200 ){
             console.log("Target MEDI: " + medi);
             try {
-                const processedData  = await executePython('python/P_Controller(Plux_Medi).py', [plux, medi]);
+                const processedData  = await executePython('python/Open_loop(Plux_Medi).py', [plux, medi]);
                 res.json({ processedData }); 
                 console.log(processedData)
     
@@ -371,6 +388,21 @@ app.post("/get_Plux_MEDI", async function(req, res){
             console.log("Input Plux is Null or Invalid");
             res.status(400).alert("Input Plux is Null or Invalid");
     } 
+})
+
+// Close Loop
+app.post("/get_Plux_MEDI_CL", async function(req, res){
+    var plux = req.body.inputplux;
+    var medi = req.body.inputmedi;
+
+    try {
+        const processedData  = await executePython('python/P_Controller(Plux_Medi).py', [plux, medi]);
+        res.json({ processedData }); 
+        console.log(processedData)
+
+    } catch (error) {
+        res.status(500).json({ error: error }); 
+    }
 })
 
 /// ==================================================== Step.html ======================================================================== ///

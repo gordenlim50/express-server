@@ -175,15 +175,18 @@
 
             }
 
-            function mediInputDisplay(medi, mder) {
+            function medi_mderInputDisplay(medi, mder) {
                 const inputDisplay = document.getElementById('inputDisplay');
                 inputDisplay.innerHTML = `Target MEDI: <span style="color: rgba(11, 73, 241, 0.615); font-weight: bold;"> ${medi} lux </span>,
-                Target MDER: <span style="color: rgba(11, 73, 241, 0.615); font-weight: bold;"> ${mder} lux </span>`;
+                Target MDER: <span style="color: rgba(11, 73, 241, 0.615); font-weight: bold;"> ${mder} </span>`;
             }
 
             clearButton.addEventListener('click', async () => {
+                sliderInput.checked = false;
                 glasshourGif.style.display = 'none';
                 covering.style.display = 'flex';
+                close_loop.style.display = 'none';
+                toggle_switch.style.display = 'none';
                 inputMedi.value = '';
                 inputMder.value = '';
             });
@@ -206,6 +209,8 @@
               const result = await response.json();
               updateResults(result.processedData, 'medi_mder');  
               covering.style.display = 'none';
+              close_loop.style.display = 'block';
+              toggle_switch.style.display = 'block';
             });
 
             closeloopctrl.addEventListener('click', async ()=>{

@@ -29,7 +29,7 @@ target2 = target_mder
 diff1 = 10
 diff2 = 10
 
-while abs(diff1) > 6:
+while abs(diff1) > 3:
     val_bri = fitResult_brinvs(target_medi, target_mder)
 
     val_cct = fitResult_CCTnvs(target_medi, target_mder)

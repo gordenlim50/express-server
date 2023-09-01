@@ -17,8 +17,6 @@ url_post = 'https://ece4809api.intlightlab.com/set-lights'
 
 headers = {'Authorization': 'Bearer 0d90d4d9-ac95-4339-836b-7b733f2973f7'} #special token
 
-Kp_medi = 0.6
-Kp_cct = 0.6 
 iteration = 1
 target_medi = int(sys.argv[2])
 target_cct = int(sys.argv[1])

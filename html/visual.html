@@ -265,55 +265,55 @@
               toggle_switch.style.display = 'block'; 
             });
 
-            if (inputCCT.value != "" && inputPlux.value == "" && inputCRI.value == ""){
-                closeloopctrl.addEventListener('click', async () =>{
-                        covering.style.display = 'flex';
-                        glasshourGif.style.display = 'block';
-                        const response = await fetch('/getCCT_CL', {
-                        method: 'POST',
-                        headers: {
-                        'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ data: inputCCT.value })
+            
+            closeloopctrl.addEventListener('click', async () =>{
+                if(inputCCT.value !== ""){
+                    covering.style.display = 'flex';
+                    glasshourGif.style.display = 'block';
+                    const response = await fetch('/getCCT_CL', {
+                    method: 'POST',
+                    headers: {
+                    'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ data: inputCCT.value })
                     });
                     cctInputDisplay(inputCCT.value);
                     const result = await response.json();
                     updateResults(result.processedData, 'cct');  
                     covering.style.display = 'none';
-                });
-            } else if(inputPlux.value != "" && inputCCT.value == "" && inputCRI.value == ""){
-                closeloopctrl.addEventListener('click', async () =>{
-                        covering.style.display = 'flex';
-                        glasshourGif.style.display = 'block';
-                        const response = await fetch('/getPlux_CL', {
-                        method: 'POST',
-                        headers: {
-                        'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ data: inputPlux.value })
+
+                } else if(inputPlux.value !== ""){
+                    covering.style.display = 'flex';
+                    glasshourGif.style.display = 'block';
+                    const response = await fetch('/getPlux_CL', {
+                    method: 'POST',
+                    headers: {
+                    'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ data: inputPlux.value })
                     });
                     pluxInputDisplay(inputPlux.value);
                     const result = await response.json();
                     updateResults(result.processedData, 'plux');
                     covering.style.display = 'none';
-                });
-            } else {
-                closeloopctrl.addEventListener('click', async () =>{
-                        covering.style.display = 'flex';
-                        glasshourGif.style.display = 'block';
-                        const response = await fetch('/getCRI_CL', {
-                        method: 'POST',
-                        headers: {
-                        'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ data: inputCRI.value })
+                    
+                } else if(inputCRI.value !== ""){
+                    covering.style.display = 'flex';
+                    glasshourGif.style.display = 'block';
+                    const response = await fetch('/getCRI_CL', {
+                    method: 'POST',
+                    headers: {
+                    'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ data: inputCRI.value })
                     });
                     criInputDisplay(inputCRI.value);
                     const result = await response.json();
                     updateResults(result.processedData, 'cri'); 
                     covering.style.display = 'none';
-                });
-            }
+                }
+            })
+                
         </script>
 
     </section>
