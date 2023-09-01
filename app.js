@@ -51,7 +51,18 @@ app.get('/ja', (req, res)=>{
     res.sendFile(__dirname + '/html/ja.html')
 })
 
+// --- Daylight Prediction --- //
+app.post('/predict', async function(req, res) {
+    var curtain_perc = req.body.data;
+    try {
+        const processedData = await executePython('python/ja/predictDaylight.py', [curtain_perc]);
+        res.json({ processedData }); 
+        console.log(processedData)
 
+    } catch (error) {
+        res.status(500).json({ error: error }); 
+    }
+});
 
 
 /// ==================================================== Data Collection.html ======================================================================= ///

@@ -30,7 +30,7 @@
     </header>
     <section id="ovrflw" class="backgrd">
         <div class = "vm">
-            <h1> -> Light Simulator with Indoor Daylight Prediction <- </h1>
+            <h1> -> Integrative Light Simulator with Indoor Daylight Prediction <- </h1>
         </div>
 
         <div class = "ja_time">
@@ -38,8 +38,7 @@
         </div>
         
         <div class = "ja_input_box">
-            <h1>Set Your Inputs</h1>
-            <!-- <p>(Suggested range: 2500K - 6500K)</p> -->
+            <h1>Daylight Prediction</h1>
             <label for="curtainInput" class="ja_input_select_text">Curtain opened percentage: </label>
             <select id="curtainInput" name="curtainInput" class="ja_input_select">
                 <option value="0">0%</option>
@@ -50,26 +49,8 @@
                 <option value="90">90%</option>
                 <option value="100">100%</option>
             </select><br>
-            <label for="metricsInput" class="ja_input_select_text">Desired pair metrics: </label>
-            <select id="metricsInput" name="metricsInput" class="ja_input_select">
-                <option value="-1">None</option>
-                <option value="0">CCT & Photopic Lux</option>
-                <option value="1">CCT & MEDI</option>
-            </select><br>
-            <div id="ja_selected_pair1" style="display: none;">
-                <label for="ja_get_cct" class="ja_input_select_text">Desired CCT: </label>
-                <input type="text" name ="ja_get_cct", id="ja_get_cct", class="ja_input_text", placeholder="2000K ~ 6500K", min="2000", max="6500" ><br>
-                <label for="ja_get_plux" class="ja_input_select_text">Desired Plux: </label>
-                <input type="text" name ="ja_get_plux", id="ja_get_plux", class="ja_input_text", placeholder="0lx ~ 250lx", min="0", max="250" ><br>
-            </div>
-            <div id="ja_selected_pair2" style="display: none;">
-                <label for="ja_get_cct2" class="ja_input_select_text">Desired CCT: </label>
-                <input type="text" name ="ja_get_cct2", id="ja_get_cct2", class="ja_input_text", placeholder="2000K ~ 6500K", min="2000", max="6500" ><br>
-                <label for="ja_get_medi" class="ja_input_select_text">Desired MEDI: </label>
-                <input type="text" name ="ja_get_medi", id="ja_get_medi", class="ja_input_text", placeholder="0lx ~ 200lx", min="0", max="200" ><br>
-            </div>
-            
-            <br><button id="openPopup" class="ja_input_button">Select target zone</button>
+
+            <button id="openPopup" class="ja_input_button">Select target zone</button>
             <!-- <span class="ja_text" id="selectedZone" style="display: none;"></span> -->
             <div class="popup" id="popup">
                 <div class="popup-content">
@@ -101,8 +82,34 @@
                 <button class="popup-button">Zone 24</button>
                 </div>
             </div>
+
+            <br><button id="ja_predict" class="ja_input_button">Predict</button>
+        </div>
+
+        <div class = "ja_input_box2">
+            <h1>Set Your Desired Metrics</h1>
+            <!-- <p>(Suggested range: 2500K - 6500K)</p> -->
             
-            <br><br><button id="ja_input_set" class="ja_input_button">Set</button>
+            <label for="metricsInput" class="ja_input_select_text">Desired pair metrics: </label>
+            <select id="metricsInput" name="metricsInput" class="ja_input_select">
+                <option value="-1">None</option>
+                <option value="0">CCT & Photopic Lux</option>
+                <option value="1">CCT & MEDI</option>
+            </select><br>
+            <div id="ja_selected_pair1" style="display: none;">
+                <label for="ja_get_cct" class="ja_input_select_text">Desired CCT: </label>
+                <input type="text" name ="ja_get_cct", id="ja_get_cct", class="ja_input_text", placeholder="2000K ~ 6500K", min="2000", max="6500" ><br>
+                <label for="ja_get_plux" class="ja_input_select_text">Desired Plux: </label>
+                <input type="text" name ="ja_get_plux", id="ja_get_plux", class="ja_input_text", placeholder="0lx ~ 250lx", min="0", max="250" ><br>
+            </div>
+            <div id="ja_selected_pair2" style="display: none;">
+                <label for="ja_get_cct2" class="ja_input_select_text">Desired CCT: </label>
+                <input type="text" name ="ja_get_cct2", id="ja_get_cct2", class="ja_input_text", placeholder="2000K ~ 6500K", min="2000", max="6500" ><br>
+                <label for="ja_get_medi" class="ja_input_select_text">Desired MEDI: </label>
+                <input type="text" name ="ja_get_medi", id="ja_get_medi", class="ja_input_text", placeholder="0lx ~ 200lx", min="0", max="200" ><br>
+            </div>
+            
+            <br><button id="ja_input_set" class="ja_input_button">Set</button>
         </div>
 
         
@@ -111,7 +118,7 @@
             <a href="/" class="back-btn"> Home </a> 
         </div>
         
-        <div class ="target-content">
+        <!-- <div class ="target-content">
             <h1>Target Metrics</h1>
             <p id="inputDisplay"> </p>
         </div>
@@ -119,19 +126,19 @@
         <div class = "result-content" >
             <h1>Measured Metrics Results:</h1>
             <div id="result-box" class="result-box"></div>
-        </div>
+        </div> -->
         <div class= "plot" id='myDiv'></div>
-        <div class = "energy-content" >
+        <!-- <div class = "energy-content" >
             <h1> Estimated Energy Usage </h1>
             <div id="result-box2" class="result-box2"> </div>
-        </div>
-        <div class = "occupancy" >
+        </div> -->
+        <!-- <div class = "occupancy" >
             <h1> Occupancy Status </h1>
             <div class = "result-box3">
                 <div class="Presence"> Presence: </div>
                 <div class="Detected"> Person Detected: </div>
             </div>
-        </div>
+        </div> -->
 
         <script>
             const setButton = document.getElementById("ja_input_set");
@@ -141,6 +148,7 @@
             const pluxInput = document.getElementById("ja_get_plux");
             const cctInput2 = document.getElementById("ja_get_cct2");
             const mediInput = document.getElementById("ja_get_medi");
+            const predictButton = document.getElementById("ja_predict");
             let zonesSelection = 0;
 
 
@@ -217,6 +225,19 @@
                   // Proceed with your action here
                   alert("Inputs are valid. Performing action...");
                 }
+            });
+
+            // For Predict button
+            predictButton.addEventListener('click', async () => {
+                glasshourGif.style.display = 'block';
+                const response = await fetch('/predict', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({ data: curtainInput.value })
+                });
+                const result = await response.json();
             });
             
 

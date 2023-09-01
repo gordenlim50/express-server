@@ -229,7 +229,7 @@ header{
     top: 13.5%;
     left: 2%;
     width: 450px;
-    height: 500px;
+    height: 300px;
     background: transparent;
     border: 2px solid rgba(255, 255, 255, .5);
     border-radius: 20px;
@@ -244,6 +244,31 @@ header{
 }
 
 .ja_input_box p{
+    margin: 0px 0 15px;
+    font-size: 12px;
+    color:#fff;
+}
+
+.ja_input_box2{
+    position: absolute;
+    top: 13.5%;
+    left: 32%;
+    width: 450px;
+    height: 300px;
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, .5);
+    border-radius: 20px;
+    backdrop-filter: blur(20px);
+    text-align: center;
+}
+
+.ja_input_box2 h1{
+    margin: 15px 0 5px;
+    font-size: 16px;
+    color:#fff;
+}
+
+.ja_input_box2 p{
     margin: 0px 0 15px;
     font-size: 12px;
     color:#fff;
