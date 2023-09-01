@@ -749,7 +749,7 @@ color:#fff;
     top: 13.5%;
     left: 9%;
     width: 360px;
-    height: 300px;
+    height: 320px;
     background: transparent;
     border: 2px solid rgba(255, 255, 255, .5);
     border-radius: 20px;
@@ -1116,43 +1116,52 @@ color:#fff;
     position: absolute;
     top: 13%;
     left: 37.5%;
+    width: 300px;
+    height: 90px;
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, .5);
+    border-radius: 20px;
 }
 
 .target-content h1{
+    padding-left: 10px;
     color:#fff;
     font-size: 20px;
-    text-decoration: underline;
+    -webkit-text-stroke: 1px var(--main-color);
+	text-shadow: 0px 4px 4px var(--main-color);
+    /* text-decoration: underline; */
 }
 
 .target-content p{
+    padding-left: 10px;
     font-size: 15px;
+    left: 38.3%;
     color:#fff;
 }
 
 /* Close loop  */
 .close-loop{
     position: absolute;
-    top: 11.8%;
-    right: 9.5%;
-    z-index: 1; 
-    border: 3px solid var(--main-color); 
-    background-color: var(--main-color);
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2); 
-    display: none;
-}
+    top: 12.3%;
+    right: 7.5%;
+    z-index: 1;
+    display: none; 
+} 
 
 .close-loop h1{
     color: #fff;
     font-size: 18px;
+    -webkit-text-stroke: 1px var(--main-color);
+	text-shadow: 0px 4px 4px var(--main-color);
 }
 
 /* Result box */
 .result-content{
     position: absolute;
-    top: 23%;
+    top: 28%;
     left: 37.5%;
     width: 300px;
-    height: 180px;
+    height: 160px;
     background: transparent;
     border: 2px solid rgba(255, 255, 255, .5);
     border-radius: 20px;
@@ -1161,10 +1170,12 @@ color:#fff;
 
 .result-content h1{
     padding-left: 10px;
-    margin: 5px 0 10px;
+    margin: 0px 0 5px;
     font-size: 20px;
     color:#fff;
-    text-decoration: underline;
+    -webkit-text-stroke: 1px var(--main-color);
+	text-shadow: 0px 4px 4px var(--main-color);
+    /* text-decoration: underline; */
 }
 
 .result-box {
@@ -1177,10 +1188,10 @@ color:#fff;
 /* Energy */
 .energy-content{
     position: absolute;
-    top: 52.5%;
+    top: 53%;
     left: 37.5%;
     width: 300px;
-    height: 110px;
+    height: 120px;
     background: transparent;
     border: 2px solid rgba(255, 255, 255, .5);
     border-radius: 20px;
@@ -1189,10 +1200,12 @@ color:#fff;
 
 .energy-content h1{
     padding-left: 10px;
-    margin: 5px 0 10px;
+    margin: 5px 0 5px;
     font-size: 20px;
     color:#fff;
-    text-decoration: underline;
+    -webkit-text-stroke: 1px var(--main-color);
+	text-shadow: 0px 4px 4px var(--main-color);
+    /* text-decoration: underline; */
 }
 
 .result-box2 {
@@ -1205,7 +1218,7 @@ color:#fff;
 /* Occupancy */
 .occupancy{
     position: absolute;
-    top: 71.5%;
+    top: 72.5%;
     left: 37.5%;
     width: 300px;
     height: 110px;
@@ -1217,10 +1230,12 @@ color:#fff;
 
 .occupancy h1{
     padding-left: 10px;
-    margin: 5px 0 10px;
+    margin: 5px 0 5px;
     font-size: 20px;
     color:#fff;
-    text-decoration: underline;
+    -webkit-text-stroke: 1px var(--main-color);
+	text-shadow: 0px 4px 4px var(--main-color);
+    /* text-decoration: underline; */
 }
 
 .result-box3 {
@@ -1232,8 +1247,8 @@ color:#fff;
 
 .plot{
     position: absolute;
-    top: 23%;
-    right: 5.5%;
+    top: 20%;
+    right: 3%;
     border: 15px solid rgba(11, 73, 241, 0.615);
     border-radius: 20px;
 }
@@ -1317,7 +1332,7 @@ color:#fff;
   position: absolute;
   display: inline-block;
   top: 11.5%; 
-  right: 5%;
+  right: 3%;
   width: 60px;
   height: 34px;
   z-index: 2; 

@@ -320,7 +320,7 @@ app.post("/get_CCT_Plux_CL", async function(req, res){
 
 // --- GET desired CCT & Medi --- //
 // Open Loop  
-app.post("/get_CCT_MEDI", async function(req, res){
+app.post("/get_CCT_MEDI_OL", async function(req, res){
     var cct = req.body.inputcct;
     var medi = req.body.inputmedi;
 
@@ -350,6 +350,9 @@ app.post("/get_CCT_MEDI", async function(req, res){
 app.post("/get_CCT_MEDI_CL", async function(req,res){
     var cct = req.body.inputcct;
     var medi = req.body.inputmedi;
+
+    console.log("Target CCT CL: " + cct);
+    console.log("Target MEDI CL: " + medi);
 
     try {
         const processedData = await executePython('python/P_Controller(CCT_Medi).py', [cct, medi]);

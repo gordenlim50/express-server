@@ -17,7 +17,7 @@ url_post = 'https://ece4809api.intlightlab.com/set-lights'
 
 headers = {'Authorization': 'Bearer 0d90d4d9-ac95-4339-836b-7b733f2973f7'} #special token
 
-Kp_plux = 0.6
+Kp_plux = 0.65
 Kp_cct = 0.5 #1.65e-4
 iteration = 1
 error_plux = 1e5
@@ -29,7 +29,7 @@ target2 = target_cct
 diff1 = 100
 diff2 = 100
 
-while diff1 > 5 or diff2 > 50:
+while diff1 > 5 or diff2 > 30:
     # Start the timer at the beginning of each iteration
     start_time = time.time()
 
@@ -85,6 +85,7 @@ while diff1 > 5 or diff2 > 50:
     measured_lumen = measured_plux * 19.77
     measured_medi = data['mlux']
     measured_mder = data['mlux']/data['plux']
+    measured_watt = measured_lumen/measured_LER
 
     diff1 = abs(target1 - measured_plux)
     diff2 = abs(target2 - measured_CCT)
@@ -114,6 +115,7 @@ output_data = {
     "Measured mder": "{:.2f}".format(measured_mder),
     "Measured LER": "{:.2f}".format(measured_LER),
     "Measured Lumen": "{:.2f}".format(measured_lumen),
+    "Measured Watt": "{:.2f}".format(measured_watt),
     "SPM_interpolated": spm_list,
 }
 print(json.dumps(output_data))  # Convert the dictionary to JSON and print it

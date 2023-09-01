@@ -16,11 +16,9 @@ url_post = 'https://ece4809api.intlightlab.com/set-lights'
 headers = {'Authorization': 'Bearer 0d90d4d9-ac95-4339-836b-7b733f2973f7'} #special token
 
 target_CCT = int(sys.argv[1])
-target = target_CCT
+
 input_ct = round(1e6/target_CCT)
 Kp = 1.85e-4
-iteration = 1
-diff = 100
 
 # Post request
 set_light = {

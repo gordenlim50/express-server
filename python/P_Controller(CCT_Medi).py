@@ -85,6 +85,7 @@ while diff1 > 5 or diff2 > 50:
     measured_lumen = measured_plux * 19.77
     measured_medi = data['mlux']
     measured_mder = data['mlux']/data['plux']
+    measured_watt = measured_lumen/measured_LER
 
     diff1 = abs(target1 - measured_medi)
     diff2 = abs(target2 - measured_CCT)
@@ -115,6 +116,7 @@ output_data = {
     "Measured mder": "{:.2f}".format(measured_mder),
     "Measured LER": "{:.2f}".format(measured_LER),
     "Measured Lumen": "{:.2f}".format(measured_lumen),
+    "Measured Watt": "{:.2f}".format(measured_watt),
     "SPM_interpolated": spm_list, 
 }
 print(json.dumps(output_data))  # Convert the dictionary to JSON and print it

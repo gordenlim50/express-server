@@ -61,6 +61,7 @@ while abs(diff) > 50:
     measured_plux = data["plux"] #photopic illuminance 
     measured_lumen = measured_plux * 19.77
     measured_MDER = np.divide(measured_medi, measured_plux)
+    measured_watt = measured_lumen/measured_LER
    
     # Update input_ct
     diff = abs(target - measured_CCT)
@@ -85,6 +86,7 @@ output_data = {
     "Measured mder": "{:.2f}".format(measured_MDER),
     "Measured LER": "{:.2f}".format(measured_LER),
     "Measured Lumen": "{:.2f}".format(measured_lumen),
+    "Measured Watt": "{:.2f}".format(measured_watt),
     "SPM_interpolated": spm_list, 
 }
 print(json.dumps(output_data))  # Convert the dictionary to JSON and print it
