@@ -67,7 +67,7 @@ app.post('/predict', async function(req, res) {
 
 /// ==================================================== Data Collection.html ======================================================================= ///
 app.get('/selfcali', (req, res)=>{
-    res.sendFile(__dirname + '/html/selfcali.html')
+    res.sendFile(__dirname + '/html/collect.html')
 })
 
 app.post('/get_selfcali', async function(req, res) {
