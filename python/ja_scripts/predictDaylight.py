@@ -300,28 +300,28 @@ else:
 # plt.legend()
 # plt.show()
 
-print(f"\n========== Weather Information in {CITY} ==========")
-print(f"Temperature: {temp_celsius:.2f}°C")
-print(f"Temperature feels like: {feels_like_celsius:.2f}°C")
-print(f"Humidity: {humidity:.2f} %")
-print(f"Wind Speed: {wind_speed:.2f} m/s")
-print(f"Cloud Cover: {cloudiness:.2f} %")
-print(f"Sun rises at {sunrise_time} local time")
-print(f"Sun sets at {sunset_time} local time")
-print(f"Description: {description}")
-print(f"Weather retrieving time: {retrieve_time}\n")
+# print(f"\n========== Weather Information in {CITY} ==========")
+# print(f"Temperature: {temp_celsius:.2f}°C")
+# print(f"Temperature feels like: {feels_like_celsius:.2f}°C")
+# print(f"Humidity: {humidity:.2f} %")
+# print(f"Wind Speed: {wind_speed:.2f} m/s")
+# print(f"Cloud Cover: {cloudiness:.2f} %")
+# print(f"Sun rises at {sunrise_time} local time")
+# print(f"Sun sets at {sunset_time} local time")
+# print(f"Description: {description}")
+# print(f"Weather retrieving time: {retrieve_time}\n")
 
-# Print sky parameters
-print(f"=========================== Sky Parameters ===========================")
-print(f"Cloudiness: {cloudiness} %")
-print(f"Air mass: {airmass:.2f}")
-print(f"Direct Normal Irradiance (DNI): {dni:.2f} W/m^2")
-print(f"Diffuse Horizontal Irradiance (DHI): {dhi:.2f} W/m^2")
-print(f"Global Horizontal Irradiance (GHI): {ghi:.2f} W/m^2")
-print(f"Sun Altitude: {altitude:.2f}°")
-print(f"Sun Azimuth: {azimuth:.2f}°\n\n")
+# # Print sky parameters
+# print(f"=========================== Sky Parameters ===========================")
+# print(f"Cloudiness: {cloudiness} %")
+# print(f"Air mass: {airmass:.2f}")
+# print(f"Direct Normal Irradiance (DNI): {dni:.2f} W/m^2")
+# print(f"Diffuse Horizontal Irradiance (DHI): {dhi:.2f} W/m^2")
+# print(f"Global Horizontal Irradiance (GHI): {ghi:.2f} W/m^2")
+# print(f"Sun Altitude: {altitude:.2f}°")
+# print(f"Sun Azimuth: {azimuth:.2f}°\n\n")
 
-print(f"DATA CALCULATION TIME: {retrieve_time}\n")
+# print(f"DATA CALCULATION TIME: {retrieve_time}\n")
 
 
 
