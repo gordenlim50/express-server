@@ -123,8 +123,6 @@ url = BASE_URL + "appid=" + API_KEY + "&q=" + CITY
 # Get weather_data response from Weather API
 weather_data = requests.get(url).json()
 
-#print(weather_data, '\n')
-
 # Getting weather information from the response
 latitude = weather_data['coord']['lat']
 longitude = weather_data['coord']['lon']

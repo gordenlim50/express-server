@@ -55,7 +55,7 @@ app.get('/ja', (req, res)=>{
 app.post('/predict', async function(req, res) {
     var curtain_perc = req.body.data;
     try {
-        const processedData = await executePython('python/ja/predictDaylight.py', [curtain_perc]);
+        const processedData = await executePython('python/ja_scripts/predictDaylight.py', [curtain_perc]);
         res.json({ processedData }); 
         console.log(processedData)
 
