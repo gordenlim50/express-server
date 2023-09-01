@@ -178,7 +178,7 @@ ghi = clear_sky['ghi'].values[0]
 dni = clear_sky['dni'].values[0]
 dhi = clear_sky['dhi'].values[0]
 
-if dni != 0:
+if dni != 0 and curtain != 0:
     # parameters to estimate the solar spectral irradiance using Bird Simple Spectral Model
     albedo = 0.15 # surface albedo in Monash
     surface_pressure = pressure*100 # in Pa
@@ -269,7 +269,8 @@ else:
     plt_spectrum = [0] * 81
     norm_spec = [0] * 81
     zones_spec = [plt_spectrum] * 24
-    plux_all, medi_all, cct_all, cri_all = [0] * 24
+    plux_all, medi_all, cri_all = [0] * 24
+    cct_all = [np.nan] *24
 
 
 # # zones => 0 to 23 (zone 1 to zone 24)

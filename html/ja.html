@@ -86,6 +86,8 @@
             <br><button id="ja_predict" class="ja_input_button">Predict</button>
         </div>
 
+        <div class= "plot" id='myDiv'></div>
+
         <div class = "ja_input_box2">
             <h1>Set Your Desired Metrics</h1>
             <!-- <p>(Suggested range: 2500K - 6500K)</p> -->
@@ -127,7 +129,6 @@
             <h1>Measured Metrics Results:</h1>
             <div id="result-box" class="result-box"></div>
         </div> -->
-        <div class= "plot" id='myDiv'></div>
         <!-- <div class = "energy-content" >
             <h1> Estimated Energy Usage </h1>
             <div id="result-box2" class="result-box2"> </div>
@@ -238,6 +239,7 @@
                   body: JSON.stringify({ data: curtainInput.value })
                 });
                 const result = await response.json();
+                console.log(result.processedData)
             });
             
 
