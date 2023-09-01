@@ -4,7 +4,7 @@ from Ref_light import reflight
 from LER import cal_LER
 from xyz import xyz
 from phue import Bridge
-from fitResult_bri import fitResult_bri_cp
+from fitResult_CCT import fitResult_CCTcri 
 import requests as rq
 import numpy as np
 import json
@@ -14,21 +14,20 @@ import sys
 url_get = 'https://ece4809api.intlightlab.com/get-spectrum-room'
 url_post = 'https://ece4809api.intlightlab.com/set-lights'
 
-
 headers = {'Authorization': 'Bearer 0d90d4d9-ac95-4339-836b-7b733f2973f7'} #special token
 
+target_cri = int(sys.argv[1])
+                                            
+val_bri = 200
+#print('Bri: ', "{:.2f}".format(val_bri))
+val_cct = fitResult_CCTcri(target_cri)
+#print('CCT: ', "{:.2f}".format(val_cct))
 
-target_plux = int(sys.argv[2])
-target_cct = int(sys.argv[1])
-
-val_bri = fitResult_bri_cp(target_plux, target_cct)
-val_cct = target_cct
-
-input_bri = val_bri
-input_ct = 1e6/val_cct
+input_bri = round(val_bri)
+input_ct = round(1e6/val_cct)
 
 if input_bri > 250:
-    input_bri = 254
+    input_bri = 250
 elif input_bri < 0:
     input_bri = 0
 
@@ -37,17 +36,17 @@ if input_ct > 500:
 elif input_ct < 154:
     input_ct = 154
 
-    # Post request
+# Post request
 set_light = {
     "bri": input_bri,
     "ct": input_ct
 }
-response_post = rq.post(url_post, data=set_light, headers=headers)
+response_post = rq.post(url_post, data=set_light, headers = headers)
 
 time.sleep(10)
 
 # Get request
-response = rq.get(url_get, headers=headers)
+response = rq.get(url_get, headers = headers)
 data = response.json()
 #Read SPM
 SPM = data['SPM']
@@ -60,7 +59,6 @@ SPM_interpolated = np.array(SPM_interpolated)
 SPM_interpolated = np.expand_dims(SPM_interpolated, axis=0)
 spm_i = SPM_interpolated[0]
 spm_list = spm_i.tolist()
-
 measured_LER = cal_LER(spm_i)
 
 # Calculate CCT and CRI from SPM
@@ -68,11 +66,10 @@ measured_LER = cal_LER(spm_i)
 measured_CCT = cct(x,y)
 ref = reflight(measured_CCT)
 [CRI, R9] = getcri(SPM_interpolated, ref)
-
-measured_plux = data['plux']
+measured_medi = data["mlux"]
+measured_plux = data["plux"] #photopic illuminance 
 measured_lumen = measured_plux * 19.77
-measured_medi = data['mlux']
-measured_mder = data['mlux']/data['plux']
+measured_MDER = np.divide(measured_medi, measured_plux)
 measured_watt = measured_lumen/measured_LER
 
 # Handle output result
@@ -81,11 +78,11 @@ output_data = {
     "Measured CRI": "{:.2f}".format(CRI),
     "Measured plux": "{:.2f}".format(measured_plux),
     "Measured medi": "{:.2f}".format(measured_medi),
-    "Measured mder": "{:.2f}".format(measured_mder),
+    "Measured mder": "{:.2f}".format(measured_MDER),
     "Measured LER": "{:.2f}".format(measured_LER),
     "Measured Lumen": "{:.2f}".format(measured_lumen),
-    "Measured Watt": "{:.2f}".format(measured_watt),
-    "SPM_interpolated": spm_list,
+     "Measured Watt": "{:.2f}".format(measured_watt),
+    "SPM_interpolated": spm_list, 
 }
 print(json.dumps(output_data))  # Convert the dictionary to JSON and print it
-sys.stdout.flush()
+sys.stdout.flush()   

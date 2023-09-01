@@ -74,7 +74,7 @@
 
         <div class ="target-content">
             <h1>Target Metrics</h1>
-            <p id="inputDisplay"> </p>
+            <div id="inputDisplay"> </div>
         </div>
         <div class = "close-loop">
             <h1> Close-Loop P Control:</h1>  
@@ -137,13 +137,15 @@
                 630, 635, 640, 645, 650, 655, 660, 665, 670, 675, 680, 685, 690, 695, 700, 705, 710, 
                 715, 720, 725, 730, 735, 740, 745, 750, 755, 760, 765, 770, 775, 780],
                 y: yValues,
-                type: 'scatter'
+                type: 'scatter',
+                fill: 'tozeroy',
+                fillcolor: 'blue',
             };
 
             var data = [SPM_return];
             var layout = {
-                height: 400,
-                width: 500,
+                height: 450,
+                width: 550,
                 margin: {
                 t: 50,  // Top margin
                 b: 60,  // Bottom margin
@@ -188,6 +190,7 @@
             dataResult2.innerHTML = `
                 <p> LER: ${results['Measured LER']} lm/W</p>
                 <p> Lumen: ${results['Measured Lumen']} lm</p>
+                <p> Watt: ${results['Measured Watt']} W <p>
             `;
 
             createPlot(results['SPM_interpolated']);
@@ -196,20 +199,26 @@
 
             function cct_pluxInputDisplay(cct, plux) {
                 const inputDisplay = document.getElementById('inputDisplay');
-                inputDisplay.innerHTML = `Target CCT: <span style="color: rgba(11, 73, 241, 0.615); font-weight: bold;"> ${cct} K </span>, 
-                Target Plux: <span style="color: rgba(11, 73, 241, 0.615); font-weight: bold;"> ${plux} lux </span>  `;
+                inputDisplay.innerHTML = `
+                <p> Target CCT: <span style="color: rgba(11, 73, 241, 0.615); font-weight: bold;"> ${cct} K </span></p> 
+                <p> Target Plux: <span style="color: rgba(11, 73, 241, 0.615); font-weight: bold;"> ${plux} lux </span></p>  
+                `;
             }
 
             function cct_mediInputDisplay(cct, medi) {
                 const inputDisplay = document.getElementById('inputDisplay');
-                inputDisplay.innerHTML = `Target CCT: <span style="color: rgba(11, 73, 241, 0.615); font-weight: bold;"> ${cct} lux </span>, 
-                Target Medi: <span style="color: rgba(11, 73, 241, 0.615); font-weight: bold;"> ${medi} lux </span>  `;
+                inputDisplay.innerHTML = `
+                <p> Target CCT: <span style="color: rgba(11, 73, 241, 0.615); font-weight: bold;"> ${cct} K </span>
+                <p> Target Medi: <span style="color: rgba(11, 73, 241, 0.615); font-weight: bold;"> ${medi} lux </span></p>
+                `;
             }
 
             function plux_mediInputDisplay(plux, medi) {
                 const inputDisplay = document.getElementById('inputDisplay');
-                inputDisplay.innerHTML = `Target Plux: <span style="color: rgba(11, 73, 241, 0.615); font-weight: bold;"> ${plux} lux </span>,
-                Target Medi: <span style="color: rgba(11, 73, 241, 0.615); font-weight: bold;"> ${medi} lux </span>  `;
+                inputDisplay.innerHTML = `
+                <p> Target Plux: <span style="color: rgba(11, 73, 241, 0.615); font-weight: bold;"> ${plux} lux </span></p>
+                <p> Target Medi: <span style="color: rgba(11, 73, 241, 0.615); font-weight: bold;"> ${medi} lux </span></p>
+                `;
             }
 
             clearButton.addEventListener('click', async () => {
@@ -221,8 +230,8 @@
                 inputCCT_cp.value = ''; 
                 inputPlux_cp.value = '';
                 inputCCT_cm.value = '';
-                inputMedi_cm,value = '';
-                inputPlux_cp.value = '';
+                inputMedi_cm.value = '';
+                inputPlux_pm.value = '';
                 inputMedi_pm.value = '';
             });
 
@@ -333,6 +342,7 @@
                     covering.style.display = 'none';
 
                 } else if(inputPlux_pm.value !== "" && inputMedi_pm.value !== ""){
+                    covering.style.display = 'flex';
                     glasshourGif.style.display = 'block';
                     const requestData = {
                         inputplux: inputPlux_pm.value,

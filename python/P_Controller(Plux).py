@@ -79,6 +79,7 @@ while abs(diff) > 5:
     measured_plux = data['plux']
     measured_lumen = measured_plux * 19.77
     measured_MDER = np.divide(measured_medi, measured_plux)
+    measured_watt = measured_lumen/measured_LER
 
     diff = abs(target - measured_plux)
     error_plux =  measured_plux - target_plux
@@ -101,6 +102,7 @@ output_data = {
     "Measured mder": "{:.2f}".format(measured_MDER),
     "Measured LER": "{:.2f}".format(measured_LER),
     "Measured Lumen": "{:.2f}".format(measured_lumen),
+    "Measured Watt": "{:.2f}".format(measured_watt),
     "SPM_interpolated": spm_list, 
 }
 print(json.dumps(output_data))  # Convert the dictionary to JSON and print it

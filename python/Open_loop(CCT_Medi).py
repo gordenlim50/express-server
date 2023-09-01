@@ -17,10 +17,9 @@ url_post = 'https://ece4809api.intlightlab.com/set-lights'
 
 headers = {'Authorization': 'Bearer 0d90d4d9-ac95-4339-836b-7b733f2973f7'} #special token
 
-iteration = 1
+
 target_medi = int(sys.argv[2])
 target_cct = int(sys.argv[1])
-
 
 val_bri = fitResult_bri_cm(target_medi, target_cct)
 val_cct = target_cct
@@ -74,7 +73,7 @@ measured_plux = data['plux']
 measured_lumen = measured_plux * 19.77
 measured_medi = data['mlux']
 measured_mder = data['mlux']/data['plux']
-
+measured_watt = measured_lumen/measured_LER
 
 # Handle output result
 output_data = {
@@ -85,6 +84,7 @@ output_data = {
     "Measured mder": "{:.2f}".format(measured_mder),
     "Measured LER": "{:.2f}".format(measured_LER),
     "Measured Lumen": "{:.2f}".format(measured_lumen),
+    "Measured Watt": "{:.2f}".format(measured_watt),
     "SPM_interpolated": spm_list, 
 }
 print(json.dumps(output_data))  # Convert the dictionary to JSON and print it
