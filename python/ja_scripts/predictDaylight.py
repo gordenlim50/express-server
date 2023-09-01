@@ -114,7 +114,7 @@ curtain = curtain_perc / 100
 
 # defining URL parameters
 BASE_URL = "http://api.openweathermap.org/data/2.5/weather?"
-API_KEY = open('api_key.txt','r').read()
+API_KEY = open('python/ja_scripts/api_key.txt','r').read()
 CITY = "Subang Jaya"
 
 # URL
@@ -221,12 +221,12 @@ if dni != 0 and curtain != 0:
 
     plt_spectrum = estimated_spd
     wavelengths = desired_wav
-    norm_spec = plt_spectrum / np.max(plt_spectrum)
+    norm_spec = plt_spectrum / max(plt_spectrum)
     # --------------------------------------------------------------------------
 
     #-----------------------------------Indoor Daylight Illuminance Model Prediction----------------------------------
     # Load the trained model
-    model = RoomRadiancePredictor.load_from_checkpoint('model_2h_64_105.ckpt')
+    model = RoomRadiancePredictor.load_from_checkpoint('python/ja_scripts/model_2h_64_105.ckpt')
 
     # Set the model to evaluation mode
     model = model.to('cuda')
@@ -260,15 +260,16 @@ if dni != 0 and curtain != 0:
     zones_spec = getZonesSPD(spd_room, zones_illum)
     
     # calculate lighting metrics for all zones
-    plux_all, medi_all, cct_all, cri_all = cal_all_zones(zones_spec)  
+    plux_all, medi_all, cct_all = cal_all_zones(zones_spec)  
 else:
     wavelengths = np.arange(380, 781, 5)
     zones_illum = [0] * 24
     plt_spectrum = [0] * 81
     norm_spec = [0] * 81
     zones_spec = [plt_spectrum] * 24
-    plux_all, medi_all, cri_all = [0] * 24
-    cct_all = [np.nan] *24
+    plux_all = [0] * 24
+    medi_all = [0] * 24
+    cct_all = [-1] *24
 
 
 # # zones => 0 to 23 (zone 1 to zone 24)
@@ -336,32 +337,34 @@ else:
 # for i in range(len(wavelengths) - 1):
 #     plt.fill_between([wavelengths[i], wavelengths[i+1]], [plot_data[i], plot_data[i+1]], color=colors[:, i])
 # plt.show()
+wavelengths = wavelengths.tolist()
 
+norm_spec = np.array(norm_spec)
+norm_spec = norm_spec.tolist()
 
 # Handle output result
 output_data = {
-    "city": f"{CITY}",
-    "temperature": f"{temp_celsius:.2f}",
-    "humidity": f"{humidity:.2f}",
-    "wind speed": f"{wind_speed:.2f}",
-    "cloud Cover": f"{cloudiness}",
-    "sunrise time": f"{sunrise_time}",
-    "sunset time": f"{sunset_time}",
-    "description": f"{description}",
-    "retrieve time": f"{retrieve_time}",
-    "air mass": f"{airmass}",
-    "sun altitude": f"{altitude}",
-    "sun azimuth": f"{azimuth}",
-    "dni": f"{dni}",
-    "dhi": f"{dhi}",
-    "ghi": f"{ghi}",
-    "wavelengths": f"{wavelengths}",
-    "normalised daylight": f"{norm_spec}",
-    "zones spectrum": f"{zones_spec}",
-    "plux all": f"{plux_all}",
-    "cct_all": f"{cct_all}",
-    "medi_all": f"{medi_all}",
-    "cri_all": f"{cri_all}"
+    'city': f'{CITY}',
+    'temperature': f'{temp_celsius:.2f}',
+    'humidity': f'{humidity:.2f}',
+    'wind speed': f'{wind_speed:.2f}',
+    'cloud Cover': f'{cloudiness}',
+    'sunrise time': f'{sunrise_time}',
+    'sunset time': f'{sunset_time}',
+    'description': f'{description}',
+    'retrieve time': f'{retrieve_time}',
+    'air mass': f'{airmass}',
+    'sun altitude': f'{altitude}',
+    'sun azimuth': f'{azimuth}',
+    'dni': f'{dni}',
+    'dhi': f'{dhi}',
+    'ghi': f'{ghi}',
+    'wavelengths': wavelengths,
+    'normalised daylight': norm_spec,
+    'zones spectrum': zones_spec,
+    'plux all': plux_all,
+    'cct_all': cct_all,
+    'medi_all': medi_all
 }
 print(json.dumps(output_data))  # Convert the dictionary to JSON and print it
 sys.stdout.flush()

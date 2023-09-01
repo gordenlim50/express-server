@@ -1062,20 +1062,20 @@ def cal_all_zones(zones_spd):
     plux_all = []
     medi_all = []
     cct_all = []
-    cri_all = []
+    #cri_all = []
     
-    for i in range(zones_spd):
+    for i in range(len(zones_spd)):
         temp1, temp2 = alpha_opic_cal(zones_spd[i])
         x,y,z = xyz(zones_spd[i], 2)
         temp3 = xyToCCT(x,y)
-        temp4 = getcri(zones_spd[i], reflight(temp3))
+        #temp4 = getcri(zones_spd[i], reflight(temp3))
         
         plux_all.append(temp1)
         medi_all.append(temp2)
         cct_all.append(temp3)
-        cri_all.append(temp4)
+        #cri_all.append(temp4)
     
-    return plux_all, medi_all, cct_all, cri_all
+    return plux_all, medi_all, cct_all
 
 
 def wavelength_to_rgb(wavelength, gamma=0.8):
