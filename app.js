@@ -63,6 +63,10 @@ app.post('/predict', async function(req, res) {
         res.status(500).json({ error: error }); 
     }
 });
+/// ==================================================== Music & Light.html ======================================================================= ///
+app.get('/audio', (req, res)=>{
+    res.sendFile(__dirname + '/html/music.html')
+})
 
 // --- Light Simulation --- //
 app.post('/simulate', async function(req, res) {
@@ -82,8 +86,8 @@ app.post('/simulate', async function(req, res) {
 
 
 /// ==================================================== Data Collection.html ======================================================================= ///
-app.get('/selfcali', (req, res)=>{
-    res.sendFile(__dirname + '/html/selfcali.html')
+app.get('/collect', (req, res)=>{
+    res.sendFile(__dirname + '/html/collect.html')
 })
 
 app.post('/get_selfcali', async function(req, res) {

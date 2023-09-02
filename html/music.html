@@ -29,12 +29,12 @@
 
     <!-- Banner -->
     <section id="ovrflw" class="backgrd">
-        <div class="text-box">
-            <h1>Illuminating Life Intelligently</h1>
-            <p>We aim to fulfill all the choices and preferences of our customers.</p>
-            <a href="/metrics" class = "hero-btn" id="metrics-btn"> Integrative Lighting Control</a> 
-            <a href="/collect" class = "hero-btn2" id="metrics-btn"> Data Collection </a>
-            <a href= "/ja" class = "hero-btn"> Integrative Lighting Simulation </a>
+        <form action="/upload" method="post" enctype="multipart/form-data">
+            <input type="file" name="mp3file" accept=".mp3">
+            <input type="submit" value="Upload">
+        </form>
+        <div class ="back">
+            <a href="/metrics" class="home-btn"> Back </a> 
         </div>
     </section> 
 </body>
