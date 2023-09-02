@@ -440,6 +440,12 @@ header{
     left: 5%;
 }
 
+.ja_plot_result{
+    position: absolute;
+    bottom: 1%;
+    left: 5%;
+}
+
 
 /*------------------------------- end -------------------------------*/
 

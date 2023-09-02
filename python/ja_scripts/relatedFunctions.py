@@ -183,7 +183,9 @@ def  getcri(inlight, ref):
     denominator_temp = sum(np.multiply(inlight, CMF_2))
     denominator_temp = np.expand_dims(denominator_temp, axis = 0)
     testlight = inlight @ np.linalg.pinv(denominator_temp) *100
-    ref = ref / sum(np.multiply(ref, CMF_2))*100
+    # print('testlight:', testlight)
+    ref = ref / np.sum(np.multiply(ref, CMF_2))*100
+    # print('ref:', ref.flatten())
 
     # FOR DEBUGGING
     # plot(CMF(:,1), CMF(:,2), CMF(:,1), CMF(:,3), CMF(:,1), CMF(:,4))
@@ -236,6 +238,9 @@ def  getcri(inlight, ref):
 #     print('z_tris_ref.shape:',z_tris_ref.shape)
     
 #     print('x_ref.shape:', x_ref.shape)
+    # print('x_ref:', x_ref)
+    # print('y_ref:', y_ref)
+    # print('Y_ref:', Y_ref)
 #     print('y_ref.shape:', y_ref.shape)
 #     print('Y_ref.shape:', Y_ref.shape)
     
@@ -339,12 +344,14 @@ def  getcri(inlight, ref):
     # Getting chromaticity: u and v
     u_ref = np.divide(4 * x_ref, (-2 * x_ref + 12 * y_ref + 3))
     #print('u_ref.shape:', u_ref.shape)
+    # print('u_ref', u_ref)
                  
     v_ref = np.divide(6 * y_ref, (-2 * x_ref + 12 * y_ref + 3))           
     #print('v_ref.shape:', v_ref.shape)
 
     u_white_ref = np.divide(4 * x_white_ref, (-2 * x_white_ref + 12 * y_white_ref + 3))
     #print('u_white_ref.shape:', u_white_ref)
+    # print('u_white_ref:', u_white_ref)
     
     v_white_ref = np.divide(6 * y_white_ref, (-2 * x_white_ref + 12 * y_white_ref + 3))
     #print('v_white_ref.shape:', v_white_ref)
@@ -410,8 +417,16 @@ def  getcri(inlight, ref):
     U_test = 13 * np.multiply(W_test, (u_test_adap - u_white_test[0,0]))
     V_test = 13 * np.multiply(W_test, (v_test_adap - v_white_test[0,0]))
 
+    # print('W', W)
+    # print('U', U)
+    # print('V', V)
+    # print('W_test', W_test)
+    # print('U_test', U_test)
+    # print('V_test', V_test)
+
     # Calculating Ri
     colourshift = np.sqrt((W - W_test)**2 + (U - U_test)**2 + (V - V_test)**2)
+    #print('colorshift:', colourshift)
     #print(colourshift.shape)
     Ri = 100 - 4.6 * colourshift
     R9 = Ri[0,8]
@@ -744,11 +759,11 @@ def reflight(CCT):
 
     else:
         if (CCT<=7000): #if 5000<CCT<7000 
-            xD=-4.6070e9/(CCT**3)+2.9678e6/(CCT**2)+0.09911e3/(CCT)+0.244063;
+            xD=-4.6070e9/(CCT**3)+2.9678e6/(CCT**2)+0.09911e3/(CCT)+0.244063
         else: #if 7000<CCT<25000
 
-            xD=(-2.0064e9/CCT**3)+(1.9018e6/CCT**2)+(0.24748e3/CCT)+0.237040;
-        yD=-3.000*(xD**2)+2.870*(xD)-0.275;
+            xD=(-2.0064e9/CCT**3)+(1.9018e6/CCT**2)+(0.24748e3/CCT)+0.237040
+        yD=-3.000*(xD**2)+2.870*(xD)-0.275
 
         M1=(-1.3515-1.7703*xD+5.9114*yD)/(0.0241+0.2562*xD-0.7341*yD)
         M2=(0.0300-31.4424*xD+30.0717*yD)/(0.0241+0.2562*xD-0.7341*yD)
