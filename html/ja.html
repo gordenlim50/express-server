@@ -11,6 +11,11 @@
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
+
+<div class="popup2" id="loading" style="display: none;">
+    <h1>Loading...</h1>
+</div>
+
 <body>
     <!-- Header -->
     <header>
@@ -192,6 +197,7 @@
             const mderResult = document.getElementById("mder_result");
             const cctResult = document.getElementById("cct_result");
             const criResult = document.getElementById("cri_result");
+            const loading = document.getElementById("loading");
             
             let zonesSelection = 0;
             let selectedZone_spec = [];
@@ -281,6 +287,7 @@
                 }
           
                 if (valid) {
+                    loading.style.display = "block";
                     // Proceed with your action here
                     if (metricsInput.value === "0") {
                         cct_value = cctInput1.value
@@ -302,6 +309,7 @@
                         body: JSON.stringify(requestData)
                     });
                     const result = await response.json();
+                    loading.style.display = "none";
                     var output1 = result.processedData;
                     var required_spec = output1['required_led_spectrum'];
                     var target_spec = output1['target_spectrum'];
@@ -309,7 +317,7 @@
 
                     createPlot('led_spec', required_spec, `Required LED SPD at Zone ${zonesSelection}`, 'Wavelength (nm)', 'Spectral Power Density (W/m^2/nm)')
                     //createPlot2(id, yValues, yValues2, title, xlabel, ylabel, legend1, legend2)
-                    createPlot2('result_spec', target_spec, resultant_spec, `SPD at Zone ${zonesSelection}`, 'Wavelength (nm)', 'Spectral Power Density (W/m^2/nm)', 'Target Spectrum', 'Measured Spectrum')
+                    createPlot2('result_spec', target_spec, resultant_spec, `Final SPD at Zone ${zonesSelection}`, 'Wavelength (nm)', 'Spectral Power Density (W/m^2/nm)', 'Target Spectrum', 'Measured Spectrum')
                     //createPlot('result_spec', resultant_spec, `SPD at Zone ${zonesSelection}`, 'Wavelength (nm)', 'Spectral Power Density (W/m^2/nm)')
 
                     pluxResult.innerHTML = `Photopic lux: ${Number(output1['resultant_plux']).toFixed(2)} lx`;
@@ -338,6 +346,7 @@
                 }
                 
                 if (valid) {
+                    loading.style.display = "block";
                     // Proceed with your action here
                     const response = await fetch('/predict', {
                         method: 'POST',
@@ -347,6 +356,7 @@
                         body: JSON.stringify({ data: curtainInput.value })
                     });
                     const result = await response.json();
+                    loading.style.display = "none";
                     var output1 = result.processedData;
                     var zones_spec = output1['zones_spectrum'];
                     var plux_all = output1['plux_all'];
@@ -517,10 +527,10 @@
                     paper_bgcolor: 'rgba(0,0,0,0)', // Set paper color
                     showlegend: true,
                     legend: {
-                        x: 0.02,
-                        y: 1,
+                        x: 0.6,
+                        y: 1.1,
                         font: {
-                            size: 12,
+                            size: 11,
                             weight: 'bold',
                             color: 'white'
                         }
