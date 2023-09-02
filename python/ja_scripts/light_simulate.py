@@ -1,12 +1,9 @@
 import datetime as dt
 import requests
 import pandas as pd
-import pvlib # library for photovoltaic system
-import pytz
 import numpy as np
 import matplotlib.pyplot as plt
 import csv
-import statistics
 import json
 import sys
 import ast
@@ -16,15 +13,26 @@ from relatedFunctions import window_dist, xyz, xyToCCT, getZonesSPD, getActualSP
 
 # Getting inputs (inputs = [(dk what is this), [indoor daylight spectrum (1 zone)], targetvalues])
 pred_spd = sys.argv[1]
-target_cct = float(sys.argv[2])
-target_plux = float(sys.argv[3])
-target_medi = float(sys.argv[4])
+target_cct = sys.argv[2]
+target_plux = sys.argv[3]
+target_medi = sys.argv[4]
 
+# Processing inputs 
+pred_spd = ast.literal_eval(pred_spd)
+target_cct = float(target_cct)
+if not target_medi:
+    target_plux = float(target_plux)
+    target_lx = target_plux
+    select = 1
+else:
+    target_medi = float(target_medi)
+    target_lx = target_medi
+    select = 2
 
 #target_plux = 300
 #target_cct = 5000
 target_spec = D_illuminant(target_cct)
-target_spec = getActualSPD(target_spec, target_plux)
+target_spec = getActualSPD(target_spec, target_lx, select)
 spec_temp = []
 for i in range(len(target_spec)):
     spec_temp.append(target_spec[i]-pred_spd[i])
@@ -38,6 +46,14 @@ cct_req = xyToCCT(x_req,y_req)
 mder_req = medi_req / plux_req
 
 #---------------------------------Codes to set for Hue light in the room----------------------------
+with open('python/ja_scripts/all_metrics_wf_sensor2.csv', 'r') as file1:
+    reader = csv.reader(file1)
+    hue = list(reader)
+    hue = hue[1:]
+    for i in range(len(hue)):
+        hue[i] = [float(val) for val in hue[i]]
+
+
 
 #---------------------------------------------------------------------------------------------------
 

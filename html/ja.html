@@ -98,10 +98,19 @@
                 <p id="cct_daylight">CCT: --</p>
                 <p id="cri_daylight">CRI: --</p>
             </div>
+
+            <div class="ja_metrics">
+                <p style="border-bottom: 3px solid white;display: inline-block;padding-bottom: 2px;">Resultant Metrics</p><br>
+                <p id="plux_result">Photopic lux: --</p>
+                <p id="medi_result">MEDI: --</p>
+                <p id="mder_result">MDER: --</p>
+                <p id="cct_result">CCT: --</p>
+                <p id="cri_result">CRI: --</p>
+            </div>
         </div>
 
         <div class="ja_plot_box2">
-            <h1>LED Spectrum</h1>
+            <h1>Required LED Spectrum</h1>
             <div class="ja_plot" id="led_spec"></div>
             <br><br><br><br><br><br><br><br><br><br><br>
             
@@ -265,19 +274,25 @@
           
                 if (valid) {
                     // Proceed with your action here
+                    if (metricsInput.value === "0") {
+                        cct_value = cctInput1.value
+                    } else if (metricsInput.value === "1") {
+                        cct_value = cctInput2.value
+                    }
+
                     const requestData = {
                         zone_spec: `[${selectedZone_spec}]`,
-                        inputcct: cctInput1.value,
+                        inputcct: cct_value,
                         inputplux: pluxInput.value,
                         inputmedi: mediInput.value
                     };
                     console.log(requestData);
                     const response = await fetch('/simulate', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(requestData)
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(requestData)
                     });
                     const result = await response.json();
                     var output1 = result.processedData;
