@@ -137,6 +137,8 @@ for i in range(len(outputs_process)):
 
 # Handle output result
 output_data = {
+    'target_cct': f'{target_cct:.2f}',
+    'target_lx': f'{target_lx:.2f}',
     'required_led_plux': f'{plux_req:.2f}',
     'required_led_medi': f'{medi_req:.2f}',
     'required_led_cct': f'{cct_req:.2f}',

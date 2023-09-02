@@ -303,9 +303,10 @@
                     });
                     const result = await response.json();
                     var output1 = result.processedData;
-                    var required_spec = output1['required_spectrum'];
+                    var required_spec = output1['required_led_spectrum'];
                     var target_spec = output1['target_spectrum'];
-                    var resultant_spec = output1['resultant_spd'];
+                    var resultant_spec = output1['resultant_spectrum'];
+
                     createPlot('led_spec', required_spec, `Required LED SPD at Zone ${zonesSelection}`, 'Wavelength (nm)', 'Spectral Power Density (W/m^2/nm)')
                     //createPlot2(id, yValues, yValues2, title, xlabel, ylabel, legend1, legend2)
                     createPlot2('result_spec', target_spec, resultant_spec, `SPD at Zone ${zonesSelection}`, 'Wavelength (nm)', 'Spectral Power Density (W/m^2/nm)', 'Target Spectrum', 'Measured Spectrum')
@@ -316,6 +317,12 @@
                     mderResult.innerHTML = `MDER: ${Number(output1['resultant_mder']).toFixed(2)}`;
                     cctResult.innerHTML = `CCT: ${Number(output1['resultant_cct']).toFixed(2)} K`;
                     criResult.innerHTML = `CCT: ${Number(output1['resultant_cri']).toFixed(2)}`;
+
+                    // clear inputs
+                    cctInput1.value = '';
+                    cctInput2.value = '';
+                    pluxInput.value = '';
+                    mediInput.value = '';
 
                 }
             });
@@ -358,8 +365,6 @@
                     mediDaylight.innerHTML = `MEDI: ${medi_all[zonesSelection-1].toFixed(2)} lx`;
                     mderDaylight.innerHTML = `MDER: ${(medi_all[zonesSelection-1]/plux_all[zonesSelection-1]).toFixed(2)}`;
                     cctDaylight.innerHTML = `CCT: ${cct_all[zonesSelection-1].toFixed(2)} K`;
-    
-                    console.log(result.processedData)
                 }
 
             });
@@ -510,7 +515,16 @@
                     },
                     plot_bgcolor: 'rgba(0,0,0,0)', // Set background color
                     paper_bgcolor: 'rgba(0,0,0,0)', // Set paper color
-                    showlegend: true
+                    showlegend: true,
+                    legend: {
+                        x: 0.02,
+                        y: 1,
+                        font: {
+                            size: 12,
+                            weight: 'bold',
+                            color: 'white'
+                        }
+                    }
                 };
             
                 Plotly.newPlot(id, data, layout);
