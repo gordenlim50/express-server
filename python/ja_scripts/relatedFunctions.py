@@ -1048,10 +1048,14 @@ def getZonesSPD(spd_room, zones_illum):
     return zones_spec
     
 
-def getActualSPD(spd_room, illum):
+def getActualSPD(spd_room, illum, select):
     plux_temp, medi_temp = alpha_opic_cal(spd_room)
 
-    ratio = illum / plux_temp
+    if select == 1:
+        ratio = illum / plux_temp
+    elif select == 2:
+        ratio = illum / medi_temp
+    
     spd_temp = []
     for j in range(len(spd_room)):
         spd_temp.append(spd_room[j] * ratio)
@@ -1062,20 +1066,20 @@ def cal_all_zones(zones_spd):
     plux_all = []
     medi_all = []
     cct_all = []
-    cri_all = []
+    #cri_all = []
     
-    for i in range(zones_spd):
+    for i in range(len(zones_spd)):
         temp1, temp2 = alpha_opic_cal(zones_spd[i])
         x,y,z = xyz(zones_spd[i], 2)
         temp3 = xyToCCT(x,y)
-        temp4 = getcri(zones_spd[i], reflight(temp3))
+        #temp4 = getcri(zones_spd[i], reflight(temp3))
         
         plux_all.append(temp1)
         medi_all.append(temp2)
         cct_all.append(temp3)
-        cri_all.append(temp4)
+        #cri_all.append(temp4)
     
-    return plux_all, medi_all, cct_all, cri_all
+    return plux_all, medi_all, cct_all
 
 
 def wavelength_to_rgb(wavelength, gamma=0.8):

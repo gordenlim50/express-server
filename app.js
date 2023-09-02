@@ -68,6 +68,22 @@ app.get('/audio', (req, res)=>{
     res.sendFile(__dirname + '/html/music.html')
 })
 
+// --- Light Simulation --- //
+app.post('/simulate', async function(req, res) {
+    var zone_spec = req.body.zone_spec;
+    var targetcct = req.body.inputcct;
+    var targetplux = req.body.inputplux;
+    var targetmedi = req.body.inputmedi;
+    try {
+        const processedData = await executePython('python/ja_scripts/light_simulate.py', [zone_spec, targetcct, targetplux, targetmedi]);
+        res.json({ processedData }); 
+        console.log(processedData)
+
+    } catch (error) {
+        res.status(500).json({ error: error }); 
+    }
+});
+
 
 /// ==================================================== Data Collection.html ======================================================================= ///
 app.get('/collect', (req, res)=>{
