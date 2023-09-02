@@ -1393,3 +1393,121 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+
+
+/* Step */
+
+.Steps{
+    position: absolute;
+    top: 13.5%;
+    left: 9%;
+    width: 420px;
+    height: 270px;
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, .5);
+    border-radius: 20px;
+    backdrop-filter: blur(20px);
+
+}
+
+.Steps h1{
+    color: #fff;
+    padding:10px 0;
+    text-align: center;
+}
+
+.Steps p{
+    color: #fff;
+    padding:0px 0 8px;
+    text-align: center;
+}
+
+
+.step_input_select{
+    width: 40%;
+    padding: 8px 0;
+    padding-left: 5px;
+    margin: 3px 0;
+    margin-left: 20px;
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+    font-size: 13px;
+    border: 2px solid #fff;
+    border-radius: 10px;
+    outline: none;
+    background: transparent;
+    color: white; 
+}
+
+.step_input_select option {
+    background: var(--main-color); 
+    color: white; 
+}
+
+.step_input_select_text{
+    padding-left: 15px;
+    font-size: 14px;
+    outline: none;
+    background: transparent;
+    color: #fff;
+}
+
+.step_input_text{
+    width: 25%;
+    padding: 8px 0;
+    padding-left: 18px;
+    margin: 5px 5px 5px;
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+    font-size: 12px;
+    border-bottom: 2px solid #fff;;
+    outline: none;
+    background: transparent;
+    color: #fff;
+}
+
+.step_input_text::placeholder{
+    color: #fff;
+}
+
+.step_input_time{
+    width: 20%;
+    padding: 8px 0;
+    padding-left: 15px;
+    margin: 5px 5px 5px;
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+    font-size: 12px;
+    border-bottom: 2px solid #fff;;
+    outline: none;
+    background: transparent;
+    color: #fff;
+}
+
+.step_input_time::placeholder{
+    color: #fff;
+}
+
+.step_input_button{
+    display: inline-block;
+    text-decoration: none;
+    color: #fff;
+    border: 1px solid #fff;
+    padding: 12px 30px;
+    font-size: 13px;
+    background: transparent;
+    border-radius: 20px;
+    position: relative;
+    left: 165px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.step_input_button:hover{
+    border: 1px solid var(--main-color);
+    background: var(--main-color);
+    transition: 1s;
+}
