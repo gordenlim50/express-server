@@ -9,6 +9,7 @@ import csv
 import statistics
 import json
 import sys
+import ast
 
 from relatedFunctions import linear_interpolation, alpha_opic_cal, D_illuminant
 from relatedFunctions import window_dist, xyz, xyToCCT, getZonesSPD, getActualSPD
@@ -18,7 +19,6 @@ pred_spd = sys.argv[1]
 target_cct = float(sys.argv[2])
 target_plux = float(sys.argv[3])
 target_medi = float(sys.argv[4])
-
 
 
 #target_plux = 300
@@ -37,9 +37,16 @@ x_req,y_req,z_req = xyz(required_spec, 2)
 cct_req = xyToCCT(x_req,y_req)
 mder_req = medi_req / plux_req
 
+#---------------------------------Codes to set for Hue light in the room----------------------------
 
-print(f"Metrics required ")
-print(f"CCT = {cct_req}K")
-print(f"Plux = {plux_req:.2f}lx")
-print(f"MEDI = {medi_req:.2f}lx")
-print(f"MDER = {mder_req:.2f}\n")
+#---------------------------------------------------------------------------------------------------
+
+# Handle output result
+output_data = {
+    'required_spectrum': required_spec,
+    'required_plux': f'{plux_req:.2f}',
+    'required_medi': f'{medi_req:.2f}',
+    'required_cct': f'{medi_req:.2f}'
+}
+print(json.dumps(output_data))  # Convert the dictionary to JSON and print it
+sys.stdout.flush()

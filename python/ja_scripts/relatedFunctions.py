@@ -1048,10 +1048,14 @@ def getZonesSPD(spd_room, zones_illum):
     return zones_spec
     
 
-def getActualSPD(spd_room, illum):
+def getActualSPD(spd_room, illum, select):
     plux_temp, medi_temp = alpha_opic_cal(spd_room)
 
-    ratio = illum / plux_temp
+    if select == 1:
+        ratio = illum / plux_temp
+    elif select == 2:
+        ratio = illum / medi_temp
+    
     spd_temp = []
     for j in range(len(spd_room)):
         spd_temp.append(spd_room[j] * ratio)

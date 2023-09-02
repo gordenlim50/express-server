@@ -91,13 +91,20 @@
             <div class="ja_plot" id="daylightSpectrum"></div>
             <br><br><br><br><br><br><br><br><br><br><br>
             <div class="ja_metrics">
-                <p style="border-bottom: 3px solid white;display: inline-block;padding-bottom: 2px;">Metrics</p><br>
+                <p style="border-bottom: 3px solid white;display: inline-block;padding-bottom: 2px;">Indoor Daylight Metrics</p><br>
                 <p id="plux_daylight">Photopic lux: --</p>
                 <p id="medi_daylight">MEDI: --</p>
                 <p id="mder_daylight">MDER: --</p>
                 <p id="cct_daylight">CCT: --</p>
                 <p id="cri_daylight">CRI: --</p>
             </div>
+        </div>
+
+        <div class="ja_plot_box2">
+            <h1>LED Spectrum</h1>
+            <div class="ja_plot" id="led_spec"></div>
+            <br><br><br><br><br><br><br><br><br><br><br>
+            
         </div>
         
         <div class = "ja_input_box2">
@@ -163,6 +170,7 @@
             const mediInput = document.getElementById("ja_get_medi");
             const predictButton = document.getElementById("ja_predict");
             const daylightPlot = document.getElementById("daylightSpectrum");
+            const requiredLED = document.getElementById("led_spec");
             const pluxDaylight = document.getElementById("plux_daylight");
             const mediDaylight = document.getElementById("medi_daylight");
             const cctDaylight = document.getElementById("cct_daylight");
@@ -170,6 +178,7 @@
             const criDaylight = document.getElementById("cri_daylight");
             
             let zonesSelection = 0;
+            let selectedZone_spec = [];
 
             // Function to generate 'count' random numbers between 'min' and 'max'
             function getRandomNumbers(count, min, max) {
@@ -195,7 +204,8 @@
 
             // Create empty plot
             var zerosArr = getRandomNumbers(81,0,0);
-            createPlot(zerosArr, '...', 'Wavelength (nm)', 'Spectral Power Density (W/m^2/nm)')
+            createPlot('daylightSpectrum', zerosArr, '...', 'Wavelength (nm)', 'Spectral Power Density (W/m^2/nm)')
+            createPlot('led_spec', zerosArr, '...', 'Wavelength (nm)', 'Spectral Power Density (W/m^2/nm)')
 
             // popup button
             const openPopupButton = document.getElementById("openPopup");
@@ -232,7 +242,7 @@
             });
 
             // For the Set button
-            setButton.addEventListener("click", function () {
+            setButton.addEventListener("click", async () => {
                 let valid = true;
                 const errorMessage = "Please select or fill in all required fields.";
           
@@ -251,11 +261,28 @@
                 } else if (zonesSelection === 0) {
                     valid = false;
                     alert(errorMessage);
-                  }
+                }
           
                 if (valid) {
-                  // Proceed with your action here
-                  alert("Inputs are valid. Performing action...");
+                    // Proceed with your action here
+                    const requestData = {
+                        zone_spec: `[${selectedZone_spec}]`,
+                        inputcct: cctInput1.value,
+                        inputplux: pluxInput.value,
+                        inputmedi: mediInput.value
+                    };
+                    console.log(requestData);
+                    const response = await fetch('/simulate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestData)
+                    });
+                    const result = await response.json();
+                    var output1 = result.processedData;
+                    var required_spec = output1['required_spectrum'];
+                    createPlot('led_spec', required_spec, `SPD at Zone ${zonesSelection}`, 'Wavelength (nm)', 'Spectral Power Density (W/m^2/nm)')
                 }
             });
 
@@ -290,7 +317,8 @@
                         }
                     }
                     daylightPlot.innerHTML = "";
-                    createPlot(zones_spec[zonesSelection-1], `Indoor Daylight Spectrum at Zone ${zonesSelection}`, 'Wavelength (nm)', 'Spectral Power Density (W/m^2/nm)')
+                    selectedZone_spec = zones_spec[zonesSelection-1];
+                    createPlot('daylightSpectrum', zones_spec[zonesSelection-1], `Indoor Daylight Spectrum at Zone ${zonesSelection}`, 'Wavelength (nm)', 'Spectral Power Density (W/m^2/nm)')
 
                     pluxDaylight.outerHTML = `<p id="plux_daylight"> Photopic lux: ${plux_all[zonesSelection-1].toFixed(2)} lx </p>`;
                     mediDaylight.outerHTML = `<p id="plux_daylight"> MEDI: ${plux_all[zonesSelection-1].toFixed(2)} lx </p>`;
@@ -303,7 +331,7 @@
             });
 
             // Create SPD plot
-            function createPlot(yValues, title, xlabel, ylabel) {
+            function createPlot(id, yValues, title, xlabel, ylabel) {
                 var SPM_return = {
                     x: [380, 385, 390, 395, 400, 405, 410, 415, 420, 425, 430, 435, 440, 445, 450, 455, 
                     460, 465, 470, 475, 480, 485, 490, 495, 500, 505, 510, 515, 520, 525, 530, 535, 540, 
@@ -367,7 +395,7 @@
                     paper_bgcolor: 'rgba(0,0,0,0)' // Set paper color
                 };
             
-                Plotly.newPlot("daylightSpectrum", data, layout);
+                Plotly.newPlot(id, data, layout);
             }
 
 
