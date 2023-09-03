@@ -30,7 +30,7 @@ from pytorch_lightning.callbacks import Callback, ModelCheckpoint
 
 
 class RoomRadiancePredictor(LightningModule):
-    def __init__(self, input_dim=10, hidden_dim=64, output_dim=1, learning_rate=1e-4):
+    def __init__(self, input_dim=10, hidden_dim=128, output_dim=1, learning_rate=1e-4):
         super().__init__()
         
         self.learning_rate = learning_rate
@@ -226,7 +226,7 @@ if dni != 0 and curtain != 0:
 
     #-----------------------------------Indoor Daylight Illuminance Model Prediction----------------------------------
     # Load the trained model
-    model = RoomRadiancePredictor.load_from_checkpoint('python/ja_scripts/model_2h_64_105.ckpt')
+    model = RoomRadiancePredictor.load_from_checkpoint('python/ja_scripts/model_2h_128_48.ckpt')
 
     # Set the model to evaluation mode
     model = model.to('cuda')
@@ -260,7 +260,7 @@ if dni != 0 and curtain != 0:
     zones_spec = getZonesSPD(spd_room, zones_illum)
     
     # calculate lighting metrics for all zones
-    plux_all, medi_all, cct_all = cal_all_zones(zones_spec)  
+    plux_all, medi_all, cct_all, cri_all = cal_all_zones(zones_spec)  
 else:
     wavelengths = np.arange(380, 781, 5)
     zones_illum = [0] * 24
@@ -270,6 +270,7 @@ else:
     plux_all = [0] * 24
     medi_all = [0] * 24
     cct_all = [-1] *24
+    cri_all = [-1] *24
 
 
 # # zones => 0 to 23 (zone 1 to zone 24)
@@ -362,9 +363,11 @@ output_data = {
     'wavelengths': wavelengths,
     'normalised_daylight': norm_spec,
     'zones_spectrum': zones_spec,
+    'zones_illuminance': zones_illum,
     'plux_all': plux_all,
     'cct_all': cct_all,
-    'medi_all': medi_all
+    'medi_all': medi_all,
+    'cri_all': cri_all
 }
 print(json.dumps(output_data))  # Convert the dictionary to JSON and print it
 sys.stdout.flush()

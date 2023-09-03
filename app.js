@@ -56,17 +56,12 @@ app.post('/predict', async function(req, res) {
     var curtain_perc = req.body.data;
     try {
         const processedData = await executePython('python/ja_scripts/predictDaylight.py', [curtain_perc]);
-        res.json({ processedData }); 
-        console.log(processedData)
+        res.json({ processedData });
 
     } catch (error) {
         res.status(500).json({ error: error }); 
     }
 });
-/// ==================================================== Music & Light.html ======================================================================= ///
-app.get('/audio', (req, res)=>{
-    res.sendFile(__dirname + '/html/music.html')
-})
 
 // --- Light Simulation --- //
 app.post('/simulate', async function(req, res) {
@@ -83,6 +78,12 @@ app.post('/simulate', async function(req, res) {
         res.status(500).json({ error: error }); 
     }
 });
+
+
+/// ==================================================== Music & Light.html ======================================================================= ///
+app.get('/audio', (req, res)=>{
+    res.sendFile(__dirname + '/html/music.html')
+})
 
 
 /// ==================================================== Data Collection.html ======================================================================= ///

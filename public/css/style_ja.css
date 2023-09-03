@@ -349,6 +349,7 @@ header{
     transition: 1s;
 }
 
+
 /* Pop up */
 .popup {
     display: none;
@@ -381,6 +382,26 @@ header{
     /* border: 1px solid var(--main-color); */
     background: var(--main-color);
     transition: 1s;
+}
+
+.popup2 {
+    display: none;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    justify-content: center;
+    border-radius: 0px;
+    align-items: center;
+    z-index: 2;
+}
+
+.popup2 h1{
+    margin: 15px 0 5px;
+    font-size: 30px;
+    color:#fff;
+    padding-left: 45%;
+    padding-top: 20%;
 }
 
 /* Plot */
@@ -437,6 +458,12 @@ header{
 .ja_plot{
     position: absolute;
     top: 6%;
+    left: 5%;
+}
+
+.ja_plot_result{
+    position: absolute;
+    bottom: 1%;
     left: 5%;
 }
 
