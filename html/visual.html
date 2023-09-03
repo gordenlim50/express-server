@@ -29,30 +29,89 @@
         </div> 
     </header>
     <section id="ovrflw" class="backgrd">
-        <div class = "vm">
-            <h1>Visual Metrics:</h1>
+        <div id="visual-metrics" class="VM">
+            <h1> Visual Metrics</h1>
+            <label for="vm_Input" class="input_select_text">Desired Metrics: </label>
+            <select id="vm_Input" name="metricsInput" class="step_input_select">
+                <option value="-1">None </option>
+                <option value="0">CCT </option>
+                <option value="1">Photopic Lux </option>
+                <option value="2">CRI </option>
+            </select><br>
+            <div id="select_visual1" style="display: none;">
+                <!-- CCT -->
+                <label for="get_cct" class="input_select_text">Desired CCT: </label>
+                <input type="text" name ="get_cct", id="get_cct", class="input-field-cct", placeholder="2500K ~ 6500K", min="2500", max="6000" > 
+                <button id="set-button-cct" class="set-button-cct">Set</button>
+            </div>
+            <div id="select_visual2" style="display: none;">
+                <!-- PLUX-->
+                <label for="get_plux" class="input_select_text">Desired Plux: </label>
+                <input type="text" name="get_plux", id="get_plux", class="input-field-plux", placeholder="0lx ~ 250lx",min="0", max="250" > 
+                <button id="set-button-plux" class="set-button-plux">Set</button>     
+            </div>
+            <div id="select_visual3" style="display: none;">
+                <!-- CRI -->
+                <label for="get_cri" class="input_select_text">Desired CRI: </label>
+                <input type = "text" name = "get_cri", id = "get_cri", class = "input-field-cri", placeholder="0 ~100", min="0", max="100"> 
+                <button id="set-button-cri" class="set-button-cri">Set</button>    
+            </div>
+        </div>
+
+        <div id="non-visual-metrics" class="NVM">
+            <h1> Non-Visual Metrics</h1>
+            <label for="nvm_Input" class="input_select_text">Desired Metrics: </label>
+            <select id="nvm_Input" name="metricsInput" class="step_input_select">
+                <option value="-1">None</option>
+                <option value="0">MEDI & MDER </option>
+            </select><br>
+            <div id="select_non_visual1" style="display: none;">
+                <!-- MEDI & MDER -->
+                <label for="get_medi" class="input_select_text">Desired MEDI: </label>
+                <input type="text" name="get_medi", id="get_medi", class="input-field-medi", placeholder="0lx ~ 200lx", min="0", max="250"><br>
+                <label for="get_mder" class="input_select_text">Desired MDER: </label>
+                <input type="text" name="get_mder", id="get_mder", class="input-field-mder", placeholder="0 ~ 1", min="0", max ="1" >   
+                <button id="set-button-medi-mder" class="set-button-medi-mder">Set</button> 
+            </div>
+        </div>
+
+        <div id="pairwise-metrics" class="PM">
+            <h1> Pairwise Metrics</h1>
+            <label for="pm_Input" class="input_select_text">Desired Metrics: </label>
+            <select id="pm_Input" name="metricsInput" class="step_input_select">
+                <option value="-1">None</option>
+                <option value="0">CCT & Photopic Lux </option>
+                <option value="1">CCT & MEDI </option>
+                <option value="2">Photopic Lux & MEDI </option>
+            </select><br>
+
+             <!-- CCT & PLUX-->
+            <div id="select_pair1" style="display: none;">
+                <label for="get_cct" class="input_select_text">Desired CCT: </label>
+                <input type="text" name = "get_cct_plux", id = "get_cct_plux", class = "input-field-cct-plux", placeholder="2500K ~ 6500K", min="2500", max="6500"><br>
+                <label for="get_plux" class="input_select_text">Desired Plux: </label>
+                <input type="text" name = "get_plux_cct", id = "get_plux_cct", class = "input-field-plux-cct", placeholder="0lx ~ 250lx", min="0", max="250">   
+                <button id="set-button-cct-plux" class="set-button-cct-plux">Set</button> 
+            </div>
+
+            <div id="select_pair2" style="display: none;">
+                <label for="get_cct" class="input_select_text">Desired CCT: </label>
+                <input type="text" name = "get_cct_medi", id = "get_cct_medi", class = "input-field-cct-medi", placeholder="2500K ~ 6500K", min="2500", max="6500"><br>
+                <label for="get_medi" class="input_select_text">Desired Medi: </label>
+                <input type="text" name = "get_medi_cct", id = "get_medi_cct", class = "input-field-medi-cct", placeholder="0lx ~ 200lx", min="0", max ="200"> 
+                <button id="set-button-cct-medi" class="set-button-cct-medi">Set</button> 
+            </div>
+
+            <div id="select_pair3" style="display: none;">
+                <label for="get_plux" class="input_select_text">Desired Plux: </label>
+                <input type="text" name = "get_plux_medi", id = "get_plux_medi", class = "input-field-plux-medi", placeholder="0lx ~ 250lx", min="0", max="250"><br>
+                <label for="get_medi" class="input_select_text">Desired Medi: </label>
+                <input type="text" name = "get_medi_plux", id = "get_medi_plux", class = "input-field-medi-plux", placeholder="0lx ~ 200lx", min="0", max ="200" >  
+                <button id="set-button-plux-medi" class="set-button-plux-medi">Set</button> 
+            </div>
         </div>
         
-        <div class = "CCT">
-            <h1>Corelated Colour Temperature (CCT)</h1>
-            <p>(Suggested range: 2500K - 6500K)</p>
-            <input type="text" name ="get_cct", id="get_cct", class="input-field-cct", placeholder="Set Desired CCT", min="2500", max="6000" > 
-            <button id="set-button-cct" class="set-button-cct">Set</button>
-        </div>
 
-        <div class = "Plux">
-            <h1>Photopic Illuminance (Plux)</h1>
-            <p>(Suggested range: 0lux - 250lux)</p>
-            <input type="text" name="get_plux", id="get_plux", class="input-field-plux", placeholder="Set Desired Plux",min="50", max="250" > 
-            <button id="set-button-plux" class="set-button-plux">Set</button>     
-        </div>
-
-        <div class = "CRI">
-            <h1>Colour Rendering Index (CRI)</h1>
-            <p>(Suggested range: 0-100)</p>
-            <input type = "text" name = "get_cri", id = "get_cri", class = "input-field-cri", placeholder="Set Desired CRI", min="0", max="100"> 
-            <button id="set-button-cri" class="set-button-cri">Set</button>            
-        </div>
         
         <div class ="back">
             <a href="/metrics" class="back-btn"> Back </a> 
@@ -102,6 +161,10 @@
             const cctButton = document.getElementById('set-button-cct');
             const pluxButton = document.getElementById('set-button-plux');
             const criButton = document.getElementById('set-button-cri');
+            const medi_mderButton = document.getElementById('set-button-medi-mder');
+            const cct_pluxButton = document.getElementById('set-button-cct-plux');
+            const cct_mediButton = document.getElementById('set-button-cct-medi');
+            const plux_mediButton = document.getElementById('set-button-plux-medi');
             const clearButton = document.getElementById('clearbutton');
             const closeloopctrl = document.getElementById('toggle');
 
@@ -109,6 +172,18 @@
             const inputCCT = document.getElementById('get_cct');
             const inputPlux = document.getElementById('get_plux');
             const inputCRI = document.getElementById('get_cri');
+
+            // Input Constant of Non Visual metrics
+            const inputMedi = document.getElementById('get_medi');
+            const inputMder = document.getElementById('get_mder');
+
+            // Input Constant of Pair metrics
+            const inputCCT_cp = document.getElementById('get_cct_plux');
+            const inputPlux_cp = document.getElementById('get_plux_cct');
+            const inputCCT_cm = document.getElementById('get_cct_medi');
+            const inputMedi_cm = document.getElementById('get_medi_cct');
+            const inputPlux_pm = document.getElementById('get_plux_medi');
+            const inputMedi_pm = document.getElementById('get_medi_plux');
 
             // Result Boxes Constant
             const dataResult = document.getElementById('result-box');
@@ -121,6 +196,24 @@
             const close_loop = document.querySelector('.close-loop');
             const toggle_switch = document.querySelector('.switch');
 
+            // Select visual List Constant 
+            const visualbox = document.getElementById("visual-metrics");
+            const visual_metricsInput = document.getElementById("vm_Input");
+            const selectCCT = document.getElementById("select_visual1");
+            const selectPlux = document.getElementById("select_visual2");
+            const selectCRI = document.getElementById("select_visual3");
+
+            // Select non-visual List Constant 
+            const nonvisualbox = document.getElementById("non-visual-metrics");
+            const non_visual_metricsInput = document.getElementById("nvm_Input");
+            const selectMedi_Mder = document.getElementById("select_non_visual1");
+
+            // Select pairwise List Constant 
+            const pairbox = document.getElementById("pairwise-metrics");
+            const pair_metricsInput = document.getElementById("pm_Input");
+            const select_cctplux = document.getElementById("select_pair1");
+            const select_cctmedi = document.getElementById("select_pair2");
+            const select_pluxmedi = document.getElementById("select_pair3");
             
             // Create SPD plot
             function createPlot(yValues) {
@@ -168,11 +261,11 @@
             }
         
             // Assuming you have a function to update the results on the HTML page
-            function updateResults(results, buttonClicked) {
+            function updateResults_v(results, buttonClicked) {
             const cctColor = buttonClicked === 'cct' ? 'rgba(11, 73, 241, 0.615); font-weight: bold;' : 'white';
             const pluxColor = buttonClicked === 'plux' ? 'rgba(11, 73, 241, 0.615); font-weight: bold;' : 'white';
             const criColor = buttonClicked === 'cri' ? 'rgba(11, 73, 241, 0.615); font-weight: bold ' : 'white';
-
+            
             dataResult.innerHTML = `
                 <p> CCT: <span style="color: ${cctColor}"> ${results['Measured CCT']} K</span></p>
                 <p> Plux: <span style="color: ${pluxColor}">${results['Measured plux']} lux</span></p>
@@ -191,6 +284,52 @@
 
             }
 
+            function updateResults_nv(results, buttonClicked) {
+            const medi_mderColor = buttonClicked === 'medi_mder' ? 'rgba(11, 73, 241, 0.615); font-weight: bold;' : 'white';
+           
+            dataResult.innerHTML = `
+                <p> CCT: ${results['Measured CCT']} K</p>
+                <p> Plux: ${results['Measured plux']} lux</p>
+                <p> CRI: ${results['Measured CRI']}</p> 
+                <p> MEDI: <span style="color: ${medi_mderColor}"> ${results['Measured medi']} lux </span></p>
+                <p> MDER: <span style="color: ${medi_mderColor}"> ${results['Measured mder']} </span></p>
+            `;
+
+            dataResult2.innerHTML = `
+                <p> LER: ${results['Measured LER']} lm/W</p>
+                <p> Lumen: ${results['Measured Lumen']} lm</p>
+                <p> Watt: ${results['Measured Watt']} W <p>
+            `;
+
+            createPlot(results['SPM_interpolated']);
+
+            }
+
+            function updateResults_p(results, buttonClicked) {
+            const cctColor = (buttonClicked === 'cct_plux' || buttonClicked === 'cct_medi') ? 'rgba(11, 73, 241, 0.615); font-weight: bold;' : 'white';
+            const mediColor = (buttonClicked === 'cct_medi' || buttonClicked === 'plux_medi') ? 'rgba(11, 73, 241, 0.615); font-weight: bold;' : 'white';
+            const pluxColor = (buttonClicked === 'plux_medi' || buttonClicked === 'cct_plux') ? 'rgba(11, 73, 241, 0.615); font-weight: bold ' : 'white';
+
+            dataResult.innerHTML = `
+                <p> CCT: <span style="color: ${cctColor}"> ${results['Measured CCT']} K </span></p>
+                <p> Plux: <span style="color: ${pluxColor}"> ${results['Measured plux']} lux </span></p>
+                <p> CRI: ${results['Measured CRI']}</p> 
+                <p> MEDI: <span style="color: ${mediColor}"> ${results['Measured medi']} lux </span></p>
+                <p> MDER: ${results['Measured mder']}</p>
+            `;
+
+            dataResult2.innerHTML = `
+                <p> LER: ${results['Measured LER']} lm/W</p>
+                <p> Lumen: ${results['Measured Lumen']} lm</p>
+                <p> Watt: ${results['Measured Watt']} W <p>
+            `;
+
+            createPlot(results['SPM_interpolated']);
+
+            }
+
+
+            // Display Target metrics
             function cctInputDisplay(cct) {
                 const inputDisplay = document.getElementById('inputDisplay');
                 inputDisplay.innerHTML = `Target CCT: <span style="color: rgba(11, 73, 241, 0.615); font-weight: bold;"> ${cct} K </span>`;
@@ -206,6 +345,39 @@
                 inputDisplay.innerHTML = `Target CRI: <span style="color: rgba(11, 73, 241, 0.615); font-weight: bold;"> ${cri} </span>`;
             }
 
+            function medi_mderInputDisplay(medi, mder) {
+                const inputDisplay = document.getElementById('inputDisplay');
+                inputDisplay.innerHTML = `
+                <p>Target MEDI: <span style="color: rgba(11, 73, 241, 0.615); font-weight: bold;"> ${medi} lux  </span></p>
+                <p>Target MDER: <span style="color: rgba(11, 73, 241, 0.615); font-weight: bold;"> ${mder} </span></p>
+                `;
+            }
+
+            function cct_pluxInputDisplay(cct, plux) {
+                const inputDisplay = document.getElementById('inputDisplay');
+                inputDisplay.innerHTML = `
+                <p> Target CCT: <span style="color: rgba(11, 73, 241, 0.615); font-weight: bold;"> ${cct} K </span></p> 
+                <p> Target Plux: <span style="color: rgba(11, 73, 241, 0.615); font-weight: bold;"> ${plux} lux </span></p>  
+                `;
+            }
+
+            function cct_mediInputDisplay(cct, medi) {
+                const inputDisplay = document.getElementById('inputDisplay');
+                inputDisplay.innerHTML = `
+                <p> Target CCT: <span style="color: rgba(11, 73, 241, 0.615); font-weight: bold;"> ${cct} K </span>
+                <p> Target Medi: <span style="color: rgba(11, 73, 241, 0.615); font-weight: bold;"> ${medi} lux </span></p>
+                `;
+            }
+
+            function plux_mediInputDisplay(plux, medi) {
+                const inputDisplay = document.getElementById('inputDisplay');
+                inputDisplay.innerHTML = `
+                <p> Target Plux: <span style="color: rgba(11, 73, 241, 0.615); font-weight: bold;"> ${plux} lux </span></p>
+                <p> Target Medi: <span style="color: rgba(11, 73, 241, 0.615); font-weight: bold;"> ${medi} lux </span></p>
+                `;
+            }
+            
+            // Clear Button
             clearButton.addEventListener('click', async () => {
                 sliderInput.checked = false;
                 glasshourGif.style.display = 'none';
@@ -215,8 +387,87 @@
                 inputCCT.value = '';
                 inputPlux.value = '';
                 inputCRI.value = '';
+                inputMedi.value = '';
+                inputMder.value = '';
+                inputCCT_cp.value = ''; 
+                inputPlux_cp.value = '';
+                inputCCT_cm.value = '';
+                inputMedi_cm.value = '';
+                inputPlux_pm.value = '';
+                inputMedi_pm.value = '';
             });
 
+            // Display metric's style on change
+            visual_metricsInput.addEventListener("change", function(){
+                if(visual_metricsInput.value == "-1"){    
+                    visualbox.style.height = "90px";
+                    selectCCT.style.display = "none";
+                    selectPlux.style.display = "none";
+                    selectCRI.style.display = "none";
+                }
+                else if(visual_metricsInput.value == "0"){
+                    visualbox.style.height = "140px";
+                    selectCCT.style.display = "block";
+                    selectPlux.style.display = "none";
+                    selectCRI.style.display = "none";
+                }
+                else if(visual_metricsInput.value == "1"){
+                    visualbox.style.height = "140px";
+                    selectCCT.style.display = "none";
+                    selectPlux.style.display = "block";
+                    selectCRI.style.display = "none";
+                }
+                else if(visual_metricsInput.value == "2"){
+                    visualbox.style.height = "140px";
+                    selectCCT.style.display = "none";
+                    selectPlux.style.display = "none";
+                    selectCRI.style.display = "block";
+                }
+            });
+
+            non_visual_metricsInput.addEventListener("change", function(){
+                if(non_visual_metricsInput.value == "-1"){
+                    pairbox.style.top = "57.5%";
+                    nonvisualbox.style.height = "90px";
+                    selectMedi_Mder.style.display = "none";
+                }
+                else if(non_visual_metricsInput.value == "0"){
+                    pairbox.style.top = "67.5%";
+                    nonvisualbox.style.height = "210px";
+                    selectMedi_Mder.style.display = "block";
+                }
+            })
+
+            pair_metricsInput.addEventListener("change", function(){
+                if(pair_metricsInput.value == "-1"){
+                    pairbox.style.height = "90px";
+                    select_cctplux.style.display = "none";
+                    select_cctmedi.style.display = "none";
+                    select_pluxmedi.style.display = "none";
+                }
+                else if(pair_metricsInput.value == "0"){
+                    pairbox.style.height = "210px";
+                    select_cctplux.style.display = "block";
+                    select_cctmedi.style.display = "none";
+                    select_pluxmedi.style.display = "none";
+                }
+                else if(pair_metricsInput.value == "1"){
+                    pairbox.style.height = "210px";
+                    select_cctplux.style.display = "none";
+                    select_cctmedi.style.display = "block";
+                    select_pluxmedi.style.display = "none";
+                }
+                else if(pair_metricsInput.value == "2"){
+                    pairbox.style.height = "210px";
+                    select_cctplux.style.display = "none";
+                    select_cctmedi.style.display = "none";
+                    select_pluxmedi.style.display = "block";
+                }
+            })
+
+            
+            // Event on click 
+            // CCT 
             cctButton.addEventListener('click', async () => {
               glasshourGif.style.display = 'block';
               const response = await fetch('/getCCT_OL', {
@@ -228,12 +479,13 @@
               });
               cctInputDisplay(inputCCT.value);
               const result = await response.json();
-              updateResults(result.processedData, 'cct');  
+              updateResults_v(result.processedData, 'cct');  
               covering.style.display = 'none';
               close_loop.style.display = 'block';
               toggle_switch.style.display = 'block';
             });
 
+            // Plux
             pluxButton.addEventListener('click', async () => {
                 glasshourGif.style.display = 'block';
                 const response = await fetch('/getPlux_OL', {
@@ -245,12 +497,13 @@
               });
               pluxInputDisplay(inputPlux.value);
               const result = await response.json();
-              updateResults(result.processedData, 'plux');
+              updateResults_v(result.processedData, 'plux');
               covering.style.display = 'none'; 
               close_loop.style.display = 'block';
               toggle_switch.style.display = 'block';
             });
 
+            // CRI
             criButton.addEventListener('click', async () => {
                 glasshourGif.style.display = 'block';
                 const response = await fetch('/getCRI', {
@@ -262,13 +515,105 @@
               });
               criInputDisplay(inputCRI.value);
               const result = await response.json();
-              updateResults(result.processedData, 'cri'); 
+              updateResults_v(result.processedData, 'cri'); 
               covering.style.display = 'none';
               close_loop.style.display = 'block';
               toggle_switch.style.display = 'block'; 
             });
 
+            // Medi Mder
+            medi_mderButton.addEventListener('click', async () => {
+                glasshourGif.style.display = 'block';
+                const requestData = {
+                    inputmedi: inputMedi.value,
+                    inputmder: inputMder.value
+                };
+
+                const response = await fetch('/getMEDI_MDER_OL', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestData)
+              });
+              medi_mderInputDisplay(inputMedi.value, inputMder.value)
+              const result = await response.json();
+              updateResults_nv(result.processedData, 'medi_mder');  
+              covering.style.display = 'none';
+              close_loop.style.display = 'block';
+              toggle_switch.style.display = 'block';
+            });
+
+            // CCT Plux
+            cct_pluxButton.addEventListener('click', async () => {
+                glasshourGif.style.display = 'block';
+                const requestData = {
+                    inputcct: inputCCT_cp.value,
+                    inputplux: inputPlux_cp.value
+                };
+
+                const response = await fetch('/get_CCT_Plux_OL', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestData)
+              });
+              cct_pluxInputDisplay(inputCCT_cp.value, inputPlux_cp.value)
+              const result = await response.json();
+              updateResults_p(result.processedData, 'cct_plux'); 
+              covering.style.display = 'none';
+              close_loop.style.display = 'block';
+              toggle_switch.style.display = 'block';
+            });
+
+            // CCT Medi
+            cct_mediButton.addEventListener('click', async () => {
+                glasshourGif.style.display = 'block';
+                const requestData = {
+                    inputcct: inputCCT_cm.value,
+                    inputmedi: inputMedi_cm.value
+                };
+                
+                const response = await fetch('/get_CCT_MEDI_OL', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestData)
+              });
+              cct_mediInputDisplay_p(inputCCT_cm.value, inputMedi_cm.value)
+              const result = await response.json();
+              updateResults(result.processedData, 'cct_medi'); 
+              covering.style.display = 'none';
+              close_loop.style.display = 'block';
+              toggle_switch.style.display = 'block';
+            });
+
+            // Plux Medi
+            plux_mediButton.addEventListener('click', async () => {
+                glasshourGif.style.display = 'block';
+                const requestData = {
+                    inputplux: inputPlux_pm.value,
+                    inputmedi: inputMedi_pm.value
+                };
+
+                const response = await fetch('/get_Plux_MEDI_OL', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestData)
+              });
+              plux_mediInputDisplay_p(inputPlux_pm.value, inputMedi_pm.value)
+              const result = await response.json();
+              updateResults(result.processedData, 'plux_medi');  
+              covering.style.display = 'none';
+              close_loop.style.display = 'block';
+              toggle_switch.style.display = 'block';
+            });
             
+            // On toggle Close Loop Control
             closeloopctrl.addEventListener('click', async () =>{
                 if(inputCCT.value !== ""){
                     covering.style.display = 'flex';
@@ -282,7 +627,7 @@
                     });
                     cctInputDisplay(inputCCT.value);
                     const result = await response.json();
-                    updateResults(result.processedData, 'cct');  
+                    updateResults_v(result.processedData, 'cct');  
                     covering.style.display = 'none';
 
                 } else if(inputPlux.value !== ""){
@@ -297,7 +642,7 @@
                     });
                     pluxInputDisplay(inputPlux.value);
                     const result = await response.json();
-                    updateResults(result.processedData, 'plux');
+                    updateResults_v(result.processedData, 'plux');
                     covering.style.display = 'none';
 
                 } else if(inputCRI.value !== ""){
@@ -312,9 +657,89 @@
                     });
                     criInputDisplay(inputCRI.value);
                     const result = await response.json();
-                    updateResults(result.processedData, 'cri'); 
+                    updateResults_v(result.processedData, 'cri'); 
                     covering.style.display = 'none';
-                }
+
+                }  else if(inputMedi.value != "" && inputMder.value != ""){
+                    covering.style.display = 'flex';
+                    glasshourGif.style.display = 'block';
+
+                    const requestData = {
+                        inputmedi: inputMedi.value,
+                        inputmder: inputMder.value
+                    };
+
+                    const response = await fetch('/getMEDI_MDER_CL', {
+                    method: 'POST',
+                    headers: {
+                    'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestData)
+                    });
+                    medi_mderInputDisplay(inputMedi.value, inputMder.value)
+                    const result = await response.json();
+                    updateResults_nv(result.processedData, 'medi_mder');  
+                    covering.style.display = 'none';
+            
+                } else if(inputCCT_cp.value !== "" && inputPlux_cp.value !== ""){
+                    covering.style.display = 'flex';
+                    glasshourGif.style.display = 'block';
+                    const requestData = {
+                        inputcct: inputCCT_cp.value,
+                        inputplux: inputPlux_cp.value
+                    };
+                    const response = await fetch('/get_CCT_Plux_CL', {
+                    method: 'POST',
+                    headers: {
+                    'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestData)
+                    });
+                    cct_pluxInputDisplay(inputCCT_cp.value, inputPlux_cp.value)
+                    const result = await response.json();
+                    updateResults_p(result.processedData, 'cct_plux'); 
+                    covering.style.display = 'none';
+
+                } else if(inputCCT_cm.value !== "" && inputMedi_cm !== ""){
+                    covering.style.display = 'flex';
+                    glasshourGif.style.display = 'block';
+                    const requestData = {
+                        inputcct: inputCCT_cm.value,
+                        inputmedi: inputMedi_cm.value
+                    };
+                    
+                    const response = await fetch('/get_CCT_MEDI_CL', {
+                    method: 'POST',
+                    headers: {
+                    'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestData)
+                    });
+                    cct_mediInputDisplay(inputCCT_cm.value, inputMedi_cm.value)
+                    const result = await response.json();
+                    updateResults_p(result.processedData, 'cct_medi'); 
+                    covering.style.display = 'none';
+
+                } else if(inputPlux_pm.value !== "" && inputMedi_pm.value !== ""){
+                    covering.style.display = 'flex';
+                    glasshourGif.style.display = 'block';
+                    const requestData = {
+                        inputplux: inputPlux_pm.value,
+                        inputmedi: inputMedi_pm.value
+                    };
+
+                    const response = await fetch('/get_Plux_MEDI_CL', {
+                    method: 'POST',
+                    headers: {
+                    'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestData)
+                    });
+                    plux_mediInputDisplay(inputPlux_pm.value, inputMedi_pm.value)
+                    const result = await response.json();
+                    updateResults_p(result.processedData, 'plux_medi');  
+                    covering.style.display = 'none';
+                    } 
             })
                 
         </script>

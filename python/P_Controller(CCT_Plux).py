@@ -91,7 +91,7 @@ while diff1 > 5 or diff2 > 30:
     diff2 = abs(target2 - measured_CCT)
     diff3 = measured_plux - target1
     diff4 = measured_CCT - target2
-    error_medi = measured_plux - target_plux
+    error_plux = measured_plux - target_plux
     error_cct = measured_CCT - target_cct
     
     if diff1 < 20 or diff2 < 200:

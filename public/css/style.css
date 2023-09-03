@@ -578,7 +578,7 @@ color:#fff;
 }
 
 /* Input field CCT */
-.input-field-cct{
+/* .input-field-cct{
     width: 50%;
     padding: 10px 0;
     margin: 5px 0;
@@ -594,7 +594,7 @@ color:#fff;
 
 .input-field-cct::placeholder{
     color: #fff;
-}
+} */
 
 
 /* Plux */
@@ -645,7 +645,7 @@ color:#fff;
 }
 
 /* Input field PLUX */
-.input-field-plux{
+/* .input-field-plux{
     width: 50%;
     padding: 10px 0;
     margin: 5px 0;
@@ -661,7 +661,7 @@ color:#fff;
 
 .input-field-plux::placeholder{
     color: #fff;
-}
+} */
 
 /* CRI */
 .CRI{
@@ -711,7 +711,7 @@ color:#fff;
 }
 
 /* Input field CRI */
-.input-field-cri{
+/* .input-field-cri{
     width: 50%;
     padding: 10px 0;
     margin: 5px 0;
@@ -727,7 +727,7 @@ color:#fff;
 
 .input-field-cri::placeholder{
     color: #fff;
-}
+} */
 
 /* Non Visual Metrics */
 .nvm{
@@ -793,7 +793,7 @@ color:#fff;
 }
 
 /* Input field MEDI */
-.input-field-medi{
+/* .input-field-medi{
     width: 50%;
     padding: 10px 0;
     margin: 5px 0;
@@ -809,10 +809,10 @@ color:#fff;
 
 .input-field-medi::placeholder{
     color: #fff;
-}
+} */
 
 /* Input field MDER */
-.input-field-mder{
+/* .input-field-mder{
     width: 50%;
     padding: 10px 0;
     margin: 0px 0;
@@ -830,7 +830,7 @@ color:#fff;
 
 .input-field-mder::placeholder{
     color: #fff;
-}
+} */
 
 /* Combination */
 .comb{
@@ -871,7 +871,7 @@ font-size: 11px;
 color:#fff;
 }
 
-.set-button-cct-plux{
+/* .set-button-cct-plux{
     display: inline-block;
     text-decoration: none;
     color: #fff;
@@ -891,10 +891,10 @@ color:#fff;
     border: 1px solid var(--main-color);
     background: var(--main-color);
     transition: 1s;
-}
+} */
 
 /* Input field CCT & Plux */
-.input-field-cct-plux{
+/* .input-field-cct-plux{
     width: 50%;
     padding: 10px 0;
     margin: 0;
@@ -911,9 +911,9 @@ color:#fff;
 
 .input-field-cct-plux::placeholder{
     color: #fff;
-}
+} */
 
-.input-field-plux-cct{
+/* .input-field-plux-cct{
     width: 50%;
     padding: 10px 0;
     margin: 0px 0;
@@ -931,7 +931,7 @@ color:#fff;
 
 .input-field-plux-cct::placeholder{
     color: #fff;
-}
+} */
 
 /* CCT & MEDI */
 .CCT_MEDI{
@@ -964,13 +964,13 @@ color:#fff;
     text-decoration: none;
     color: #fff;
     border: 1px solid #fff;
-    padding: 9px 30px;
-    font-size: 12px;
+    padding: 12px 30px;
+    font-size: 14px;
     background: transparent;
     border-radius: 20px;
     position: relative;
-    top: 10px;
-    margin: 10px 10 5px;
+    left: 4px;
+    margin: 5px 0 10px;
     cursor: pointer;
     left: 6px;
     top: 30px;
@@ -984,14 +984,15 @@ color:#fff;
 
 /* Input field CCT & MEDI */
 .input-field-cct-medi{
-    width: 50%;
-    padding: 10px 0;
-    margin: 0;
+    width: 30%;
+    padding: 6px 0;
+    padding-left: 30px;
+    margin: 5px 5px 5px;
     border-top: 0;
     border-left: 0;
     border-right: 0;
     font-size: 12px;
-    border-bottom: 1px solid #fff;;
+    border-bottom: 2px solid #fff;;
     outline: none;
     background: transparent;
     color: #fff;
@@ -1002,20 +1003,18 @@ color:#fff;
 }
 
 .input-field-medi-cct{
-    width: 50%;
-    padding: 10px 0;
-    margin: 0px 0;
+    width: 30%;
+    padding: 6px 0;
+    padding-left: 30px;
+    margin: 5px 5px 5px;
     border-top: 0;
     border-left: 0;
     border-right: 0;
     font-size: 12px;
-    border-bottom: 1px solid #fff;;
+    border-bottom: 2px solid #fff;;
     outline: none;
     background: transparent;
-    color: #fff;
-    position: relative;
-    left: -45px
-    
+    color: #fff;  
 }
 
 .input-field-medi-cct::placeholder{
@@ -1053,13 +1052,13 @@ color:#fff;
     text-decoration: none;
     color: #fff;
     border: 1px solid #fff;
-    padding: 9px 30px;
-    font-size: 12px;
+    padding: 12px 30px;
+    font-size: 14px;
     background: transparent;
     border-radius: 20px;
     position: relative;
-    top: 10px;
-    margin: 10px 10 5px;
+    left: 4px;
+    margin: 5px 0 10px;
     cursor: pointer;
     left: 6px;
     top: 30px;
@@ -1073,14 +1072,15 @@ color:#fff;
 
 /* Input field Plux & MEDI */
 .input-field-plux-medi{
-    width: 50%;
-    padding: 10px 0;
-    margin: 0;
+    width: 30%;
+    padding: 6px 0;
+    padding-left: 20px;
+    margin: 5px 5px 5px;
     border-top: 0;
     border-left: 0;
     border-right: 0;
     font-size: 12px;
-    border-bottom: 1px solid #fff;;
+    border-bottom: 2px solid #fff;;
     outline: none;
     background: transparent;
     color: #fff;
@@ -1091,19 +1091,18 @@ color:#fff;
 }
 
 .input-field-medi-plux{
-    width: 50%;
-    padding: 10px 0;
-    margin: 0px 0;
+    width: 30%;
+    padding: 6px 0;
+    padding-left: 12px;
+    margin: 5px 5px 5px;
     border-top: 0;
     border-left: 0;
     border-right: 0;
     font-size: 12px;
-    border-bottom: 1px solid #fff;;
+    border-bottom: 2px solid #fff;;
     outline: none;
     background: transparent;
     color: #fff;
-    position: relative;
-    left: -45px
     
 }
 
@@ -1511,3 +1510,246 @@ input:checked + .slider:before {
     background: var(--main-color);
     transition: 1s;
 }
+
+.VM{
+    position: absolute;
+    top: 13.5%;
+    left: 9%;
+    width: 380px;
+    height: 90px;
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, .5);
+    border-radius: 20px;
+    backdrop-filter: blur(20px);
+}
+
+.VM h1{
+    color: #fff;
+    font-size: 16px;
+    padding:8px 0 0px;
+    text-align: center;
+}
+
+.input_select_text{
+    padding-left: 15px;
+    font-size: 14px;
+    outline: none;
+    background: transparent;
+    color: #fff;
+}
+
+.input-field-cct{
+    width: 30%;
+    padding: 6px 0;
+    padding-left: 12px;
+    margin: 5px 5px 5px;
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+    font-size: 12px;
+    border-bottom: 2px solid #fff;;
+    outline: none;
+    background: transparent;
+    color: #fff;
+}
+
+.input-field-cct::placeholder{
+    color: #fff;
+}
+
+.input-field-plux{
+    width: 30%;
+    padding: 6px 0;
+    padding-left: 15px;
+    margin: 5px 5px 5px;
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+    font-size: 12px;
+    border-bottom: 2px solid #fff;;
+    outline: none;
+    background: transparent;
+    color: #fff;
+}
+
+.input-field-plux::placeholder{
+    color: #fff;
+}
+
+.input-field-cri{
+    width: 30%;
+    padding: 6px 0;
+    padding-left: 25px;
+    margin: 5px 5px 5px;
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+    font-size: 12px;
+    border-bottom: 2px solid #fff;;
+    outline: none;
+    background: transparent;
+    color: #fff;
+}
+
+.input-field-cri::placeholder{
+    color: #fff;
+}
+
+.NVM{
+    position: absolute;
+    top: 35.5%;
+    left: 9%;
+    width: 380px;
+    height: 90px;
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, .5);
+    border-radius: 20px;
+    backdrop-filter: blur(20px);
+}
+
+.NVM h1{
+    color: #fff;
+    font-size: 16px;
+    padding:8px 0 0px;
+    text-align: center;
+}
+
+.input-field-medi{
+    width: 30%;
+    padding: 6px 0;
+    padding-left: 25px;
+    margin: 5px 5px 5px;
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+    font-size: 12px;
+    border-bottom: 2px solid #fff;;
+    outline: none;
+    background: transparent;
+    color: #fff;
+}
+
+.input-field-medi::placeholder{
+    color: #fff;
+}
+
+.input-field-mder{
+    width: 30%;
+    padding: 6px 0;
+    padding-left: 35px;
+    margin: 5px 5px 5px;
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+    font-size: 12px;
+    border-bottom: 2px solid #fff;;
+    outline: none;
+    background: transparent;
+    color: #fff;
+}
+
+.input-field-mder::placeholder{
+    color: #fff;
+}
+
+.set-button-medi-mder{
+    display: inline-block;
+    text-decoration: none;
+    color: #fff;
+    border: 1px solid #fff;
+    padding: 12px 30px;
+    font-size: 14px;
+    background: transparent;
+    border-radius: 20px;
+    position: relative;
+    left: 4px;
+    margin: 5px 0 10px;
+    cursor: pointer;
+}
+
+.set-button-medi-mder:hover{
+    border: 1px solid var(--main-color);
+    background: var(--main-color);
+    transition: 1s;
+}
+
+.PM{
+    position: absolute;
+    top: 57.5%;
+    left: 9%;
+    width: 380px;
+    height: 90px;
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, .5);
+    border-radius: 20px;
+    backdrop-filter: blur(20px);
+}
+
+.PM h1{
+    color: #fff;
+    font-size: 16px;
+    padding:8px 0 0px;
+    text-align: center;
+}
+
+.input-field-cct-plux{
+    width: 30%;
+    padding: 6px 0;
+    padding-left: 12px;
+    margin: 5px 5px 5px;
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+    font-size: 12px;
+    border-bottom: 2px solid #fff;;
+    outline: none;
+    background: transparent;
+    color: #fff;
+}
+
+.input-field-cct-plux::placeholder{
+    color: #fff;
+}
+
+.input-field-plux-cct{
+    width: 30%;
+    padding: 6px 0;
+    padding-left: 30px;
+    margin: 5px 5px 5px;
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+    font-size: 12px;
+    border-bottom: 2px solid #fff;;
+    outline: none;
+    background: transparent;
+    color: #fff;
+}
+
+.input-field-plux-cct::placeholder{
+    color: #fff;
+}
+
+.set-button-cct-plux{
+    display: inline-block;
+    text-decoration: none;
+    color: #fff;
+    border: 1px solid #fff;
+    padding: 12px 30px;
+    font-size: 14px;
+    background: transparent;
+    border-radius: 20px;
+    position: relative;
+    left: 4px;
+    margin: 5px 0 10px;
+    cursor: pointer;
+    left: 6px;
+    top: 30px;
+}
+
+.set-button-cct-plux:hover{
+    border: 1px solid var(--main-color);
+    background: var(--main-color);
+    transition: 1s;
+}
+
