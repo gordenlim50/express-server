@@ -30,7 +30,7 @@ from pytorch_lightning.callbacks import Callback, ModelCheckpoint
 
 
 class RoomRadiancePredictor(LightningModule):
-    def __init__(self, input_dim=10, hidden_dim=64, output_dim=1, learning_rate=1e-4):
+    def __init__(self, input_dim=10, hidden_dim=128, output_dim=1, learning_rate=1e-4):
         super().__init__()
         
         self.learning_rate = learning_rate
@@ -226,7 +226,7 @@ if dni != 0 and curtain != 0:
 
     #-----------------------------------Indoor Daylight Illuminance Model Prediction----------------------------------
     # Load the trained model
-    model = RoomRadiancePredictor.load_from_checkpoint('python/ja_scripts/model_2h_64_105.ckpt')
+    model = RoomRadiancePredictor.load_from_checkpoint('python/ja_scripts/model_2h_128_48.ckpt')
 
     # Set the model to evaluation mode
     model = model.to('cuda')
@@ -363,6 +363,7 @@ output_data = {
     'wavelengths': wavelengths,
     'normalised_daylight': norm_spec,
     'zones_spectrum': zones_spec,
+    'zones_illuminance': zones_illum,
     'plux_all': plux_all,
     'cct_all': cct_all,
     'medi_all': medi_all,
