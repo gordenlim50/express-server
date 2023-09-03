@@ -347,14 +347,18 @@
                 
                 if (valid) {
                     loading.style.display = "block";
+                    const requestData = {
+                        data: curtainInput.value
+                    };
                     // Proceed with your action here
                     const response = await fetch('/predict', {
                         method: 'POST',
                         headers: {
-                          'Content-Type': 'application/json'
+                            'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify({ data: curtainInput.value })
+                        body: JSON.stringify(requestData)
                     });
+                    console.log(response)
                     const result = await response.json();
                     loading.style.display = "none";
                     var output1 = result.processedData;
