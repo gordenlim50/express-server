@@ -260,7 +260,7 @@ if dni != 0 and curtain != 0:
     zones_spec = getZonesSPD(spd_room, zones_illum)
     
     # calculate lighting metrics for all zones
-    plux_all, medi_all, cct_all = cal_all_zones(zones_spec)  
+    plux_all, medi_all, cct_all, cri_all = cal_all_zones(zones_spec)  
 else:
     wavelengths = np.arange(380, 781, 5)
     zones_illum = [0] * 24
@@ -270,6 +270,7 @@ else:
     plux_all = [0] * 24
     medi_all = [0] * 24
     cct_all = [-1] *24
+    cri_all = [-1] *24
 
 
 # # zones => 0 to 23 (zone 1 to zone 24)
@@ -364,7 +365,8 @@ output_data = {
     'zones_spectrum': zones_spec,
     'plux_all': plux_all,
     'cct_all': cct_all,
-    'medi_all': medi_all
+    'medi_all': medi_all,
+    'cri_all': cri_all
 }
 print(json.dumps(output_data))  # Convert the dictionary to JSON and print it
 sys.stdout.flush()

@@ -324,7 +324,7 @@
                     mediResult.innerHTML = `MEDI: ${Number(output1['resultant_medi']).toFixed(2)} lx`;
                     mderResult.innerHTML = `MDER: ${Number(output1['resultant_mder']).toFixed(2)}`;
                     cctResult.innerHTML = `CCT: ${Number(output1['resultant_cct']).toFixed(2)} K`;
-                    criResult.innerHTML = `CCT: ${Number(output1['resultant_cri']).toFixed(2)}`;
+                    criResult.innerHTML = `CRI: ${Number(output1['resultant_cri']).toFixed(2)}`;
 
                     // clear inputs
                     cctInput1.value = '';
@@ -358,14 +358,16 @@
                         },
                         body: JSON.stringify(requestData)
                     });
-                    console.log(response)
+                    
                     const result = await response.json();
                     loading.style.display = "none";
                     var output1 = result.processedData;
+                    console.log(output1)
                     var zones_spec = output1['zones_spectrum'];
                     var plux_all = output1['plux_all'];
                     var cct_all = output1['cct_all'];
                     var medi_all = output1['medi_all'];
+                    var cri_all = output1['cri_all'];
                     if (cct_all[0] < 0) {
                         for (let i = 0; i < cct_all.length; i++) {
                             cct_all[i] = NaN;
@@ -379,6 +381,7 @@
                     mediDaylight.innerHTML = `MEDI: ${medi_all[zonesSelection-1].toFixed(2)} lx`;
                     mderDaylight.innerHTML = `MDER: ${(medi_all[zonesSelection-1]/plux_all[zonesSelection-1]).toFixed(2)}`;
                     cctDaylight.innerHTML = `CCT: ${cct_all[zonesSelection-1].toFixed(2)} K`;
+                    criDaylight.innerHTML = `CRI: ${cri_all[zonesSelection-1].toFixed(2)}`;
                 }
 
             });
