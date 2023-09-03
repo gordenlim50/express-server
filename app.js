@@ -142,9 +142,9 @@ app.get('/metrics', (req, res)=>{
     res.sendFile(__dirname + '/html/metrics.html')
 })
 
-/// ==================================================== Visual.html ======================================================================== ///
+/// ==================================================== Visual Metrics ======================================================================== ///
 app.get('/visual', (req, res)=>{
-    res.sendFile(__dirname + '/html/visual.html')
+    res.sendFile(__dirname + '/html/set.html')
 })
 
 // --- GET desired CCT --- //
@@ -249,10 +249,7 @@ app.post("/getCRI_CL", async function(req, res){
     }
 })
 
-/// ==================================================== Non Visual.html ======================================================================== ///
-app.get('/nonvisual', (req, res)=>{
-    res.sendFile(__dirname + '/html/non-visual.html')
-})
+/// ==================================================== Non Visual Metrics ======================================================================== ///
 
 // --- GET desired MEDI & MDER --- //
 // Open loop 
@@ -299,10 +296,7 @@ app.post("/getMEDI_MDER_CL", async function(req, res) {
     }
 });
 
-/// ==================================================== Pair.html ======================================================================== ///
-app.get('/pair', (req, res)=>{
-    res.sendFile(__dirname + '/html/pair.html')
-})
+/// ==================================================== Pair Metrics ======================================================================== ///
 
 // --- GET desired CCT & Plux --- //
 // Open Loop 

@@ -226,7 +226,7 @@
                 y: yValues,
                 type: 'scatter',
                 fill: 'tozeroy',
-                fillcolor: 'blue',
+                fillcolor: 'lightblue',
             };
 
             var data = [SPM_return];
@@ -582,9 +582,9 @@
                 },
                 body: JSON.stringify(requestData)
               });
-              cct_mediInputDisplay_p(inputCCT_cm.value, inputMedi_cm.value)
+              cct_mediInputDisplay(inputCCT_cm.value, inputMedi_cm.value)
               const result = await response.json();
-              updateResults(result.processedData, 'cct_medi'); 
+              updateResults_p(result.processedData, 'cct_medi'); 
               covering.style.display = 'none';
               close_loop.style.display = 'block';
               toggle_switch.style.display = 'block';
@@ -605,9 +605,9 @@
                 },
                 body: JSON.stringify(requestData)
               });
-              plux_mediInputDisplay_p(inputPlux_pm.value, inputMedi_pm.value)
+              plux_mediInputDisplay(inputPlux_pm.value, inputMedi_pm.value)
               const result = await response.json();
-              updateResults(result.processedData, 'plux_medi');  
+              updateResults_p(result.processedData, 'plux_medi');  
               covering.style.display = 'none';
               close_loop.style.display = 'block';
               toggle_switch.style.display = 'block';

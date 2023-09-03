@@ -986,7 +986,7 @@ color:#fff;
 .input-field-cct-medi{
     width: 30%;
     padding: 6px 0;
-    padding-left: 30px;
+    padding-left: 12px;
     margin: 5px 5px 5px;
     border-top: 0;
     border-left: 0;
@@ -1005,7 +1005,7 @@ color:#fff;
 .input-field-medi-cct{
     width: 30%;
     padding: 6px 0;
-    padding-left: 30px;
+    padding-left: 12px;
     margin: 5px 5px 5px;
     border-top: 0;
     border-left: 0;
@@ -1074,7 +1074,7 @@ color:#fff;
 .input-field-plux-medi{
     width: 30%;
     padding: 6px 0;
-    padding-left: 20px;
+    padding-left: 12px;
     margin: 5px 5px 5px;
     border-top: 0;
     border-left: 0;
@@ -1617,7 +1617,7 @@ input:checked + .slider:before {
 .input-field-medi{
     width: 30%;
     padding: 6px 0;
-    padding-left: 25px;
+    padding-left: 12px;
     margin: 5px 5px 5px;
     border-top: 0;
     border-left: 0;
@@ -1636,7 +1636,7 @@ input:checked + .slider:before {
 .input-field-mder{
     width: 30%;
     padding: 6px 0;
-    padding-left: 35px;
+    padding-left: 12px;
     margin: 5px 5px 5px;
     border-top: 0;
     border-left: 0;
@@ -1714,7 +1714,7 @@ input:checked + .slider:before {
 .input-field-plux-cct{
     width: 30%;
     padding: 6px 0;
-    padding-left: 30px;
+    padding-left: 12px;
     margin: 5px 5px 5px;
     border-top: 0;
     border-left: 0;
