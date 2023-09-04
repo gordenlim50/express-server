@@ -10,7 +10,7 @@ import ast
 import time
 
 from relatedFunctions import linear_interpolation, alpha_opic_cal, D_illuminant, reflight, getcri
-from relatedFunctions import window_dist, xyz, xyToCCT, getZonesSPD, getActualSPD
+from relatedFunctions import window_dist, xyz, xyToCCT, getZonesSPD, getActualSPD, fitResult_bri_cm, fitResult_bri_cp
 
 # Getting inputs (inputs = [(dk what is this), [indoor daylight spectrum (1 zone)], targetvalues])
 pred_spd = sys.argv[1]
@@ -49,32 +49,43 @@ if target_lx > 0:
     mder_req = medi_req / plux_req
 
     #---------------------------------Codes to set for Hue lights in the room----------------------------
-    with open('python/ja_scripts/all_metrics_wf_sensor2.csv', 'r') as file1:
-        reader = csv.reader(file1)
-        hue = list(reader)
-        hue = hue[1:]
-        for i in range(len(hue)):
-            hue[i] = [float(val) for val in hue[i]]
+    # with open('python/ja_scripts/all_metrics_wf_sensor2.csv', 'r') as file1:
+    #     reader = csv.reader(file1)
+    #     hue = list(reader)
+    #     hue = hue[1:]
+    #     for i in range(len(hue)):
+    #         hue[i] = [float(val) for val in hue[i]]
 
-    # search for appropriate inputs of hue from the collected data
-    lx_dev = 20
-    cct_dev = 150
-    for i in range(len(hue)):
-        if select == 1:
-            ind = 7
-            lx_req = plux_req
-        elif select == 2:
-            ind = 6
-            lx_req = medi_req
+    # # search for appropriate inputs of hue from the collected data
+    # lx_dev = 20
+    # cct_dev = 150
+    # for i in range(len(hue)):
+    #     if select == 1:
+    #         ind = 7
+    #         lx_req = plux_req
+    #     elif select == 2:
+    #         ind = 6
+    #         lx_req = medi_req
             
-        if hue[i][ind] >= lx_req and hue[i][ind] <= lx_req + lx_dev and hue[i][4] >= target_cri:
-            spd_corres = hue[i][9:]
-            spd_overall = np.array(spd_corres) + np.array(pred_spd)
-            x,y,z = xyz(spd_overall, 2)
-            cct_overall = xyToCCT(x,y)
-            if cct_overall >= cct_req - cct_dev and cct_overall <= cct_req + cct_dev :
-                set_bri = hue[i][0]
-                set_ct = hue[i][1]
+    #     if hue[i][ind] >= lx_req and hue[i][ind] <= lx_req + lx_dev and hue[i][4] >= target_cri:
+    #         spd_corres = hue[i][9:]
+    #         spd_overall = np.array(spd_corres) + np.array(pred_spd)
+    #         x,y,z = xyz(spd_overall, 2)
+    #         cct_overall = xyToCCT(x,y)
+    #         if cct_overall >= cct_req - cct_dev and cct_overall <= cct_req + cct_dev :
+    #             set_bri = hue[i][0]
+    #             set_ct = hue[i][1]
+    
+    
+    if select == 2:
+        set_bri = fitResult_bri_cm(medi_req, cct_req)
+        set_cct = cct_req
+        set_ct = 1e6 / set_cct
+    elif select == 1:
+        set_bri = fitResult_bri_cp(plux_req, cct_req)
+        set_cct = cct_req
+        set_ct = 1e6 / set_cct
+    
     
     ## Set Hue lights
     url_get = 'https://ece4809api.intlightlab.com/get-spectrum-room'
