@@ -29,7 +29,7 @@
 
     <!-- Banner -->
     <section id="ovrflw" class="backgrd">
-        <div class = "nvm">
+        <div class = "vm">
             <h1>Step Metrics:</h1>
         </div>
 
@@ -92,6 +92,9 @@
                 <input type="text" name ="step_get_mder", id="step_get_mder", class="step_input_text", placeholder="0 ~ 1", min="0", max="1" >
                 <input type="text" name ="get_stepmder", id="get_stepmder", class="step_input_text", placeholder="(Steps MDER)", min="0.02", max="0.05"><br>
             </div>
+
+            <label for="timeInput" class="step_input_select_text"> Allocate Time: </label>
+            <input type="text" name ="alloc_Time", id="alloc_time", class="step_input_time", placeholder="(minutes)"><br>
     
             <label for="timeInput" class="step_input_select_text">Steps Time: </label>
             <input type="text" name ="step_Time", id="step_time", class="step_input_time", placeholder="(minutes)"><br>
@@ -151,35 +154,35 @@
             // Select Pairwise Metrics
             metricsInput.addEventListener("change", function(){
                 if(metricsInput.value == "0"){
-                    Stepbox.style.height = "360px";
+                    Stepbox.style.height = "420px";
                     selectCCT_PLUX.style.display = "block";
                     selectCCT_MEDI.style.display = "none";
                     selectPLUX_MEDI.style.display = "none";
                     selectMEDI_MDER.style.display = "none";
                 }
                 else if (metricsInput.value == "1"){
-                    Stepbox.style.height = "360px";
+                    Stepbox.style.height = "420px";
                     selectCCT_PLUX.style.display = "none";
                     selectCCT_MEDI.style.display = "block";
                     selectPLUX_MEDI.style.display = "none";
                     selectMEDI_MDER.style.display = "none";
                 }
                 else if (metricsInput.value == "2"){
-                    Stepbox.style.height = "360px";
+                    Stepbox.style.height = "420px";
                     selectCCT_PLUX.style.display = "none";
                     selectCCT_MEDI.style.display = "none";
                     selectPLUX_MEDI.style.display = "block";
                     selectMEDI_MDER.style.display = "none";
                 }
                 else if (metricsInput.value == "3"){
-                    Stepbox.style.height = "360px";
+                    Stepbox.style.height = "420px";
                     selectCCT_PLUX.style.display = "none";
                     selectCCT_MEDI.style.display = "none";
                     selectPLUX_MEDI.style.display = "none";
                     selectMEDI_MDER.style.display = "block";
                 }
                 else{
-                    Stepbox.style.height = "270px";
+                    Stepbox.style.height = "320px";
                     selectCCT_PLUX.style.display = "none";
                     selectCCT_MEDI.style.display = "none";
                     selectPLUX_MEDI.style.display = "none";

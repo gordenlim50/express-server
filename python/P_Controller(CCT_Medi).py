@@ -30,9 +30,7 @@ diff1 = 100
 diff2 = 100
 
 while diff1 > 5 or diff2 > 50:
-    # Start the timer at the beginning of each iteration
-    start_time = time.time()
-
+   
     val_bri = fitResult_bri_cm(target_medi, target_cct)
     val_cct = target_cct
 

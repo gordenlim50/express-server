@@ -517,45 +517,9 @@ header{
 
 
 /* Visual Metrics */
-.vm{
-    position: absolute;
-    top: 9%;
-    left: 9%;
-}
-
-.vm h1{
-    font-size: 16px;
-    color: #fff;
-    text-align: left;
-}
 
 
 /* CCT */
-.CCT{
-    position: absolute;
-    top: 13.5%;
-    left: 9%;
-    width: 360px;
-    height: 160px;
-    background: transparent;
-    border: 2px solid rgba(255, 255, 255, .5);
-    border-radius: 20px;
-    backdrop-filter: blur(20px);
-    text-align: center;
-}
-
-.CCT h1{
-    margin: 15px 0 5px;
-    font-size: 16px;
-    color:#fff;
-}
-
-.CCT p{
-margin: 0px 0 15px;
-font-size: 12px;
-color:#fff;
-}
-
 .set-button-cct{
     display: inline-block;
     text-decoration: none;
@@ -576,25 +540,6 @@ color:#fff;
     background: var(--main-color);
     transition: 1s;
 }
-
-/* Input field CCT */
-/* .input-field-cct{
-    width: 50%;
-    padding: 10px 0;
-    margin: 5px 0;
-    border-top: 0;
-    border-left: 0;
-    border-right: 0;
-    font-size: 14px;
-    border-bottom: 1px solid #fff;;
-    outline: none;
-    background: transparent;
-    color: #fff;
-}
-
-.input-field-cct::placeholder{
-    color: #fff;
-} */
 
 
 /* Plux */
@@ -644,25 +589,6 @@ color:#fff;
     transition: 1s;
 }
 
-/* Input field PLUX */
-/* .input-field-plux{
-    width: 50%;
-    padding: 10px 0;
-    margin: 5px 0;
-    border-top: 0;
-    border-left: 0;
-    border-right: 0;
-    font-size: 14px;
-    border-bottom: 1px solid #fff;;
-    outline: none;
-    background: transparent;
-    color: #fff;
-}
-
-.input-field-plux::placeholder{
-    color: #fff;
-} */
-
 /* CRI */
 .CRI{
     position: absolute;
@@ -710,65 +636,6 @@ color:#fff;
     transition: 1s;
 }
 
-/* Input field CRI */
-/* .input-field-cri{
-    width: 50%;
-    padding: 10px 0;
-    margin: 5px 0;
-    border-top: 0;
-    border-left: 0;
-    border-right: 0;
-    font-size: 14px;
-    border-bottom: 1px solid #fff;;
-    outline: none;
-    background: transparent;
-    color: #fff;
-}
-
-.input-field-cri::placeholder{
-    color: #fff;
-} */
-
-/* Non Visual Metrics */
-.nvm{
-    color: #fff;
-    position: absolute;
-    top: 9%;
-    left: 9%;
-    text-align: left;
-}
-
-.nvm h1{
-    font-size: 16px;
-}
-
-
-/* MEDI */
-.MEDI_MDER{
-    position: absolute;
-    top: 13.5%;
-    left: 9%;
-    width: 360px;
-    height: 320px;
-    background: transparent;
-    border: 2px solid rgba(255, 255, 255, .5);
-    border-radius: 20px;
-    backdrop-filter: blur(20px);
-    text-align: center;
-}
-
-.MEDI_MDER h1{
-    margin: 15px 0 5px;
-    font-size: 14px;
-    color:#fff
-}
-
-.MEDI_MDER p{
-margin: 0px 0 10px;
-font-size: 12px;
-color:#fff;
-}
-
 .set-button-medi-mder{
     display: inline-block;
     text-decoration: none;
@@ -792,172 +659,6 @@ color:#fff;
     transition: 1s;
 }
 
-/* Input field MEDI */
-/* .input-field-medi{
-    width: 50%;
-    padding: 10px 0;
-    margin: 5px 0;
-    border-top: 0;
-    border-left: 0;
-    border-right: 0;
-    font-size: 14px;
-    border-bottom: 1px solid #fff;;
-    outline: none;
-    background: transparent;
-    color: #fff;
-}
-
-.input-field-medi::placeholder{
-    color: #fff;
-} */
-
-/* Input field MDER */
-/* .input-field-mder{
-    width: 50%;
-    padding: 10px 0;
-    margin: 0px 0;
-    border-top: 0;
-    border-left: 0;
-    border-right: 0;
-    font-size: 14px;
-    border-bottom: 1px solid #fff;;
-    outline: none;
-    background: transparent;
-    color: #fff;
-    position: relative;
-    left: -45px
-}
-
-.input-field-mder::placeholder{
-    color: #fff;
-} */
-
-/* Combination */
-.comb{
-    color: #fff;
-    position: absolute;
-    top: 9%;
-    left: 9%;
-    text-align: left;
-}
-
-.comb h1{
-    font-size: 16px;
-}
-
-/* CCT & Plux */
-.CCT_Plux{
-    position: absolute;
-    top: 13.5%;
-    left: 9%;
-    width: 360px;
-    height: 180px;
-    background: transparent;
-    border: 2px solid rgba(255, 255, 255, .5);
-    border-radius: 20px;
-    backdrop-filter: blur(20px);
-    text-align: center;
-}
-
-.CCT_Plux h1{
-    margin: 15px 0 5px;
-    font-size: 14px;
-    color:#fff
-}
-
-.CCT_Plux p{
-margin: 0px 0 10px;
-font-size: 11px;
-color:#fff;
-}
-
-/* .set-button-cct-plux{
-    display: inline-block;
-    text-decoration: none;
-    color: #fff;
-    border: 1px solid #fff;
-    padding: 9px 30px;
-    font-size: 12px;
-    background: transparent;
-    border-radius: 20px;
-    position: relative;
-    margin: 10px 10 5px;
-    left: 6px;
-    top: 30px;
-    cursor: pointer;
-}
-
-.set-button-cct-plux:hover{
-    border: 1px solid var(--main-color);
-    background: var(--main-color);
-    transition: 1s;
-} */
-
-/* Input field CCT & Plux */
-/* .input-field-cct-plux{
-    width: 50%;
-    padding: 10px 0;
-    margin: 0;
-    border-top: 0;
-    border-left: 0;
-    border-right: 0;
-    font-size: 12px;
-    border-bottom: 1px solid #fff;;
-    outline: none;
-    background: transparent;
-    color: #fff;
-    
-}
-
-.input-field-cct-plux::placeholder{
-    color: #fff;
-} */
-
-/* .input-field-plux-cct{
-    width: 50%;
-    padding: 10px 0;
-    margin: 0px 0;
-    border-top: 0;
-    border-left: 0;
-    border-right: 0;
-    font-size: 12px;
-    border-bottom: 1px solid #fff;;
-    outline: none;
-    background: transparent;
-    color: #fff;
-    position: relative;
-    left: -40px;
-}
-
-.input-field-plux-cct::placeholder{
-    color: #fff;
-} */
-
-/* CCT & MEDI */
-.CCT_MEDI{
-    position: absolute;
-    top: 41.5%;
-    left: 9%;
-    width: 360px;
-    height: 180px;
-    background: transparent;
-    border: 2px solid rgba(255, 255, 255, .5);
-    border-radius: 20px;
-    backdrop-filter: blur(20px);
-    text-align: center;
-}
-
-.CCT_MEDI h1{
-    margin: 15px 0 5px;
-    font-size: 14px;
-    color:#fff
-}
-
-.CCT_MEDI p{
-margin: 0px 0 10px;
-font-size: 11px;
-color:#fff;
-}
 
 .set-button-cct-medi{
     display: inline-block;
@@ -1019,32 +720,6 @@ color:#fff;
 
 .input-field-medi-cct::placeholder{
     color: #fff;
-}
-
-/* CCT & MEDI */
-.Plux_MEDI{
-    position: absolute;
-    top: 69.5%;
-    left: 9%;
-    width: 360px;
-    height: 180px;
-    background: transparent;
-    border: 2px solid rgba(255, 255, 255, .5);
-    border-radius: 20px;
-    backdrop-filter: blur(20px);
-    text-align: center;
-}
-
-.Plux_MEDI h1{
-    margin: 15px 0 5px;
-    font-size: 14px;
-    color:#fff
-}
-
-.Plux_MEDI p{
-margin: 0px 0 10px;
-font-size: 11px;
-color:#fff;
 }
 
 .set-button-plux-medi{
@@ -1395,13 +1070,24 @@ input:checked + .slider:before {
 
 
 /* Step */
+.vm{
+    position: absolute;
+    top: 9%;
+    left: 9%;
+}
+
+.vm h1{
+    font-size: 16px;
+    color: #fff;
+    text-align: left;
+}
 
 .Steps{
     position: absolute;
     top: 13.5%;
     left: 9%;
     width: 420px;
-    height: 270px;
+    height: 320px;
     background: transparent;
     border: 2px solid rgba(255, 255, 255, .5);
     border-radius: 20px;
@@ -1474,7 +1160,7 @@ input:checked + .slider:before {
 .step_input_time{
     width: 20%;
     padding: 8px 0;
-    padding-left: 15px;
+    padding-left: 10px;
     margin: 5px 5px 5px;
     border-top: 0;
     border-left: 0;
