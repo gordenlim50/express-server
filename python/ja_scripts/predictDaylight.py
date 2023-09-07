@@ -106,11 +106,33 @@ class RoomRadiancePredictor(LightningModule):
     # DATA RELATED HOOKS
     ####################
 
+def normalise_array(data, means, stds):
+    norm_data = []
+    for i in range(len(data)):
+        norm_data.append((data[i]-means[i])/stds[i])
+
+    return norm_data
+
+def denormalise_array(data, means, stds):
+    denorm_data = []
+    for i in range(len(data)):
+        denorm_data.append((data[i]*stds[i])+means[i])
+
+    return denorm_data
+
+
 # Getting inputs
 curtain_perc = int(sys.argv[1])
 
 # Processing inputs
 curtain = curtain_perc / 100
+
+# Z score means and standard devs
+means = [10.962074543139346, 29.265374952679217, 2.553206666273283, 167.44713127263873, 282.91571320532455, 
+         62.22259857967276, 264.02854424043846, 1650.2812919434216, 2848.818008569364, 0.5743710637712083, 226.9186813463907]
+stds = [6.704830439183178, 17.553829417056985, 43.35674816020464, 128.14641402749257, 323.36304028278727, 
+        70.58132868625997, 335.6562081333591, 813.1405597595017, 1520.5974886111605, 0.32774445442743255, 1305.3745242649566]
+
 
 # defining URL parameters
 BASE_URL = "http://api.openweathermap.org/data/2.5/weather?"
@@ -238,8 +260,14 @@ if dni != 0 and curtain != 0:
         # Prepare your input data for prediction
         position = i+1
         dwr, dwb = window_dist(position)
+        
+        # model inputs
         model_input = [retrieve_time.hour, retrieve_time.minute, altitude, azimuth, dni, dhi, ghi, dwr, dwb, curtain]
-        new_data = model_input  # Load or create new data for prediction
+        
+        # normalise model inputs
+        model_input_norm = normalise_array(model_input, means, stds)
+        
+        new_data = model_input_norm
         input_data = torch.tensor(new_data, dtype=torch.float32)
 
         # Pass the input data through the model to obtain predictions
@@ -249,8 +277,11 @@ if dni != 0 and curtain != 0:
         # Process the predictions
         predictions = predictions.tolist()
         
+        # denormalise output
+        denorm_prediction = (predictions[0] * stds[-1]) + means[-1]
+        
         # Illuminance values for every zones
-        zones_illum.append(predictions[0])
+        zones_illum.append(denorm_prediction)
 
     #----------------------------------------------------------------------------------------------------------
     avg_illum = statistics.mean(zones_illum)
