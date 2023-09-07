@@ -33,12 +33,15 @@ diff1 = 100
 diff2 = 100
 
 # Steps Constant
-plux_step = 10
-medi_step = 10
+plux_steps = [10, 20, -40]
+medi_steps = [10, 20, -40]
+plux_i = 0
+medi_i = 0
 
 # Time step Constant
-time_step = 2 * 60          # Step 2 minutes
-time_allocate = 10 * 60     # Allocate 10 minutes
+time_steps_minutes = [2, 3, 3, 2]       # Step in minutes
+time_step_i = 0
+time_allocate = 10 * 60                 # Allocate 10 minutes
 
 # Initialize a flag to track whether to adjust targets
 adjust_targets = True
@@ -49,6 +52,10 @@ print('Target PLUX:', "{:.2f}".format(target1))
 print('Target MEDI:', "{:.2f}".format(target2))
 
 while True:
+    # Convert time step from minutes to seconds
+    time_step = time_steps_minutes[time_step_i] * 60
+
+    # Only adjust targets if the flag is set to True
     if adjust_targets:
         print("\nIteration: ", iteration)
 
@@ -135,21 +142,33 @@ while True:
     elapsed_time = current_time - start_time
     
     if elapsed_time >= time_step:
+
+        # Increment the time_step_index to use the next time step in the array
+        time_step_i += 1
+
         # Plux increment
-        if((target1 + plux_step) >= 0) and ((target1 + plux_step) <= 250):
-            target_plux = target1 + plux_step
-            target1 = target_plux
-            print('\nTarget PLUX:', "{:.2f}".format(target1))
-        else:
-            print("Plux target at range of 0lx ~ 250lx.")
+        if plux_i < len(plux_steps):
+            new_target_plux = target1 + plux_steps[plux_i]
+            if 0 <= new_target_plux <= 250:
+                target_plux = new_target_plux
+                target1 = target_plux
+                print('\nTarget PLUX:', "{:.2f}".format(target1))
+            else:
+                print("Plux target at range of 0lx ~ 250lx.")
 
         # Medi increment 
-        if ((target2 + medi_step) >= 0) and  ((target2 + medi_step)<= 200):
-            target_medi = target2 + medi_step
-            target2 = target_medi
-            print('Target MEDI:', "{:.2f}".format(target2))
-        else: 
-            print("Medi target at range of 0lx ~ 200lx.")
+        if medi_i < len(medi_steps):
+            new_target_medi = target2 + medi_steps[medi_i]
+            if 0 <= new_target_medi <= 200:
+                target_medi = new_target_medi
+                target2 = target_medi
+                print('Target MEDI:', "{:.2f}".format(target2))
+            else: 
+                print("Medi target at range of 0lx ~ 200lx.")
+
+        # Check if we've reached the end of the time_steps_minutes array
+        if time_step_i >= len(time_steps_minutes):
+            print("All time steps have been used.")
 
         # Add elapsed_time to total_elapsed_time
         total_elapsed_time += elapsed_time

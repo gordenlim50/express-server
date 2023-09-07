@@ -30,8 +30,10 @@ diff1 = 10
 diff2 = 10
 
 # Steps Constant
-medi_step = 10
-mder_step = 0.05
+medi_steps = []
+mder_steps = []
+medi_i = 0
+mder_i = 0 
 
 # Time step Constant
 time_step = 2 * 60          # Step 2 minutes
@@ -132,20 +134,25 @@ while True:
     if elapsed_time >= time_step:
 
         # MEDI increment
-        if((target1 + medi_step) >= 0) and ((target1 + medi_step) <= 250):
-            target_medi = target1 + medi_step
-            target1 = target_medi
-            print('\nTarget MEDI:', "{:.2f}".format(target1))
-        else:
-            print("Plux target at range of 0lx ~ 200lx.")
+        if medi_i < len(medi_steps):
+            new_target_medi = target1 + medi_steps[medi_i]
+            if 0 <= new_target_medi <= 250:
+                target_medi = new_target_medi
+                target1 = target_medi
+                print('\nTarget MEDI:', "{:.2f}".format(target1))
+            else:
+                print("Plux target at range of 0lx ~ 250lx.")
+
 
         # MDER increment 
-        if ((target2 + mder_step) >= 0) and  ((target2 + mder_step)<= 200):
-            target_cct = target2 + mder_step
-            target2 = target_cct
-            print('Target MDER', "{:.2f}".format(target2))
-        else: 
-            print("CCT MDER at range of 0lx ~ 200lx.")
+        if mder_i < len(mder_steps):
+            new_target_mder = target2 + mder_steps[mder_i]
+            if 0 <= new_target_mder <= 200:
+                target_mder = new_target_mder
+                target2 = target_mder
+                print('Target MDER', "{:.2f}".format(target2))
+            else: 
+                print("CCT MDER at range of 0lx ~ 200lx.")
 
         # Add elapsed_time to total_elapsed_time
         total_elapsed_time += elapsed_time

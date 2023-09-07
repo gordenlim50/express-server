@@ -444,6 +444,43 @@ app.get('/step', (req, res)=>{
     res.sendFile(__dirname + '/html/step.html')
 })
 
+app.post('/get_step_CP', async function(req, res){
+    var alltime = req.body.allocatetime;
+    var inCCT = req.body.initialcct;
+    var inPlux = req.body.initialplux;
+    var stepcct1 = req.body.stepCCT1;
+    var stepcct2 = req.body.stepCCT2;
+    var stepcct3 = req.body.stepCCT3;
+    var stepcct4 = req.body.stepCCT4;
+    var stepcct5 = req.body.stepCCT5;
+    var stepplux1 = req.body.stepPlux1;
+    var stepplux2 = req.body.stepPlux2;
+    var stepplux3 = req.body.stepPlux3;
+    var stepplux4 = req.body.stepPlux4;
+    var stepplux5 = req.body.stepPlux5;
+    var steptime1 = req.body.stepTime1;
+    var steptime2 = req.body.stepTime2;
+    var steptime3 = req.body.stepTime3;
+    var steptime4 = req.body.stepTime4;
+    var steptime5 = req.body.stepTime5;
+
+    console.log("Initial CCT: " + inCCT)
+    console.log("Initial Plux: " + inPlux)
+
+    try {
+        const processedData  = await executePython('python/step_CCT_PLUX.py', [alltime, inCCT, inPlux, stepcct1, stepcct2, stepcct3, stepcct4, stepcct5, stepplux1, stepplux2, stepplux3, stepplux4, stepplux5, steptime1, steptime2, steptime3, steptime4, steptime5]);
+        res.json({ processedData }); 
+        console.log(processedData)
+
+    } catch (error) {
+        res.status(500).json({ error: error }); 
+    }
+
+
+})
+
+
+
 // Listen on port 3000
 app.listen(port, () => console.info(`Listening on port ${port}`))
 

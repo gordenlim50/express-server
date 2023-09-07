@@ -29,12 +29,16 @@ diff1 = 100
 diff2 = 100
 
 # Steps Constant
-cct_step = 100
-medi_step = 10
+cct_steps = [500, 500, -250, -250, 0]
+medi_steps = [30, 30, -20, -10, 0]
+cct_i = 0
+medi_i = 0
+
 
 # Time step Constant
-time_step = 2 * 60          # Step 2 minutes
-time_allocate = 10 * 60     # Allocate 10 minutes
+time_steps_minutes = [2, 3, 3, 3, 3, 5]       # Step 2 minutes
+time_step_i = 0
+time_allocate = 15 * 60                 # Allocate 10 minutes
 
 # Initialize a flag to track whether to adjust targets
 adjust_targets = True
@@ -45,6 +49,10 @@ print('Target CCT:', "{:.2f}".format(target2))
 print('Target MEDI:', "{:.2f}".format(target1))
 
 while True:
+
+    # Convert time step from minutes to seconds
+    time_step = time_steps_minutes[time_step_i] * 60
+
     # Only adjust targets if the flag is set to True
     if adjust_targets:
         print("\nIteration: ", iteration)
@@ -124,7 +132,7 @@ while True:
         time.sleep(5)
     
     # Check if both targets are nearly reached
-    if diff1 < 4 and diff2 < 40:
+    if diff1 < 4 and diff2 < 50:
         iteration = 1 # Reset iteration
         adjust_targets = False  # Set the flag to False to exit the loop
         
@@ -133,22 +141,35 @@ while True:
     elapsed_time = current_time - start_time
 
     if elapsed_time >= time_step:
+
+        # Increment the time_step_index to use the next time step in the array
+        time_step_i += 1
+
         # CCT increment 
-        if ((target2 + cct_step) >= 2500) and  ((target2 + cct_step)<= 6500):
-            target_cct = target2 + cct_step
-            target2 = target_cct
-            print('\nTarget CCT:', "{:.2f}".format(target2))
-        else: 
-            print("CCT target at range of 2500K ~ 6500K.")
+        if cct_i < len(cct_steps):
+            new_target_cct = target2 + cct_steps[cct_i]
+            if 2500 <= new_target_cct <= 6500:
+                target_cct = new_target_cct
+                target2 = target_cct
+                print('\nTarget CCT:', "{:.2f}".format(target2))
+            else: 
+                print("CCT target at range of 2500K ~ 6500K.")
+
 
         # Plux increment
-        if((target1 + medi_step) >= 0) and ((target1 + medi_step) <= 200):
-            target_medi = target1 + medi_step
-            target1 = target_medi
-            print('Target MEDI:', "{:.2f}".format(target1))
-        else:
-            print("Plux target at range of 0lx ~ 200lx.")
+        if medi_i < len(medi_steps):
+            new_target_medi  = target1 + medi_steps[medi_i]
+            if 0 <= new_target_medi <= 200:
+                target_medi = new_target_medi
+                target1 = target_medi
+                print('Target MEDI:', "{:.2f}".format(target1))
+            else:
+                print("Medi target at range of 0lx ~ 200lx.")
         
+        # Check if we've reached the end of the time_steps_minutes array
+        if time_step_i >= len(time_steps_minutes):
+            print("All time steps have been used.")
+
         # Add elapsed_time to total_elapsed_time
         total_elapsed_time += elapsed_time
 
