@@ -61,26 +61,26 @@
                 <label for="step_get_plux" name="step_get_plux" class="step_input_select_text">Desired initial Plux: </label>
                 <input type="text" name ="step_get_plux", id="step_get_plux", class="step_input_text", placeholder="0lx ~ 250lx", min="0", max="250" >
                 
-                <div id='input-cct_step_cont'>
+                <div id='inputcp-cct_step_cont'>
                     <!--Input container-->
                     <label class="step_input_select_text">Step CCT: </label>
                     <input class="input_Cp_step" id="input_Cp_step1">
                 </div>
 
-                <div id='input-plux_step_cont'>
+                <div id='inputcp-plux_step_cont'>
                     <!--Input container-->
                     <label class="step_input_select_text"> Step Plux: </label>
                     <input class="input_cP_step" id="input_cP_step1">
                 </div>
 
-                <div id='input-time_step_cont'>
+                <div id='inputcp-time_step_cont'>
                     <!--Input container-->
                     <label class="step_input_select_text">Step Time (min): </label>
                     <input class="input_time_cp_step" id="input_time_cp_step1">
                 </div>
             </div>
-            <button id="add_step_cp_button" class="add_step_cp_button" onclick='addInputs_cp()'>+Add steps</button>
-            <button id="set-step-button-cct-plux" class="set-step-button-cct-plux">Set</button> 
+            <button id="add_step_cp_button" class="add_step_button" onclick='addInputs_cp()'>+Add steps</button>
+            <button id="set-step-button-cct-plux" class="set-step-button">Set</button> 
 
 
             <div id="step_selected_pair2" style="display: none;">
@@ -91,7 +91,29 @@
                 <!-- MEDI -->
                 <label for="step_get_medi" class="step_input_select_text">Desired initial MEDI: </label>
                 <input type="text" name ="step_get_medi", id="step_get_medi", class="step_input_text", placeholder="0lx ~ 200lx", min="0", max="200" >
+                
+                <div id='inputcm-cct_step_cont'>
+                    <!--Input container-->
+                    <label class="step_input_select_text">Step CCT: </label>
+                    <input class="input_Cp_step" id="input_Cm_step1">
+                </div>
+
+                <div id='inputcm-medi_step_cont'>
+                    <!--Input container-->
+                    <label class="step_input_select_text"> Step Plux: </label>
+                    <input class="input_cP_step" id="input_cm_step1">
+                </div>
+
+                <div id='inputcm-time_step_cont'>
+                    <!--Input container-->
+                    <label class="step_input_select_text">Step Time (min): </label>
+                    <input class="input_time_cp_step" id="input_time_cm_step1">
+                </div>
+            
             </div>
+            <button id="add_step_cm_button" class="add_step_button" onclick='addInputs_cm()'>+Add steps</button>
+            <button id="set-step-button-cct-medi" class="set-step-button">Set</button> 
+
             
             <div id="step_selected_pair3" style="display: none;">
                 <!-- PLUX -->
@@ -141,59 +163,105 @@
             // Buttons
             const add_CP_step = document.getElementById("add_step_cp_button");
             const set_CP_step = document.getElementById("set-step-button-cct-plux");
+            const add_CM_step = document.getElementById("add_step_cm_button");
+            const set_CM_step = document.getElementById("set-step-button-cct-medi");
 
             // CCT & Plux Step
-            //CCT
             const step_CCT1 = document.getElementById("input_Cp_step1");
-           
-            //PLUX
             const step_PLUX1 = document.getElementById("input_cP_step1");
-            
-            //Time
             const step_time_CP1= document.getElementById("input_time_cp_step1");
             
+            // CCT & Medi Step
+            const step_CCT_CM1 = document.getElementById("input_Cm_step1");
+            const step_Medi_CM1 = document.getElementById("input_cM_step1");
+            const step_time_CM1= document.getElementById("input_time_cm_step1");
 
 
             // Add  CCT and Plux function 
-            var inputCount = 1;
+            var inputCount_c = 1;
             var inputCount_p = 1;
             var inputCount_tcp = 1;
 
             function addInputs_cp() {
-                var containerCct = document.getElementById('input-cct_step_cont');
-                var containerPlux = document.getElementById('input-plux_step_cont');
-                var containerTime = document.getElementById('input-time_step_cont');
+                var containerCct = document.getElementById('inputcp-cct_step_cont');
+                var containerPlux = document.getElementById('inputcp-plux_step_cont');
+                var containerTime = document.getElementById('inputcp-time_step_cont');
 
-                if (inputCount + inputCount_p + inputCount_tcp >= 15) {
+                if (inputCount_c + inputCount_p + inputCount_tcp >= 15) {
                 alert('You can add a maximum of 5 set input fields.');
                 return;
                 }
 
-                if (inputCount < 5) {
-                    inputCount++;
+                if (inputCount_c < 5) {
+                    inputCount_c++;
                     let inputCct = document.createElement('input');
                     inputCct.className = 'input_Cp_step';
-                    inputCct.id = `input_Cp_step${inputCount}`;
+                    inputCct.id = 'input_Cp_step' + (inputCount_c);
                     containerCct.appendChild(inputCct);
                 }
 
                 if (inputCount_p < 5) {
-                let inputPlux = document.createElement('input');
-                inputPlux.className = 'input_cP_step';
-                inputPlux.id = 'input_cP_step' + (inputCount_p + 1);
-                containerPlux.appendChild(inputPlux);
-                inputCount_p++;
+                    inputCount_p++;
+                    let inputPlux = document.createElement('input');
+                    inputPlux.className = 'input_cP_step';
+                    inputPlux.id = 'input_cP_step' + (inputCount_p);
+                    containerPlux.appendChild(inputPlux);
+                    
                 }
 
                 if (inputCount_tcp < 5) {
-                let inputTime = document.createElement('input');
-                inputTime.className = 'input_time_cp_step';
-                inputTime.id = 'input_time_cp_step' + (inputCount_tcp + 1);
-                containerTime.appendChild(inputTime);
-                inputCount_tcp++;
+                    inputCount_tcp++;
+                    let inputTime = document.createElement('input');
+                    inputTime.className = 'input_time_cp_step';
+                    inputTime.id = 'input_time_cp_step' + (inputCount_tcp);
+                    containerTime.appendChild(inputTime);
+                    
                 }
             }   
             
+
+            // Add  CCT and Plux function 
+            var inputCount_Cm = 1;
+            var inputCount_cM = 1;
+            var inputCount_tcm = 1;
+
+            function addInputs_cm() {
+                var containerCct = document.getElementById('inputcm-cct_step_cont');
+                var containerMedi = document.getElementById('inputcm-medi_step_cont');
+                var containerTime = document.getElementById('inputcm-time_step_cont');
+
+                if (inputCount_Cm + inputCount_cM + inputCount_tcm >= 15) {
+                alert('You can add a maximum of 5 set input fields.');
+                return;
+                }
+
+                if (inputCount_Cm < 5) {
+                    inputCount_Cm++;
+                    let inputCct = document.createElement('input');
+                    inputCct.className = 'input_Cp_step';
+                    inputCct.id = 'input_Cm_step' + (inputCount_Cm);
+                    containerCct.appendChild(inputCct);
+                }
+
+                if (inputCount_cM < 5) {
+                    inputCount_cM++;
+                    let inputMedi = document.createElement('input');
+                    inputMedi.className = 'input_cP_step';
+                    inputMedi.id = 'input_cM_step' + (inputCount_cM);
+                    containerMedi.appendChild(inputMedi);
+                    
+                }
+
+                if (inputCount_tcm < 5) {
+                    inputCount_tcm++;
+                    let inputTime = document.createElement('input');
+                    inputTime.className = 'input_time_cp_step';
+                    inputTime.id = 'input_time_cm_step' + (inputCount_tcm);
+                    containerTime.appendChild(inputTime);
+                }
+            }   
+            
+
             // Display Current Time function 
             function updateDateTime() {
                 const dateTimeElement = document.getElementById('dateTime');
@@ -388,11 +456,11 @@
                     stepPlux3: step_PLUX3,
                     stepPlux4: step_PLUX4,
                     stepPlux5: step_PLUX5,
-                    steptime1: step_time_CP1.value,
-                    steptime2: step_TIME2,
-                    steptime3: step_TIME3,
-                    steptime4: step_TIME4,
-                    steptime5: step_TIME5
+                    stepTime1: step_time_CP1.value,
+                    stepTime2: step_TIME2,
+                    stepTime3: step_TIME3,
+                    stepTime4: step_TIME4,
+                    stepTime5: step_TIME5
                 };
 
                 const response = await fetch('/get_step_CP', {
@@ -404,13 +472,121 @@
                 }); 
                 const result = await response.json();     
                 
-                if (response.ok) {
-                    const result = await response.json();
-                    // Handle the response data here
-                } else {
-                    console.error('Request failed with status:', response.status);
-                }
             })
+
+            // CCT & Medi
+            set_CM_step.addEventListener('click', async () =>{
+                // CCT
+                var inputCCT_step2 = document.getElementById('input_Cm_step2');
+                var step_CCT2 = inputCCT_step2.value;
+                if (step_CCT2 === "") {
+                    step_CCT2 = 0;
+                }
+
+                var inputCCT_step3 = document.getElementById('input_Cm_step3');
+                var step_CCT3 = inputCCT_step3.value;
+                if (step_CCT3 === "") {
+                    step_CCT3 = 0;
+                }
+
+                var inputCCT_step4 = document.getElementById('input_Cm_step4');
+                var step_CCT4 = inputCCT_step4.value;
+                if (step_CCT4 === "") {
+                    step_CCT4 = 0;
+                }
+
+                var inputCCT_step5 = document.getElementById('input_Cm_step5');
+                var step_CCT5 = inputCCT_step5.value;
+                if (step_CCT5 === "") {
+                    step_CCT5 = 0;
+                }
+
+                var inputMEDI_step2 = document.getElementById('input_cM_step2');
+                var step_MEDI2 = inputMEDI_step2.value;
+                if (step_MEDI2 == "") {
+                   step_MEDI2 = 0;
+                }
+
+                var inputMEDI_step3 = document.getElementById('input_cM_step3');
+                var step_MEDI3 = inputMEDI_step3.value;
+                if (step_MEDI3 == "") {
+                    step_MEDI3 = 0;
+                }
+
+                var inputMEDI_step4 = document.getElementById('input_cM_step4');
+                var step_MEDI4 = inputMEDI_step4.value;
+                if (step_MEDI4 == "") {
+                    step_MEDI4 = 0;
+                }
+
+                var inputMEDI_step5 = document.getElementById('input_cM_step5');
+                var step_MEDI5 = inputMEDI_step5.value;
+                if (step_MEDI5 == "") {
+                    step_MEDI5 = 0;
+                }
+
+                var inputTime_step2 = document.getElementById('input_time_cm_step2');
+                var step_TIME2 = inputTime_step2.value;
+                if (step_TIME2 == "")
+                {
+                    step_TIME2 = 0;
+                }
+
+                var inputTime_step3 = document.getElementById('input_time_cm_step3');
+                var step_TIME3 = inputTime_step3.value;
+                if (step_TIME3 == "")
+                {
+                    step_TIME3 = 0;
+                }
+
+                var inputTime_step4 = document.getElementById('input_time_cm_step4');
+                var step_TIME4 = inputTime_step4.value;
+                if (step_TIME4 == "")
+                {
+                    step_TIME4 = 0;
+                }
+
+                var inputTime_step5 = document.getElementById('input_time_cm_step5');
+                var step_TIME5 = inputTime_step5.value;
+                if (step_TIME5 == "")
+                {
+                    step_TIME5 = 0;
+                }
+
+                const requestData = {
+                    allocatetime: allocate_Time.value,
+                    initialcct: CCT_medi.value,
+                    initialmedi: cct_MEDI.value,
+                    stepCCT1: step_CCT_CM1.value,
+                    stepCCT2: step_CCT2,
+                    stepCCT3: step_CCT3,
+                    stepCCT4: step_CCT4,
+                    stepCCT5: step_CCT5,
+                    stepPlux1: step_MEDI_CM1.value,
+                    stepPlux2: step_MEDI2,
+                    stepPlux3: step_MEDI3,
+                    stepPlux4: step_MEDI4,
+                    stepPlux5: step_MEDI5,
+                    stepTime1: step_time_CM1.value,
+                    stepTime2: step_TIME2,
+                    stepTime3: step_TIME3,
+                    stepTime4: step_TIME4,
+                    stepTime5: step_TIME5
+                };
+
+                const response = await fetch('/get_step_CP', {
+                    method: 'POST',
+                    headers: {
+                    'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestData)
+                }); 
+                const result = await response.json();     
+
+            })
+
+            // Plux & Medi
+
 
 
         </script>

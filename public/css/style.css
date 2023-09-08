@@ -1748,7 +1748,7 @@ input:checked + .slider:before {
   
 }
 
-.add_step_cp_button{
+.add_step_button{
     right: 25px; /* Adjust the left position as needed */
     position: absolute; /* Use absolute positioning to control the exact position */
     margin-top: 10px;
@@ -1768,7 +1768,7 @@ input:checked + .slider:before {
     background-color: var(--main-color);;
 }
 
-.set-step-button-cct-plux{
+.set-step-button{
     display: none;
     text-decoration: none;
     color: #fff;
@@ -1783,6 +1783,6 @@ input:checked + .slider:before {
     cursor: pointer;
 }
 
-.set-step-button-cct-plux:hover{
+.set-step-button:hover{
     background-color: var(--main-color);
 }

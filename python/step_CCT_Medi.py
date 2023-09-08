@@ -29,16 +29,22 @@ diff1 = 100
 diff2 = 100
 
 # Steps Constant
-cct_steps = [500, 500, -250, -250, 0]
-medi_steps = [30, 30, -20, -10, 0]
+cct_steps = [500, 500, 0, 0, 0]
+medi_steps = [10, 20, 0, 0, 0]
 cct_i = 0
 medi_i = 0
 
-
 # Time step Constant
-time_steps_minutes = [2, 3, 3, 3, 3, 5]       # Step 2 minutes
+time_steps_minutes = [2, 2, 0, 0, 0, 5]       # Step 2 minutes
 time_step_i = 0
-time_allocate = 15 * 60                 # Allocate 10 minutes
+time_allocate = 5 * 60                 # Allocate 10 minutes
+
+# Results
+CCT_Target = []
+CCT_Measured = []
+Medi_Target = []
+Medi_Measured = []
+
 
 # Initialize a flag to track whether to adjust targets
 adjust_targets = True
@@ -46,7 +52,9 @@ start_time = time.time()
 total_elapsed_time = 0  # Initialize total elapsed time
 
 print('Target CCT:', "{:.2f}".format(target2))
+CCT_Target.append(target2)
 print('Target MEDI:', "{:.2f}".format(target1))
+Medi_Target.append(target1)
 
 while True:
 
@@ -133,6 +141,8 @@ while True:
     
     # Check if both targets are nearly reached
     if diff1 < 4 and diff2 < 50:
+        CCT_Measured.append(measured_CCT)
+        Medi_Measured.append(measured_medi)
         iteration = 1 # Reset iteration
         adjust_targets = False  # Set the flag to False to exit the loop
         
@@ -150,8 +160,10 @@ while True:
             new_target_cct = target2 + cct_steps[cct_i]
             if 2500 <= new_target_cct <= 6500:
                 target_cct = new_target_cct
+                CCT_Target.append(target_cct)
                 target2 = target_cct
                 print('\nTarget CCT:', "{:.2f}".format(target2))
+                cct_i += 1
             else: 
                 print("CCT target at range of 2500K ~ 6500K.")
 
@@ -161,8 +173,10 @@ while True:
             new_target_medi  = target1 + medi_steps[medi_i]
             if 0 <= new_target_medi <= 200:
                 target_medi = new_target_medi
+                Medi_Target.append(target_medi)
                 target1 = target_medi
                 print('Target MEDI:', "{:.2f}".format(target1))
+                medi_i += 1
             else:
                 print("Medi target at range of 0lx ~ 200lx.")
         
@@ -181,4 +195,8 @@ while True:
     # Check if it's time to stop the program
     if total_elapsed_time >= time_allocate:
         print("Time allocation reached. Stopping the program.")
+        print('CCT_Target', CCT_Target)
+        print('Medi_Target', Medi_Target)
+        print('CCT_Measured', CCT_Measured)
+        print('Medi_Measured', Medi_Measured)
         break  # Exit the loop and stop the program
