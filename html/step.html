@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="/css/style.css">
     <!-- Box Icons -->
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+    <script src='https://cdn.plot.ly/plotly-2.25.2.min.js'></script>
 </head>
 <body id="step_page">
     <!-- Header -->
@@ -101,7 +103,7 @@
                 <div id='inputcm-medi_step_cont'>
                     <!--Input container-->
                     <label class="step_input_select_text"> Step Plux: </label>
-                    <input class="input_cP_step" id="input_cm_step1">
+                    <input class="input_cP_step" id="input_cM_step1">
                 </div>
 
                 <div id='inputcm-time_step_cont'>
@@ -123,21 +125,59 @@
                 <!-- MEDI -->
                 <label for="step_get_medi2" class="step_input_select_text">Desired intial MEDI: </label>
                 <input type="text" name ="step_get_medi2", id="step_get_medi2", class="step_input_text", placeholder="0lx ~ 200lx", min="0", max="200" >
+                
+                <div id='inputpm-plux_step_cont'>
+                    <!--Input container-->
+                    <label class="step_input_select_text">Step Plux: </label>
+                    <input class="input_Cp_step" id="input_Pm_step1">
+                </div>
+
+                <div id='inputpm-medi_step_cont'>
+                    <!--Input container-->
+                    <label class="step_input_select_text"> Step Medi: </label>
+                    <input class="input_cP_step" id="input_pM_step1">
+                </div>
+
+                <div id='inputpm-time_step_cont'>
+                    <!--Input container-->
+                    <label class="step_input_select_text">Step Time (min): </label>
+                    <input class="input_time_cp_step" id="input_time_pm_step1">
+                </div>
             </div>
+            <button id="add_step_pm_button" class="add_step_button" onclick='addInputs_pm()'>+Add steps</button>
+            <button id="set-step-button-plux-medi" class="set-step-button">Set</button> 
             
             <div id="step_selected_pair4" style="display: none;">
                 <!-- MEDI -->
                 <label for="step_get_medi3" class="step_input_select_text">Desired initial MEDI: </label>
                 <input type="text" name ="step_get_medi3", id="step_get_medi3", class="step_input_text", placeholder="0lx ~ 200lx", min="0", max="200"><br>
 
-
                 <!-- MDER -->
                 <label for="step_get_mder" class="step_input_select_text">Desired intial Plux: </label>
                 <input type="text" name ="step_get_mder", id="step_get_mder", class="step_input_text", placeholder="0 ~ 1", min="0", max="1" >
+                
+                <div id='inputmm-medi_step_cont'>
+                    <!--Input container-->
+                    <label class="step_input_select_text">Step Medi: </label>
+                    <input class="input_Cp_step" id="input_Mm_step1">
+                </div>
+
+                <div id='inputmm-mder_step_cont'>
+                    <!--Input container-->
+                    <label class="step_input_select_text"> Step Mder: </label>
+                    <input class="input_cP_step" id="input_mM_step1">
+                </div>
+
+                <div id='inputmm-time_step_cont'>
+                    <!--Input container-->
+                    <label class="step_input_select_text">Step Time (min): </label>
+                    <input class="input_time_cp_step" id="input_time_mm_step1">
+                </div>
             </div>
-
+            <button id="add_step_mm_button" class="add_step_button" onclick='addInputs_mm()'>+Add steps</button>
+            <button id="set-step-button-medi-mder" class="set-step-button">Set</button> 
            
-
+            <div class= "plot" id='pairDiv'></div>
        
 
         <script>
@@ -165,6 +205,10 @@
             const set_CP_step = document.getElementById("set-step-button-cct-plux");
             const add_CM_step = document.getElementById("add_step_cm_button");
             const set_CM_step = document.getElementById("set-step-button-cct-medi");
+            const add_PM_step = document.getElementById("add_step_pm_button");
+            const set_PM_step = document.getElementById("set-step-button-plux-medi");
+            const add_MM_step = document.getElementById("add_step_mm_button");
+            const set_MM_step = document.getElementById("set-step-button-medi-mder");
 
             // CCT & Plux Step
             const step_CCT1 = document.getElementById("input_Cp_step1");
@@ -176,8 +220,103 @@
             const step_Medi_CM1 = document.getElementById("input_cM_step1");
             const step_time_CM1= document.getElementById("input_time_cm_step1");
 
+            // Plux & Medi Step 
+            const step_Plux_PM1 = document.getElementById("input_Pm_step1");
+            const step_Medi_PM1 = document.getElementById("input_pM_step1");
+            const step_time_PM1= document.getElementById("input_time_pm_step1");
 
-            // Add  CCT and Plux function 
+            // Medi & Mder Step 
+            const step_Medi_MM1 = document.getElementById("input_Mm_step1");
+            const step_Mder_MM1 = document.getElementById("input_mM_step1");
+            const step_time_MM1= document.getElementById("input_time_mm_step1");
+
+            // Create Plot
+            var pair_return = {
+                x: ['01:17:23 AM',
+                    '01:19:23 AM',
+                    '01:21:23 AM',
+                    '01:23:23 AM',
+                    '01:25:23 AM',
+                    '01:27:23 AM'],
+                y: [4031.85, 4449.89, 4983.45, 4448.09, 4715.88, 4978.85],
+                type: 'scatter'
+            }
+
+            var data = [pair_return];
+            var layout = {
+                height: 450,
+                width: 550,
+                margin: {
+                t: 50,  // Top margin
+                b: 60,  // Bottom margin
+                l: 50,  // Left margin
+                r: 20   // Right margin
+                },
+                title: {text: 'Plot of SPD', 
+                font: {
+                    size: 23, 
+                    weight: 'bolder'
+                }
+                },
+                xaxis: {
+                title: 'Time',
+                titlefont: {size: 12},
+                tickfont: { size: 10}
+                },
+                yaxis: {
+                title: 'Correlated Color Temperature (K)',
+                titlefont: {size: 12},
+                tickfont: { size: 10}
+                }
+            };
+
+            Plotly.newPlot('pairDiv', data, layout);
+
+            // function createPlot(){
+            //     var pair_return = {
+            //         x: ['01:17:23 AM',
+            //             '01:19:23 AM',
+            //             '01:21:23 AM',
+            //             '01:23:23 AM',
+            //             '01:25:23 AM',
+            //             '01:27:23 AM'],
+            //         y: [4031.85, 4449.89, 4983.45, 4448.09, 4715.88, 4978.85]
+            //     }
+
+            //     var data = [pair_return];
+            //     var layout = {
+            //         height: 450,
+            //         width: 550,
+            //         margin: {
+            //         t: 50,  // Top margin
+            //         b: 60,  // Bottom margin
+            //         l: 50,  // Left margin
+            //         r: 20   // Right margin
+            //         },
+            //         title: {text: 'Plot of SPD', 
+            //         font: {
+            //             size: 23, 
+            //             weight: 'bolder'
+            //         }
+            //         },
+            //         xaxis: {
+            //         title: 'Wavelength (nm)',
+            //         titlefont: {size: 12},
+            //         tickfont: { size: 10}
+            //         },
+            //         yaxis: {
+            //         title: 'Spectral Power Density (mW/m^2/nm)',
+            //         titlefont: {size: 12},
+            //         tickfont: { size: 10}
+            //         }
+            //     };
+
+            //     Plotly.newPlot('pairDiv', data, layout);
+            // }
+
+
+
+            // Add CCT and Plux function 
             var inputCount_c = 1;
             var inputCount_p = 1;
             var inputCount_tcp = 1;
@@ -220,7 +359,7 @@
             }   
             
 
-            // Add  CCT and Plux function 
+            // Add CCT and Plux function 
             var inputCount_Cm = 1;
             var inputCount_cM = 1;
             var inputCount_tcm = 1;
@@ -262,6 +401,89 @@
             }   
             
 
+            // Add Plux and Medi function 
+            var inputCount_Pm = 1;
+            var inputCount_pM = 1;
+            var inputCount_tpm = 1;
+
+            function addInputs_pm(){
+                var containerPlux = document.getElementById('inputpm-plux_step_cont');
+                var containerMedi = document.getElementById('inputpm-medi_step_cont');
+                var containerTime = document.getElementById('inputpm-time_step_cont');
+
+                if (inputCount_Pm + inputCount_pM + inputCount_tpm >= 15) {
+                alert('You can add a maximum of 5 set input fields.');
+                return;
+                }
+
+                if (inputCount_Pm < 5) {
+                    inputCount_Pm++;
+                    let inputPlux = document.createElement('input');
+                    inputPlux.className = 'input_Cp_step';
+                    inputPlux.id = 'input_Cm_step' + (inputCount_Pm);
+                    containerPlux.appendChild(inputPlux);
+                }
+
+                if (inputCount_pM < 5) {
+                    inputCount_pM++;
+                    let inputMedi = document.createElement('input');
+                    inputMedi.className = 'input_cP_step';
+                    inputMedi.id = 'input_cM_step' + (inputCount_pM);
+                    containerMedi.appendChild(inputMedi);
+                    
+                }
+
+                if (inputCount_tpm < 5) {
+                    inputCount_tpm++;
+                    let inputTime = document.createElement('input');
+                    inputTime.className = 'input_time_cp_step';
+                    inputTime.id = 'input_time_pm_step' + (inputCount_tpm);
+                    containerTime.appendChild(inputTime);
+                }
+            }
+
+
+            // Add Medi and Mder function
+            var inputCount_Mm = 1;
+            var inputCount_mM = 1;
+            var inputCount_tmm = 1;
+        
+            function addInputs_mm(){
+                var containerMedi = document.getElementById('inputmm-medi_step_cont');
+                var containerMder = document.getElementById('inputmm-mder_step_cont');
+                var containerTime = document.getElementById('inputmm-time_step_cont');
+
+                if (inputCount_Mm + inputCount_mM + inputCount_tmm >= 15) {
+                alert('You can add a maximum of 5 set input fields.');
+                return;
+                }
+
+                if (inputCount_Mm < 5) {
+                    inputCount_Mm++;
+                    let inputMedi = document.createElement('input');
+                    inputMedi.className = 'input_Cp_step';
+                    inputMedi.id = 'input_Mm_step' + (inputCount_Mm);
+                    containerMedi.appendChild(inputMedi);
+                }
+
+                if (inputCount_mM < 5) {
+                    inputCount_mM++;
+                    let inputMder = document.createElement('input');
+                    inputMder.className = 'input_cP_step';
+                    inputMder.id = 'input_mM_step' + (inputCount_mM);
+                    containerMder.appendChild(inputMder);
+                }
+
+                if (inputCount_tmm < 5) {
+                    inputCount_tmm++;
+                    let inputTime = document.createElement('input');
+                    inputTime.className = 'input_time_cp_step';
+                    inputTime.id = 'input_time_mm_step' + (inputCount_tmm);
+                    containerTime.appendChild(inputTime);
+                }
+            }
+
+
             // Display Current Time function 
             function updateDateTime() {
                 const dateTimeElement = document.getElementById('dateTime');
@@ -290,7 +512,12 @@
                     // Display button 
                     add_CP_step.style.display = "block";
                     set_CP_step.style.display = "block";
-
+                    add_CM_step.style.display = "none";
+                    set_CM_step.style.display = "none";
+                    add_PM_step.style.display = "none";
+                    set_PM_step.style.display = "none";
+                    add_MM_step.style.display = "none";
+                    set_MM_step.style.display = "none";
                 }
                 else if (metricsInput.value == "1"){
                     Stepbox.style.height = "420px";
@@ -300,6 +527,16 @@
                     selectCCT_MEDI.style.display = "block";
                     selectPLUX_MEDI.style.display = "none";
                     selectMEDI_MDER.style.display = "none";
+
+                    // Display button 
+                    add_CP_step.style.display = "none";
+                    set_CP_step.style.display = "none";
+                    add_CM_step.style.display = "block";
+                    set_CM_step.style.display = "block";
+                    add_PM_step.style.display = "none";
+                    set_PM_step.style.display = "none";
+                    add_MM_step.style.display = "none";
+                    set_MM_step.style.display = "none";
 
                 }
                 else if (metricsInput.value == "2"){
@@ -311,6 +548,16 @@
                     selectPLUX_MEDI.style.display = "block";
                     selectMEDI_MDER.style.display = "none";
 
+                    // Display button 
+                    add_CP_step.style.display = "none";
+                    set_CP_step.style.display = "none";
+                    add_CM_step.style.display = "none";
+                    set_CM_step.style.display = "none";
+                    add_PM_step.style.display = "block";
+                    set_PM_step.style.display = "block";
+                    add_MM_step.style.display = "none";
+                    set_MM_step.style.display = "none";
+
                 }
                 else if (metricsInput.value == "3"){
                     Stepbox.style.height = "420px";
@@ -320,6 +567,16 @@
                     selectCCT_MEDI.style.display = "none";
                     selectPLUX_MEDI.style.display = "none";
                     selectMEDI_MDER.style.display = "block";
+
+                    // Display button 
+                    add_CP_step.style.display = "none";
+                    set_CP_step.style.display = "none";
+                    add_CM_step.style.display = "none";
+                    set_CM_step.style.display = "none";
+                    add_PM_step.style.display = "none";
+                    set_PM_step.style.display = "none";
+                    add_MM_step.style.display = "block";
+                    set_MM_step.style.display = "block";
 
                 }
                 else if (metricsInput.value == "-1") {
@@ -334,6 +591,12 @@
                     // Hide buttons
                     add_CP_step.style.display = "none";
                     set_CP_step.style.display = "none";
+                    add_CM_step.style.display = "none";
+                    set_CM_step.style.display = "none";
+                    add_PM_step.style.display = "none";
+                    set_PM_step.style.display = "none";
+                    add_MM_step.style.display = "none";
+                    set_MM_step.style.display = "none";
 
                 }
             })
@@ -345,30 +608,38 @@
                 console.log("Value of step_CCT1:", step_CCT1.value);
 
                 var inputCCT_step2 = document.getElementById('input_Cp_step2');
-                var step_CCT2 = inputCCT_step2.value;
-                if (step_CCT2 === "") {
-                    step_CCT2 = 0;
+                if(inputCCT_step2){
+                    var step_CCT2 = inputCCT_step2.value;
+                }
+                else {
+                    var step_CCT2 = 0;
                 }
                 console.log('Value of step_CCT2: ' + step_CCT2);
 
                 var inputCCT_step3 = document.getElementById('input_Cp_step3');
-                var step_CCT3 = inputCCT_step3.value;
-                if (step_CCT3 === "") {
-                    step_CCT3 = 0;
+                if(inputCCT_step3){
+                    var step_CCT3 = inputCCT_step3.value;
+                }
+                else {
+                    var step_CCT3 = 0;
                 }
                 console.log('Value of step_CCT3: ' + step_CCT3);
 
                 var inputCCT_step4 = document.getElementById('input_Cp_step4');
-                var step_CCT4 = inputCCT_step4.value;
-                if (step_CCT4 === "") {
-                    step_CCT4 = 0;
+                if(inputCCT_step4){
+                    var step_CCT4 = inputCCT_step4.value;
                 }
-                console.log('Value of step_CCT3: ' + step_CCT3);
+                else {
+                    var step_CCT4 = 0;
+                }
+                console.log('Value of step_CCT4: ' + step_CCT4);
 
                 var inputCCT_step5 = document.getElementById('input_Cp_step5');
-                var step_CCT5 = inputCCT_step5.value;
-                if (step_CCT5 === "") {
-                    step_CCT5 = 0;
+                if(inputCCT_step5){
+                    var step_CCT5 = inputCCT_step5.value;
+                }
+                else {
+                    var step_CCT5 = 0;
                 }
                 console.log('Value of step_CCT3: ' + step_CCT5);
 
@@ -376,70 +647,79 @@
                 console.log("Value of step_Plux1:", step_PLUX1.value);
 
                 var inputPlux_step2 = document.getElementById('input_cP_step2');
-                var step_PLUX2 = inputPlux_step2.value;
-                if (step_PLUX2 == "") {
-                   step_PLUX2 = 0;
+                if(inputPlux_step2){
+                    var step_PLUX2 = inputPlux_step2.value;
+                }
+                else {
+                    var step_PLUX2 = 0;
                 }
                 console.log('Value of step_Plux2: ' + step_PLUX2);
 
                 var inputPlux_step3 = document.getElementById('input_cP_step3');
-                var step_PLUX3 = inputPlux_step3.value;
-                if (step_PLUX3 == "") {
-                   step_PLUX3 = 0;
-                    
+                if(inputPlux_step3){
+                    var step_PLUX3 = inputPlux_step3.value;
+                }
+                else {
+                    var step_PLUX3 = 0;
                 }
                 console.log('Value of step_Plux3: ' + step_PLUX3);
 
                 var inputPlux_step4 = document.getElementById('input_cP_step4');
-                var step_PLUX4 = inputPlux_step4.value;
-                if (step_PLUX4 == "")
-                    {
-                        step_PLUX4 = 0;
-                    }
+                if(inputPlux_step4){
+                    var step_PLUX4 = inputPlux_step4.value;
+                }
+                else {
+                    var step_PLUX4 = 0;
+                }
                 console.log('Value of step_Plux4: ' + step_PLUX4);
                 
 
                 var inputPlux_step5 = document.getElementById('input_cP_step5');
-                var step_PLUX5 = inputPlux_step5.value;
-                if (step_PLUX5 == "")
-                    {
-                        step_PLUX5 = 0;
-                    }
+                if(inputPlux_step5){
+                    var step_PLUX5 = inputPlux_step5.value;
+                }
+                else {
+                    var step_PLUX5 = 0;
+                }
                 console.log('Value of step_Plux5: ' + step_PLUX5);
                 
                 // TIME
                 console.log("Value of step_TIME1:", step_time_CP1.value);
 
                 var inputTime_step2 = document.getElementById('input_time_cp_step2');
-                var step_TIME2 = inputTime_step2.value;
-                if (step_TIME2 == "")
-                    {
-                        step_TIME2 = 0;
-                    }
+                if (inputTime_step2){
+                    var step_TIME2 = inputTime_step2.value;
+                }
+                else {
+                    step_TIME2 = 0;
+                }
                 console.log('Value of step_TIME2: ' + step_TIME2);
 
                 var inputTime_step3 = document.getElementById('input_time_cp_step3');
-                var step_TIME3 = inputTime_step3.value;
-                if (step_TIME3 == "")
-                    {
-                        step_TIME3 = 0;
-                    }
+                if (inputTime_step3){
+                    var step_TIME3 = inputTime_step3.value;
+                }
+                else {
+                    step_TIME3 = 0;
+                }
                 console.log('Value of step_TIME3: ' + step_TIME3);
 
                 var inputTime_step4 = document.getElementById('input_time_cp_step4');
-                var step_TIME4 = inputTime_step4.value;
-                if (step_TIME4 == "")
-                    {
-                        step_TIME4 = 0;
-                    }
+                if (inputTime_step4){
+                    var step_TIME4 = inputTime_step4.value;
+                }
+                else {
+                    step_TIME4 = 0;
+                }
                 console.log('Value of step_TIME4: ' + step_TIME4);
 
                 var inputTime_step5 = document.getElementById('input_time_cp_step5');
-                var step_TIME5 = inputTime_step5.value;
-                if (step_TIME5 == "")
-                    {
-                        step_TIME5 = 0;
-                    }
+                if (inputTime_step5){
+                    var step_TIME5 = inputTime_step5.value;
+                }
+                else {
+                    step_TIME5 = 0;
+                }
                 console.log('Value of step_TIME5: ' + step_TIME5);
 
                 const requestData = {
@@ -478,78 +758,108 @@
             set_CM_step.addEventListener('click', async () =>{
                 // CCT
                 var inputCCT_step2 = document.getElementById('input_Cm_step2');
-                var step_CCT2 = inputCCT_step2.value;
-                if (step_CCT2 === "") {
-                    step_CCT2 = 0;
+                if (inputCCT_step2){
+                    var step_CCT2 = inputCCT_step2.value;
+                }
+                else {
+                    var step_CCT2 = 0;
                 }
 
                 var inputCCT_step3 = document.getElementById('input_Cm_step3');
-                var step_CCT3 = inputCCT_step3.value;
-                if (step_CCT3 === "") {
-                    step_CCT3 = 0;
+                if (inputCCT_step3){
+                    var step_CCT3 = inputCCT_step3.value;
+                }
+                else {
+                    var step_CCT3 = 0;
                 }
 
                 var inputCCT_step4 = document.getElementById('input_Cm_step4');
-                var step_CCT4 = inputCCT_step4.value;
-                if (step_CCT4 === "") {
-                    step_CCT4 = 0;
+                if (inputCCT_step4){
+                    var step_CCT4 = inputCCT_step4.value;
+                }
+                else {
+                    var step_CCT4 = 0;
                 }
 
                 var inputCCT_step5 = document.getElementById('input_Cm_step5');
-                var step_CCT5 = inputCCT_step5.value;
-                if (step_CCT5 === "") {
-                    step_CCT5 = 0;
+                if (inputCCT_step5){
+                    var step_CCT5 = inputCCT_step5.value;
+                }
+                else {
+                    var step_CCT5 = 0;
                 }
 
+                // MEDI
                 var inputMEDI_step2 = document.getElementById('input_cM_step2');
-                var step_MEDI2 = inputMEDI_step2.value;
-                if (step_MEDI2 == "") {
-                   step_MEDI2 = 0;
+                if (inputMEDI_step2){
+                    var step_MEDI2 = inputMEDI_step2.value;
+                }
+                else {
+                    var step_MEDI2 = 0;
                 }
 
                 var inputMEDI_step3 = document.getElementById('input_cM_step3');
-                var step_MEDI3 = inputMEDI_step3.value;
-                if (step_MEDI3 == "") {
-                    step_MEDI3 = 0;
+                if (inputMEDI_step3){
+                    var step_MEDI3 = inputMEDI_step3.value;
+                }
+                else {
+                    var step_MEDI3 = 0;
+                }
+
+                var inputMEDI_step3 = document.getElementById('input_cM_step3');
+                if (inputMEDI_step3){
+                    var step_MEDI3 = inputMEDI_step3.value;
+                }
+                else {
+                    var step_MEDI3 = 0;
                 }
 
                 var inputMEDI_step4 = document.getElementById('input_cM_step4');
-                var step_MEDI4 = inputMEDI_step4.value;
-                if (step_MEDI4 == "") {
-                    step_MEDI4 = 0;
+                if (inputMEDI_step4){
+                    var step_MEDI4 = inputMEDI_step4.value;
+                }
+                else {
+                    var step_MEDI4 = 0;
                 }
 
                 var inputMEDI_step5 = document.getElementById('input_cM_step5');
-                var step_MEDI5 = inputMEDI_step5.value;
-                if (step_MEDI5 == "") {
+                if (inputMEDI_step5){
+                    var step_MEDI5 = inputMEDI_step5.value;
+                }
+                else {
                     step_MEDI5 = 0;
                 }
 
+                // TIME 
                 var inputTime_step2 = document.getElementById('input_time_cm_step2');
-                var step_TIME2 = inputTime_step2.value;
-                if (step_TIME2 == "")
-                {
+                if (inputTime_step2){
+                    var step_TIME2 = inputTime_step2.value;
+                }
+                else {
                     step_TIME2 = 0;
                 }
 
                 var inputTime_step3 = document.getElementById('input_time_cm_step3');
-                var step_TIME3 = inputTime_step3.value;
-                if (step_TIME3 == "")
-                {
+                if (inputTime_step3){
+                    var step_TIME3 = inputTime_step3.value;
+                }
+                else {
                     step_TIME3 = 0;
                 }
 
                 var inputTime_step4 = document.getElementById('input_time_cm_step4');
-                var step_TIME4 = inputTime_step4.value;
-                if (step_TIME4 == "")
-                {
+                if (inputTime_step4){
+                    var step_TIME4 = inputTime_step4.value;
+                }
+                else {
                     step_TIME4 = 0;
                 }
 
                 var inputTime_step5 = document.getElementById('input_time_cm_step5');
-                var step_TIME5 = inputTime_step5.value;
-                if (step_TIME5 == "")
-                {
+                if (inputTime_step5){
+                    var step_TIME5 = inputTime_step5.value;
+                }
+                else {
                     step_TIME5 = 0;
                 }
 
@@ -562,11 +872,11 @@
                     stepCCT3: step_CCT3,
                     stepCCT4: step_CCT4,
                     stepCCT5: step_CCT5,
-                    stepPlux1: step_MEDI_CM1.value,
-                    stepPlux2: step_MEDI2,
-                    stepPlux3: step_MEDI3,
-                    stepPlux4: step_MEDI4,
-                    stepPlux5: step_MEDI5,
+                    stepMedi1: step_Medi_CM1.value,
+                    stepMedi2: step_MEDI2,
+                    stepMedi3: step_MEDI3,
+                    stepMedi4: step_MEDI4,
+                    stepMedi5: step_MEDI5,
                     stepTime1: step_time_CM1.value,
                     stepTime2: step_TIME2,
                     stepTime3: step_TIME3,
@@ -574,7 +884,7 @@
                     stepTime5: step_TIME5
                 };
 
-                const response = await fetch('/get_step_CP', {
+                const response = await fetch('/get_step_CM', {
                     method: 'POST',
                     headers: {
                     'Content-Type': 'application/json'
@@ -586,11 +896,251 @@
             })
 
             // Plux & Medi
+            set_PM_step.addEventListener('click', async() => {
+                // Plux
+                var inputPlux_step2 = document.getElementById('input_Pm_step2');
+                if (inputPlux_step2){
+                    var step_PLUX2 = inputPlux_step2.value;
+                } else {
+                    step_PLUX2 = 0;
+                }
 
+                var inputPlux_step3 = document.getElementById('input_Pm_step3');
+                if (inputPlux_step3){
+                    var step_PLUX3 = inputPlux_step3.value;
+                } else {
+                    step_PLUX3 = 0;
+                }
 
+                var inputPlux_step4 = document.getElementById('input_Pm_step4');
+                if (inputPlux_step4){
+                    var step_PLUX4 = inputPlux_step4.value;
+                } else {
+                    step_PLUX4 = 0;
+                }
+
+                var inputPlux_step5 = document.getElementById('input_Pm_step5');
+                if (inputPlux_step5){
+                    var step_PLUX5 = inputPlux_step5.value;v
+                } else {
+                    step_PLUX5 = 0;
+                }
+
+                // MEDI
+                var inputMEDI_step2 = document.getElementById('input_pM_step2');
+                if (inputMEDI_step2){
+                    var step_MEDI2 = inputMEDI_step2.value;
+                } else {
+                    step_MEDI2 = 0;
+                }
+
+                var inputMEDI_step3 = document.getElementById('input_pM_step3');
+                if (inputMEDI_step3){
+                    var step_MEDI3 = inputMEDI_step3.value;
+                } else {
+                    step_MEDI3 = 0;
+                }
+
+                var inputMEDI_step4 = document.getElementById('input_pM_step4');
+                if (inputMEDI_step4){
+                    var step_MEDI4 = inputMEDI_step4.value;
+                } else {
+                    step_MEDI4 = 0;
+                }
+
+                var inputMEDI_step5 = document.getElementById('input_pM_step5');
+                if (inputMEDI_step5){
+                    var step_MEDI5 = inputMEDI_step5.value;
+                } else {
+                    step_MEDI5 = 0;
+                }
+
+                // TIME
+                var inputTime_step2 = document.getElementById('input_time_pm_step2');
+                if (inputTime_step2){
+                    var step_TIME2 = inputTime_step2.value;
+                } else {
+                    step_TIME2 = 0;
+                }
+
+                var inputTime_step3 = document.getElementById('input_time_pm_step3');
+                if (inputTime_step3){
+                    var step_TIME3 = inputTime_step3.value;
+                } else {
+                    step_TIME3 = 0;
+                }
+
+                var inputTime_step4 = document.getElementById('input_time_pm_step4');
+                if (inputTime_step4){
+                    var step_TIME4 = inputTime_step4.value;
+                } else {
+                    step_TIME4 = 0;
+                }
+
+                var inputTime_step5 = document.getElementById('input_time_pm_step5');
+                if (inputTime_step5){
+                    var step_TIME5 = inputTime_step5.value;
+                } else {
+                    step_TIME5 = 0;
+                }
+
+                const requestData = {
+                    allocatetime: allocate_Time.value,
+                    initialplux: PLUX_medi.value,
+                    initialmedi: plux_MEDI.value,
+                    stepPlux1: step_Plux_PM1.value,
+                    stepPlux2: step_PLUX2,
+                    stepPlux3: step_PLUX3,
+                    stepPlux4: step_PLUX4,
+                    stepPlux5: step_PLUX5,
+                    stepMedi1: step_Medi_PM1.value,
+                    stepMedi2: step_MEDI2,
+                    stepMedi3: step_MEDI3,
+                    stepMedi4: step_MEDI4,
+                    stepMedi5: step_MEDI5,
+                    stepTime1: step_time_PM1.value,
+                    stepTime2: step_TIME2,
+                    stepTime3: step_TIME3,
+                    stepTime4: step_TIME4,
+                    stepTime5: step_TIME5
+                };
+
+                const response = await fetch('/get_step_PM', {
+                    method: 'POST',
+                    headers: {
+                    'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestData)
+                }); 
+                const result = await response.json();     
+
+            })
+
+            // Medi & Mder
+            set_MM_step.addEventListener('click', async() => {
+                // Medi
+                var inputMEDI_step2 = document.getElementById('input_Mm_step2');
+                if (inputMEDI_step2){
+                    var step_MEDI2 = inputMEDI_step2.value;
+                } else {
+                    step_MEDI2 = 0;
+                }
+
+                var inputMEDI_step3 = document.getElementById('input_Mm_step3');
+                if (inputMEDI_step3){
+                    var step_MEDI3 = inputMEDI_step3.value;
+                } else {
+                    step_MEDI3 = 0;
+                }
+                
+                var inputMEDI_step4 = document.getElementById('input_Mm_step4');
+                if (inputMEDI_step4){
+                    var step_MEDI4 = inputMEDI_step4.value;
+                } else {
+                    step_MEDI4 = 0;
+                }
+
+                var inputMEDI_step5 = document.getElementById('input_Mm_step5');
+                if (inputMEDI_step5){
+                    var step_MEDI5 = inputMEDI_step4.value;
+                } else {
+                    step_MEDI5= 0;
+                }
+
+                // Mder
+                var inputMDER_step2 = document.getElementById('input_mM_step2');
+                if (inputMDER_step2){
+                    var step_MDER2 = inputMDER_step2.value;
+                } else {
+                    step_MDER2 = 0;
+                }
+
+                var inputMDER_step3 = document.getElementById('input_mM_step3');
+                if (inputMDER_step3){
+                    var step_MDER3 = inputMDER_step3.value;
+                } else {
+                    step_MDER3 = 0;
+                }
+
+                var inputMDER_step4 = document.getElementById('input_mM_step4');
+                if (inputMDER_step4){
+                    var step_MDER4 = inputMDER_step4.value;
+                } else {
+                    step_MDER4 = 0;
+                }
+
+                var inputMDER_step5 = document.getElementById('input_mM_step5');
+                if (inputMDER_step5){
+                    var step_MDER5 = inputMDER_step5.value;
+                } else {
+                    step_MDER5 = 0;
+                }
+
+                // TIME
+                var inputTime_step2 = document.getElementById('input_time_mm_step2');
+                if (inputTime_step2){
+                    var step_TIME2 = inputTime_step2.value;
+                } else {
+                    step_TIME2 = 0;
+                }
+
+                var inputTime_step3 = document.getElementById('input_time_mm_step3');
+                if (inputTime_step3){
+                    var step_TIME3 = inputTime_step3.value;
+                } else {
+                    step_TIME3 = 0;
+                }
+
+                var inputTime_step4 = document.getElementById('input_time_mm_step4');
+                if (inputTime_step4){
+                    var step_TIME4 = inputTime_step4.value;
+                } else {
+                    step_TIME4 = 0;
+                }
+
+                var inputTime_step5 = document.getElementById('input_time_mm_step5');
+                if (inputTime_step5){
+                    var step_TIME5 = inputTime_step5.value;
+                } else {
+                    step_TIME5 = 0;
+                }
+
+                const requestData = {
+                    allocatetime: allocate_Time.value,
+                    initialplux: MEDI_mder.value,
+                    initialmedi: medi_MDER.value,
+                    stepMedi1: step_Medi_MM1.value,
+                    stepMedi2: step_MEDI2,
+                    stepMedi3: step_MEDI3,
+                    stepMedi4: step_MEDI4,
+                    stepMedi5: step_MEDI5,
+                    stepMder1: step_Mder_MM1.value,
+                    stepMder2: step_MDER2,
+                    stepMder3: step_MDER3,
+                    stepMder4: step_MDER4,
+                    stepMder5: step_MDER5,
+                    stepTime1: step_time_MM1.value,
+                    stepTime2: step_TIME2,
+                    stepTime3: step_TIME3,
+                    stepTime4: step_TIME4,
+                    stepTime5: step_TIME5
+                };
+
+                const response = await fetch('/get_step_MM', {
+                    method: 'POST',
+                    headers: {
+                    'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestData)
+                }); 
+                const result = await response.json(); 
+            })
 
         </script>
     </section> 
+    <!-- Link To JS -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- <script src='https://cdn.plot.ly/plotly-2.25.2.min.js'></script> -->
 </body>
 </html>
 

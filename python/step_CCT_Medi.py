@@ -21,23 +21,23 @@ Kp_cct = 0.6
 iteration = 1
 error_medi = 1e5
 error_cct = 1e5
-target_medi = 120 # int(sys.argv[2])
+target_medi = int(sys.argv[3])
 target1 = target_medi
-target_cct = 4000 # int(sys.argv[1])
+target_cct = int(sys.argv[2])
 target2 = target_cct
 diff1 = 100
 diff2 = 100
 
 # Steps Constant
-cct_steps = [500, 500, 0, 0, 0]
-medi_steps = [10, 20, 0, 0, 0]
+cct_steps = [int(sys.argv[4]), int(sys.argv[5]), int(sys.argv[6]), int(sys.argv[7]), int(sys.argv[8])]
+medi_steps = [int(sys.argv[9]), int(sys.argv[10]), int(sys.argv[11]), int(sys.argv[12]), int(sys.argv[13])]
 cct_i = 0
 medi_i = 0
 
 # Time step Constant
-time_steps_minutes = [2, 2, 0, 0, 0, 5]       # Step 2 minutes
+time_steps_minutes = [int(sys.argv[14]), int(sys.argv[15]), int(sys.argv[16]), int(sys.argv[17]), int(sys.argv[18]), 5]       # Step 2 minutes
 time_step_i = 0
-time_allocate = 5 * 60                 # Allocate 10 minutes
+time_allocate = int(sys.argv[1]) * 60                 # Allocate 10 minutes
 
 # Results
 CCT_Target = []
@@ -45,15 +45,14 @@ CCT_Measured = []
 Medi_Target = []
 Medi_Measured = []
 
-
 # Initialize a flag to track whether to adjust targets
 adjust_targets = True
 start_time = time.time()
 total_elapsed_time = 0  # Initialize total elapsed time
 
-print('Target CCT:', "{:.2f}".format(target2))
+# print('Target CCT:', "{:.2f}".format(target2))
 CCT_Target.append(target2)
-print('Target MEDI:', "{:.2f}".format(target1))
+# print('Target MEDI:', "{:.2f}".format(target1))
 Medi_Target.append(target1)
 
 while True:
@@ -63,7 +62,7 @@ while True:
 
     # Only adjust targets if the flag is set to True
     if adjust_targets:
-        print("\nIteration: ", iteration)
+        # print("\nIteration: ", iteration)
 
         val_bri = fitResult_bri_cm(target_medi, target_cct)
         val_cct = target_cct
@@ -110,14 +109,14 @@ while True:
         # Calculate CCT and CRI from SPM
         [x, y, z] = xyz(SPM_interpolated, 1, 2)
         measured_CCT = cct(x,y)
-        print("measured CCT: ", "{:.2f}".format(measured_CCT[0][0]))
+        # print("measured CCT: ", "{:.2f}".format(measured_CCT[0][0]))
         ref = reflight(measured_CCT)
         [CRI, R9] = getcri(SPM_interpolated, ref)
 
         measured_plux = data['plux']
         measured_lumen = measured_plux * 19.77
         measured_medi = data['mlux']
-        print("measured MEDI: ", "{:.2f}".format(measured_medi))
+        # print("measured MEDI: ", "{:.2f}".format(measured_medi))
         measured_mder = data['mlux']/data['plux']
         measured_watt = measured_lumen/measured_LER
 
@@ -138,19 +137,21 @@ while True:
 
         iteration += 1
         time.sleep(5)
-    
+        
+
     # Check if both targets are nearly reached
-    if diff1 < 4 and diff2 < 50:
-        CCT_Measured.append(measured_CCT)
-        Medi_Measured.append(measured_medi)
+    if (diff1 < 4 and diff2 < 50) or iteration == 7:
         iteration = 1 # Reset iteration
         adjust_targets = False  # Set the flag to False to exit the loop
+       
         
     # Check if it's time to increase CCT and PLUX values
     current_time = time.time()
     elapsed_time = current_time - start_time
 
     if elapsed_time >= time_step:
+        CCT_Measured.append(f'measured_CCT[0][0]:.2f')
+        Medi_Measured.append(f'measured_medi:.2f')
 
         # Increment the time_step_index to use the next time step in the array
         time_step_i += 1
@@ -162,12 +163,8 @@ while True:
                 target_cct = new_target_cct
                 CCT_Target.append(target_cct)
                 target2 = target_cct
-                print('\nTarget CCT:', "{:.2f}".format(target2))
                 cct_i += 1
-            else: 
-                print("CCT target at range of 2500K ~ 6500K.")
-
-
+        
         # Plux increment
         if medi_i < len(medi_steps):
             new_target_medi  = target1 + medi_steps[medi_i]
@@ -175,15 +172,8 @@ while True:
                 target_medi = new_target_medi
                 Medi_Target.append(target_medi)
                 target1 = target_medi
-                print('Target MEDI:', "{:.2f}".format(target1))
                 medi_i += 1
-            else:
-                print("Medi target at range of 0lx ~ 200lx.")
-        
-        # Check if we've reached the end of the time_steps_minutes array
-        if time_step_i >= len(time_steps_minutes):
-            print("All time steps have been used.")
-
+                
         # Add elapsed_time to total_elapsed_time
         total_elapsed_time += elapsed_time
 
@@ -192,11 +182,18 @@ while True:
         elapsed_time = 0  # Reset elapsed_time
         adjust_targets = True  # Set the flag to True to adjust targets in the next iteration
         
+         # Check if both targets are nearly reached and append the measurements for this iteration
+  
     # Check if it's time to stop the program
     if total_elapsed_time >= time_allocate:
-        print("Time allocation reached. Stopping the program.")
-        print('CCT_Target', CCT_Target)
-        print('Medi_Target', Medi_Target)
-        print('CCT_Measured', CCT_Measured)
-        print('Medi_Measured', Medi_Measured)
         break  # Exit the loop and stop the program
+
+# Handle output result
+output_data = {
+    "CCT_Target": CCT_Target,
+    "Medi_Target": Medi_Target,
+    "CCT_Measured": CCT_Measured,
+    "Medi_Measured": Medi_Measured,
+}
+print(json.dumps(output_data))  # Convert the dictionary to JSON and print it
+sys.stdout.flush()

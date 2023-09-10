@@ -22,33 +22,45 @@ Kp2 = 0.05
 iteration = 1
 error_medi = 1e5
 error_mder = 1e5
-target_medi = 150 #int(sys.argv[1])
+target_medi = int(sys.argv[2])
 target1 = target_medi
-target_mder = 0.6 #float(sys.argv[2])
+target_mder = float(sys.argv[3])
 target2 = target_mder
-diff1 = 10
+diff1 = 100
 diff2 = 10
 
 # Steps Constant
-medi_steps = []
-mder_steps = []
+medi_steps = [int(sys.argv[4]), int(sys.argv[5]), int(sys.argv[6]), int(sys.argv[7]), int(sys.argv[8])]
+mder_steps = [int(sys.argv[9]), int(sys.argv[10]), -int(sys.argv[11]), int(sys.argv[12]), int(sys.argv[13])]
 medi_i = 0
 mder_i = 0 
 
 # Time step Constant
-time_step = 2 * 60          # Step 2 minutes
-time_allocate = 10 * 60     # Allocate 10 minutes
+time_steps_minutes = [int(sys.argv[14]), int(sys.argv[15]), int(sys.argv[16]), int(sys.argv[17]), int(sys.argv[18]), 5]      # Step in minutes
+time_step_i = 0
+time_allocate = int(sys.argv[1]) * 60     # Allocate 10 minutes
+
+# Results
+Medi_Target = []
+Medi_Measured = []
+Mder_Target = []
+Mder_Measured = []
 
 # Initialize a flag to track whether to adjust targets
 adjust_targets = True
 start_time = time.time()
 total_elapsed_time = 0  # Initialize total elapsed time
 
+# print('Target MEDI:', "{:.2f}".format(target1))
+# print('Target MDER:', "{:.2f}".format(target2))
 
-print('Target MEDI:', "{:.2f}".format(target1))
-print('Target MDER:', "{:.2f}".format(target2))
+Medi_Target.append(target1)
+Mder_Target.append(target2)
 
 while True:
+    # Convert time step from minutes to seconds
+    time_step = time_steps_minutes[time_step_i] * 60
+
     # Only adjust targets if the flag is set to True
     if adjust_targets:
         print("\nIteration: ", iteration)
@@ -104,7 +116,6 @@ while True:
         measured_plux = data['plux']
         measured_mder = data['mlux']/data['plux']
         measured_lumen = measured_plux * 19.77
-        measured_MDER = np.divide(measured_medi, measured_plux)
         measured_watt = measured_lumen/measured_LER
 
         diff1 = abs(target1 - measured_medi)
@@ -123,7 +134,7 @@ while True:
         time.sleep(5)
 
     # Check if both targets are nearly reached
-    if diff1 < 4 and diff2 < 40:
+    if (diff1 < 4 and diff2 < 0.05) or iteration == 7:
         iteration = 1 # Reset iteration
         adjust_targets = False  # Set the flag to False to exit the loop
         
@@ -132,27 +143,31 @@ while True:
     elapsed_time = current_time - start_time
 
     if elapsed_time >= time_step:
+        # Append Medi and Mder
+        Medi_Measured.append(f'measured_medi:.2f')
+        Mder_Measured.append(f'measured_mder:.2f')
+
+        # Increment the time_step_index to use the next time step in the array
+        time_step_i += 1
 
         # MEDI increment
         if medi_i < len(medi_steps):
             new_target_medi = target1 + medi_steps[medi_i]
             if 0 <= new_target_medi <= 250:
                 target_medi = new_target_medi
+                Medi_Target.append(target_medi)
                 target1 = target_medi
-                print('\nTarget MEDI:', "{:.2f}".format(target1))
-            else:
-                print("Plux target at range of 0lx ~ 250lx.")
+                medi_i += 1
 
-
+    
         # MDER increment 
         if mder_i < len(mder_steps):
             new_target_mder = target2 + mder_steps[mder_i]
             if 0 <= new_target_mder <= 200:
                 target_mder = new_target_mder
+                Mder_Target.append(target_mder)
                 target2 = target_mder
-                print('Target MDER', "{:.2f}".format(target2))
-            else: 
-                print("CCT MDER at range of 0lx ~ 200lx.")
+                mder_i += 1
 
         # Add elapsed_time to total_elapsed_time
         total_elapsed_time += elapsed_time
@@ -164,5 +179,15 @@ while True:
         
     # Check if it's time to stop the program
     if total_elapsed_time >= time_allocate:
-        print("Time allocation reached. Stopping the program.")
+        # print("Time allocation reached. Stopping the program.")
         break  # Exit the loop and stop the program
+
+# Handle output result
+output_data = {
+    "Medi_Target": Medi_Target,
+    "Mder_Target": Mder_Target,
+    "Medi_Measured": Medi_Measured,
+    "Mder_Measured": Mder_Measured,
+}
+print(json.dumps(output_data))  # Convert the dictionary to JSON and print it
+sys.stdout.flush()

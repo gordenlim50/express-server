@@ -5,6 +5,7 @@ import sounddevice as sd
 import time
 import matplotlib.pyplot as plt
 from phue import Bridge
+import sys
 
 def rgb_to_xy(red, green, blue):
     # Normalize RGB values
@@ -36,8 +37,6 @@ b = Bridge('59.191.204.143')
 username = b.connect()
 b.get_api()
 
-# Set the light ID
-#light_id = [1,2,3,4,5,6,7,9,10,11,12,13,14,15,17,18]
 # Get all lights
 lights = b.get_light_objects('id')
 
@@ -45,7 +44,13 @@ lights = b.get_light_objects('id')
 COLORS = [(255, 0, 0), (0, 255, 0), (0, 0, 255), (255, 255, 0), (255, 0, 255), (0, 255, 255)]
 
 # Load the disco music
-music_file = "calmdown.mp3"
+music = int(sys.argv[1])
+
+if music == "0":
+    music_file = "calmdown.mp3"
+elif music == "1":
+    music_file = "idol_YOASOBI.mp3"
+
 y, sr = librosa.load(music_file)
 
 # Detect beats in the music

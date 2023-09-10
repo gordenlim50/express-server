@@ -25,40 +25,46 @@ Kp_medi = 0.5
 iteration = 1
 error_plux = 1e5
 error_medi = 1e5
-target_plux = 180 #int(sys.argv[1])
+target_plux = int(sys.argv[2])
 target1 = target_plux
-target_medi = 120 #int(sys.argv[2])
+target_medi = int(sys.argv[3])
 target2 = target_medi
 diff1 = 100
 diff2 = 100
 
 # Steps Constant
-plux_steps = [10, 20, -40]
-medi_steps = [10, 20, -40]
+plux_steps = [int(sys.argv[4]), int(sys.argv[5]), int(sys.argv[6]), int(sys.argv[7]), int(sys.argv[8])]
+medi_steps = [int(sys.argv[9]), int(sys.argv[10]), int(sys.argv[11]), int(sys.argv[12]), int(sys.argv[13])]
 plux_i = 0
 medi_i = 0
 
 # Time step Constant
-time_steps_minutes = [2, 3, 3, 2]       # Step in minutes
+time_steps_minutes = [int(sys.argv[14]), int(sys.argv[15]), int(sys.argv[16]), int(sys.argv[17]), int(sys.argv[18]), 5]       # Step in minutes
 time_step_i = 0
-time_allocate = 10 * 60                 # Allocate 10 minutes
+time_allocate = int(sys.argv[1]) * 60                 # Allocate 10 minutes
+
+# Results
+Plux_Target = []
+Plux_Measured = []
+Medi_Target = []
+Medi_Measured = []
 
 # Initialize a flag to track whether to adjust targets
 adjust_targets = True
 start_time = time.time()
 total_elapsed_time = 0  # Initialize total elapsed time
 
-print('Target PLUX:', "{:.2f}".format(target1))
-print('Target MEDI:', "{:.2f}".format(target2))
+Plux_Target.append(target1)
+Medi_Target.append(target2)
 
 while True:
     # Convert time step from minutes to seconds
-    time_step = time_steps_minutes[time_step_i] * 60
+    if time_step_i < len(time_steps_minutes):
+        time_step = time_steps_minutes[time_step_i] * 60
 
     # Only adjust targets if the flag is set to True
     if adjust_targets:
-        print("\nIteration: ", iteration)
-
+       
         val_bri = fitResult_bri_pm(target_plux, target_medi)
         val_cct = fitResult_CCT_pm(target_plux, target_medi)
 
@@ -108,10 +114,8 @@ while True:
         [CRI, R9] = getcri(SPM_interpolated, ref)
 
         measured_plux = data['plux']
-        print("measured Plux: ", "{:.2f}".format(measured_plux))
         measured_lumen = measured_plux * 19.77
         measured_medi = data['mlux']
-        print("measured Plux: ", "{:.2f}".format(measured_medi))
         measured_mder = data['mlux']/data['plux']
         measured_watt = measured_lumen/measured_LER
 
@@ -133,7 +137,7 @@ while True:
         time.sleep(5)
 
     # Check if both targets are nearly reached
-    if diff1 < 4 and diff2 < 4:
+    if (diff1 < 4 and diff2 < 4) or iteration == 7:
         iteration = 1 # Reset iteration
         adjust_targets = False  # Set the flag to False to exit the loop
 
@@ -142,6 +146,9 @@ while True:
     elapsed_time = current_time - start_time
     
     if elapsed_time >= time_step:
+        # Plux and Medi
+        Plux_Measured.append(f'{measured_CCT[0][0]:.2f}')
+        Medi_Measured.append(f'{measured_medi:.2f}')
 
         # Increment the time_step_index to use the next time step in the array
         time_step_i += 1
@@ -151,24 +158,18 @@ while True:
             new_target_plux = target1 + plux_steps[plux_i]
             if 0 <= new_target_plux <= 250:
                 target_plux = new_target_plux
+                Plux_Target.append(target_plux)
                 target1 = target_plux
-                print('\nTarget PLUX:', "{:.2f}".format(target1))
-            else:
-                print("Plux target at range of 0lx ~ 250lx.")
+                plux_i += 1
 
         # Medi increment 
         if medi_i < len(medi_steps):
             new_target_medi = target2 + medi_steps[medi_i]
             if 0 <= new_target_medi <= 200:
                 target_medi = new_target_medi
+                Medi_Target.append(target_medi)
                 target2 = target_medi
-                print('Target MEDI:', "{:.2f}".format(target2))
-            else: 
-                print("Medi target at range of 0lx ~ 200lx.")
-
-        # Check if we've reached the end of the time_steps_minutes array
-        if time_step_i >= len(time_steps_minutes):
-            print("All time steps have been used.")
+                medi_i += 1
 
         # Add elapsed_time to total_elapsed_time
         total_elapsed_time += elapsed_time
@@ -180,5 +181,14 @@ while True:
         
     # Check if it's time to stop the program
     if total_elapsed_time >= time_allocate:
-        print("Time allocation reached. Stopping the program.")
         break  # Exit the loop and stop the program
+
+# Handle output result
+output_data = {
+    "Plux_Target": Plux_Target,
+    "Medi_Target": Medi_Target,
+    "Plux_Measured": Plux_Measured,
+    "Medi_Measured": Medi_Measured
+}
+print(json.dumps(output_data))  # Convert the dictionary to JSON and print it
+sys.stdout.flush()

@@ -29,13 +29,53 @@
 
     <!-- Banner -->
     <section id="ovrflw" class="backgrd">
-        <form action="/upload" method="post" enctype="multipart/form-data">
-            <input type="file" name="mp3file" accept=".mp3">
+        <!-- <form action="/upload" method="POST" enctype="multipart/form-data">
+            <input type="file" name="file">
             <input type="submit" value="Upload">
         </form>
+        <button id="play_button" class="play_button">Play</button> -->
+        <div id="music_list" class="Music">
+            <h1> Music Light </h1>
+            <label for="music_Input" class="input_select_text">Song List: </label>
+            <select id="music_Input" name="metricsInput" class="step_input_select">
+                <option value="-1">None </option>
+                <option value="0">calmdown </option>
+                <option value="1">idol_YOASOBI </option>
+                <option value="2">calling </option>
+            </select><br>
+            <button id="set-music" class="set-button-cri">Play</button> 
+        </div>
+
         <div class ="back">
             <a href="/metrics" class="home-btn"> Back </a> 
         </div>
+
+        <script>
+            // Constant 
+            const musicInput = document.getElementById("music_Input")
+
+            // Button 
+            const playButton = document.getElementById("set-music")
+
+            playButton.addEventListener('click', async () => {
+                const data = {
+                    inputmusic: musicInput.value
+                }
+
+                const response = await fetch('/getMusic_light', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+              });
+              const result = await response.json();
+            })
+
+
+        </script>
     </section> 
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src='https://cdn.plot.ly/plotly-2.25.2.min.js'></script>
 </body>
 </html>
