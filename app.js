@@ -2,6 +2,8 @@
 
 // imports
 const express = require("express");
+const multer = require('multer');
+const path = require('path');
 const { spawn } = require('child_process')
 const app = express();
 const port = 3000
@@ -81,8 +83,48 @@ app.post('/simulate', async function(req, res) {
 
 
 /// ==================================================== Music & Light.html ======================================================================= ///
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'python/'); // Specify the folder where uploaded files will be stored
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname); // Use the original filename
+    },
+});
+
+// Define a custom file filter function for MP3 files
+const fileFilter = (req, file, cb) => {
+    if (file.mimetype === 'audio/mpeg' || file.mimetype === 'audio/mp3') {
+        cb(null, true); // Accept the file
+    } else {
+        cb(new Error('File type not supported. Please upload an MP3 file.'), false);
+    }
+};
+
+const upload = multer({ storage, fileFilter });
+
 app.get('/audio', (req, res)=>{
     res.sendFile(__dirname + '/html/music.html')
+})
+
+app.post('/upload', upload.single('file'), (req, res) => {
+    if (!req.file) {
+        return res.send('No file uploaded.');
+    }
+    return res.send('File uploaded successfully.');
+});
+
+app.post('/getMusic_light', async function(req, res) {
+    var music = req.body.inputmusic
+
+    try {
+        const processedData = await executePython('python/disco.py', [music]);
+        res.json({ processedData }); 
+        console.log(processedData)
+
+    } catch (error) {
+        res.status(500).json({ error: error }); 
+    }
 })
 
 
@@ -444,6 +486,7 @@ app.get('/step', (req, res)=>{
     res.sendFile(__dirname + '/html/step.html')
 })
 
+// --- CCT and Plux --- //
 app.post('/get_step_CP', async function(req, res){
     var alltime = req.body.allocatetime;
     var inCCT = req.body.initialcct;
@@ -478,7 +521,76 @@ app.post('/get_step_CP', async function(req, res){
 })
 
 
+// --- Plux and Medi --- //
+app.post('/get_step_PM', async function(req, res){
+    var alltime = req.body.allocatetime;
+    var inPlux = req.body.initialplux;
+    var inMedi = req.body.initialmedi;
+    var stepplux1 = req.body.stepPlux1;
+    var stepplux2 = req.body.stepPlux2;
+    var stepplux3 = req.body.stepPlux3;
+    var stepplux4 = req.body.stepPlux4;
+    var stepplux5 = req.body.stepPlux5;
+    var stepmedi1 = req.body.stepMedi1;
+    var stepmedi2 = req.body.stepMedi2;
+    var stepmedi3 = req.body.stepMedi3;
+    var stepmedi4 = req.body.stepMedi4;
+    var stepmedi5 = req.body.stepMedi5;
+    var steptime1 = req.body.stepTime1;
+    var steptime2 = req.body.stepTime2;
+    var steptime3 = req.body.stepTime3;
+    var steptime4 = req.body.stepTime4;
+    var steptime5 = req.body.stepTime5;
 
+    
+    console.log("Initial Plux: " + inPlux)
+    console.log("Initial Medi: " + inMedi)
+
+    try {
+        const processedData  = await executePython('python/step_CCT_Medi.py', [alltime, inPlux, inMedi, stepplux1, stepplux2, stepplux3, stepplux4, stepplux5, stepmedi1, stepmedi2, stepmedi3, stepmedi4, stepmedi5, steptime1, steptime2, steptime3, steptime4, steptime5]);
+        res.json({ processedData }); 
+        console.log(processedData)
+
+    } catch (error) {
+        res.status(500).json({ error: error }); 
+    }
+})
+
+
+// --- Medi and Mder --- //
+app.post('/get_step_MM', async function(req, res){
+    var alltime = req.body.allocatetime;
+    var inMedi = req.body.initialmedi;
+    var inMder = req.body.initialmder;
+    var stepmedi1 = req.body.stepMedi1;
+    var stepmedi2 = req.body.stepMedi2;
+    var stepmedi3 = req.body.stepMedi3;
+    var stepmedi4 = req.body.stepMedi4;
+    var stepmedi5 = req.body.stepMedi5;
+    var stepmder1 = req.body.stepMder1;
+    var stepmder2 = req.body.stepMder2;
+    var stepmder3 = req.body.stepMder3;
+    var stepmder4 = req.body.stepMder4;
+    var stepmder5 = req.body.stepMder5;
+    var steptime1 = req.body.stepTime1;
+    var steptime2 = req.body.stepTime2;
+    var steptime3 = req.body.stepTime3;
+    var steptime4 = req.body.stepTime4;
+    var steptime5 = req.body.stepTime5;
+
+    
+    console.log("Initial Medi: " + inMedi)
+    console.log("Initial Mder: " + inMder)
+
+    try {
+        const processedData  = await executePython('python/step_CCT_Medi.py', [alltime, inMedi, inMder, stepmedi1, stepmedi2, stepmedi3, stepmedi4, stepmedi5, stepmder1, stepmder2, stepmder3, stepmder4, stepmder5, steptime1, steptime2, steptime3, steptime4, steptime5]);
+        res.json({ processedData }); 
+        console.log(processedData)
+
+    } catch (error) {
+        res.status(500).json({ error: error }); 
+    }
+})
 
 
 
