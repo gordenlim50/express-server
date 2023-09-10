@@ -176,8 +176,14 @@
             </div>
             <button id="add_step_mm_button" class="add_step_button" onclick='addInputs_mm()'>+Add steps</button>
             <button id="set-step-button-medi-mder" class="set-step-button">Set</button> 
-           
-            <div class= "plot" id='pairDiv'></div>
+        </div>
+
+        <div class = "result-content-step" >
+            <div id="result-box" class="result-box-step"></div>
+        </div>
+
+        <div class= "plotpair1" id='pair1Div'></div>
+        <div class= "plotpair2" id='pair2Div'></div>
        
 
         <script>
@@ -230,8 +236,23 @@
             const step_Mder_MM1 = document.getElementById("input_mM_step1");
             const step_time_MM1= document.getElementById("input_time_mm_step1");
 
-            // Create Plot
-            var pair_return = {
+            // Result Boxes Constant
+            const dataResult = document.getElementById('result-box');
+
+            // Create Plot 1
+            var metric1 = {
+                x: ['01:17:23 AM',
+                    '01:19:23 AM',
+                    '01:21:23 AM',
+                    '01:23:23 AM',
+                    '01:25:23 AM',
+                    '01:27:23 AM'],
+                y: [4000, 4500, 5000, 4500, 4800, 5000],
+                name: 'Target CCT',
+                type: 'lines+steps'
+            }
+
+            var metric2 = {
                 x: ['01:17:23 AM',
                     '01:19:23 AM',
                     '01:21:23 AM',
@@ -239,23 +260,25 @@
                     '01:25:23 AM',
                     '01:27:23 AM'],
                 y: [4031.85, 4449.89, 4983.45, 4448.09, 4715.88, 4978.85],
-                type: 'scatter'
+                name: 'Measured CCT',
+                type: 'lines+steps'
             }
 
-            var data = [pair_return];
+            
+            var data = [metric1, metric2];
             var layout = {
-                height: 450,
-                width: 550,
+                height: 300,
+                width: 680,
                 margin: {
                 t: 50,  // Top margin
-                b: 60,  // Bottom margin
+                b: 55,  // Bottom margin
                 l: 50,  // Left margin
-                r: 20   // Right margin
+                r: 10   // Right margin
                 },
-                title: {text: 'Plot of SPD', 
+                title: {text: 'Plot of Target CCT versus Measured CCT', 
                 font: {
-                    size: 23, 
-                    weight: 'bolder'
+                    size: 20, 
+                    //weight: 'bolder'
                 }
                 },
                 xaxis: {
@@ -270,52 +293,165 @@
                 }
             };
 
-            Plotly.newPlot('pairDiv', data, layout);
+            Plotly.newPlot('pair1Div', data, layout);
 
-            // function createPlot(){
-            //     var pair_return = {
-            //         x: ['01:17:23 AM',
-            //             '01:19:23 AM',
-            //             '01:21:23 AM',
-            //             '01:23:23 AM',
-            //             '01:25:23 AM',
-            //             '01:27:23 AM'],
-            //         y: [4031.85, 4449.89, 4983.45, 4448.09, 4715.88, 4978.85]
-            //     }
+            // Create Plot 2
+            var metric3 = {
+                x: ['01:17:23 AM',
+                    '01:19:23 AM',
+                    '01:21:23 AM',
+                    '01:23:23 AM',
+                    '01:25:23 AM',
+                    '01:27:23 AM'],
+                y: [180, 200, 150, 100, 120, 130],
+                name: 'Target Plux',
+                type: 'lines+steps'
+            }
 
-            //     var data = [pair_return];
-            //     var layout = {
-            //         height: 450,
-            //         width: 550,
-            //         margin: {
-            //         t: 50,  // Top margin
-            //         b: 60,  // Bottom margin
-            //         l: 50,  // Left margin
-            //         r: 20   // Right margin
-            //         },
-            //         title: {text: 'Plot of SPD', 
-            //         font: {
-            //             size: 23, 
-            //             weight: 'bolder'
-            //         }
-            //         },
-            //         xaxis: {
-            //         title: 'Wavelength (nm)',
-            //         titlefont: {size: 12},
-            //         tickfont: { size: 10}
-            //         },
-            //         yaxis: {
-            //         title: 'Spectral Power Density (mW/m^2/nm)',
-            //         titlefont: {size: 12},
-            //         tickfont: { size: 10}
-            //         }
-            //     };
+            var metric4 = {
+                x: ['01:17:23 AM',
+                    '01:19:23 AM',
+                    '01:21:23 AM',
+                    '01:23:23 AM',
+                    '01:25:23 AM',
+                    '01:27:23 AM'],
+                y: [179.23, 201.39, 150.81, 101.54, 121.28, 130.10],
+                name: 'Measured Plux',
+                type: 'lines+steps'
+            }
 
-            //     Plotly.newPlot('pairDiv', data, layout);
-            // }
+            var data2 = [metric3, metric4];
+            var layout2 = {
+                height: 300,
+                width: 680,
+                margin: {
+                t: 50,  // Top margin
+                b: 52,  // Bottom margin
+                l: 50,  // Left margin
+                r: 10   // Right margin
+                },
+                title: {text: 'Plot of Target Plux versus Measured Plux', 
+                font: {
+                    size: 20, 
+                    //weight: 'bolder'
+                }
+                },
+                xaxis: {
+                title: 'Time',
+                titlefont: {size: 12},
+                tickfont: { size: 10}
+                },
+                yaxis: {
+                title: 'Photopic Illuminance (lx)',
+                titlefont: {size: 12},
+                tickfont: { size: 10}
+                }
+            };
 
+            Plotly.newPlot('pair2Div', data2, layout2);
 
+            // Result CCT and Plux
+            function createPlot1(xValues, y1Values, y2Values){
+                var metric1 = {
+                x: xValues,
+                y: y1Values,
+                name: 'Target CCT',
+                type: 'lines+steps'
+                }
 
+                var metric2 = {
+                    x: xValues,
+                    y: y2Values,
+                    name: 'Measured CCT',
+                    type: 'lines+steps'
+                }
+
+                var data = [metric1, metric2];
+                var layout = {
+                height: 300,
+                width: 680,
+                margin: {
+                t: 50,  // Top margin
+                b: 55,  // Bottom margin
+                l: 50,  // Left margin
+                r: 10   // Right margin
+                },
+                title: {text: 'Plot of Target CCT versus Measured CCT', 
+                font: {
+                    size: 20, 
+                    //weight: 'bolder'
+                }
+                },
+                xaxis: {
+                title: 'Time',
+                titlefont: {size: 12},
+                tickfont: { size: 10}
+                },
+                yaxis: {
+                title: 'Correlated Color Temperature (K)',
+                titlefont: {size: 12},
+                tickfont: { size: 10}
+                }
+            };
+
+            Plotly.newPlot('pair1Div', data, layout);
+        }
+            function createPlot2(xValues, y1Values, y2Values){var metric1 = {
+                x: xValues,
+                y: y1Values,
+                name: 'Target Plux',
+                type: 'lines+steps'
+                }
+
+                var metric2 = {
+                    x: xValues,
+                    y: y2Values,
+                    name: 'Measured Plux',
+                    type: 'lines+steps'
+                }
+
+                var data = [metric1, metric2];
+                var layout2 = {
+                height: 300,
+                width: 680,
+                margin: {
+                t: 50,  // Top margin
+                b: 52,  // Bottom margin
+                l: 50,  // Left margin
+                r: 10   // Right margin
+                },
+                title: {text: 'Plot of Target Plux versus Measured Plux', 
+                font: {
+                    size: 20, 
+                    //weight: 'bolder'
+                }
+                },
+                xaxis: {
+                title: 'Time',
+                titlefont: {size: 12},
+                tickfont: { size: 10}
+                },
+                yaxis: {
+                title: 'Photopic Illuminance (lx)',
+                titlefont: {size: 12},
+                tickfont: { size: 10}
+                }
+            };
+
+            Plotly.newPlot('pair2Div', data2, layout2);
+        }
+
+            function updateResults_CP(results){
+                dataResult.innerHTML = `
+                <p> Target CCT: ${results['CCT_Target']} </p>
+                <p> Target Plux: ${results['Plux_Target']} </p>
+                <p> Measured CCT: ${results['CCT_Measured']}</p> 
+                <p> Measured Plux: ${results['Plux_Measured']} </p>
+                `
+                createPlot1(results['Time'], results['CCT_Target'], results['CCT_Measured'])
+                createPlot2(results['Time'], results['Plux_Target'], results['Plux_Measured'])
+            }
+          
             // Add CCT and Plux function 
             var inputCount_c = 1;
             var inputCount_p = 1;
@@ -501,7 +637,7 @@
             metricsInput.addEventListener("change", function(){
                 if(metricsInput.value == "0"){
                     
-                    Stepbox.style.height = "400px";
+                    Stepbox.style.height = "380px";
 
                     // Display initial input field
                     selectCCT_PLUX.style.display = "block";
@@ -520,7 +656,7 @@
                     set_MM_step.style.display = "none";
                 }
                 else if (metricsInput.value == "1"){
-                    Stepbox.style.height = "420px";
+                    Stepbox.style.height = "380px";
 
                     // Display initial input field
                     selectCCT_PLUX.style.display = "none";
@@ -540,7 +676,7 @@
 
                 }
                 else if (metricsInput.value == "2"){
-                    Stepbox.style.height = "420px";
+                    Stepbox.style.height = "380px";
 
                     // Display initial input field
                     selectCCT_PLUX.style.display = "none";
@@ -560,7 +696,7 @@
 
                 }
                 else if (metricsInput.value == "3"){
-                    Stepbox.style.height = "420px";
+                    Stepbox.style.height = "380px";
 
                     // Display initial input field
                     selectCCT_PLUX.style.display = "none";
@@ -750,7 +886,8 @@
                     },
                     body: JSON.stringify(requestData)
                 }); 
-                const result = await response.json();     
+                const result = await response.json();
+                updateResults_CP(result.processedData)     
                 
             })
 

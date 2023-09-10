@@ -57,14 +57,11 @@ Starting_time_p = datetime.datetime.now()
 formatted_time1 = Starting_time_p.strftime("%I:%M:%S %p")
 time_values.append(formatted_time1)
 total_elapsed_time = 0  # Initialize total elapsed time
-total_iterations = 0    # Keep track of total iterations
 
 CCT_Target.append(target2)
 Plux_Target.append(target1)
 
-
 while True:
-
     # Convert time step from minutes to seconds
     if time_step_i < len(time_steps_minutes):
         time_step = time_steps_minutes[time_step_i] * 60
@@ -145,7 +142,6 @@ while True:
     
     # Check if both targets are nearly reached
     if (diff1 < 4 and diff2 < 40) or iteration == 7:
-        total_iterations += 1
         iteration = 1 # Reset iteration
         adjust_targets = False  # Set the flag to False to exit the loop
         
@@ -156,8 +152,8 @@ while True:
     if elapsed_time >= time_step:
         if not adjust_targets:
             # Append CCT and Medi      
-            CCT_Measured.append(f'{measured_CCT[0][0]:.2f}')
-            Plux_Measured.append(f'{measured_plux:.2f}')
+            CCT_Measured.append(round(measured_CCT[0][0], 2))
+            Plux_Measured.append(round(measured_plux,2))
 
             # Increment the time_step_index to use the next time step in the array
             time_step_i += 1

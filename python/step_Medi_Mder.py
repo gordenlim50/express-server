@@ -10,6 +10,7 @@ import requests as rq
 import numpy as np
 import json
 import time
+import datetime
 import sys
 
 url_get = 'https://ece4809api.intlightlab.com/get-spectrum-room'
@@ -31,40 +32,41 @@ diff2 = 10
 
 # Steps Constant
 medi_steps = [int(sys.argv[4]), int(sys.argv[5]), int(sys.argv[6]), int(sys.argv[7]), int(sys.argv[8])]
-mder_steps = [int(sys.argv[9]), int(sys.argv[10]), -int(sys.argv[11]), int(sys.argv[12]), int(sys.argv[13])]
+mder_steps = [int(sys.argv[9]), int(sys.argv[10]), int(sys.argv[11]), int(sys.argv[12]), int(sys.argv[13])]
 medi_i = 0
 mder_i = 0 
 
 # Time step Constant
 time_steps_minutes = [int(sys.argv[14]), int(sys.argv[15]), int(sys.argv[16]), int(sys.argv[17]), int(sys.argv[18]), 5]      # Step in minutes
 time_step_i = 0
-time_allocate = int(sys.argv[1]) * 60     # Allocate 10 minutes
+time_allocate = (int(sys.argv[1])+1) * 60     # Allocate 10 minutes
 
 # Results
 Medi_Target = []
 Medi_Measured = []
 Mder_Target = []
 Mder_Measured = []
+time_values = []
 
 # Initialize a flag to track whether to adjust targets
 adjust_targets = True
 start_time = time.time()
+Starting_time_p = datetime.datetime.now()
+formatted_time1 = Starting_time_p.strftime("%I:%M:%S %p")
+time_values.append(formatted_time1)
 total_elapsed_time = 0  # Initialize total elapsed time
-
-# print('Target MEDI:', "{:.2f}".format(target1))
-# print('Target MDER:', "{:.2f}".format(target2))
 
 Medi_Target.append(target1)
 Mder_Target.append(target2)
 
 while True:
     # Convert time step from minutes to seconds
-    time_step = time_steps_minutes[time_step_i] * 60
+    if time_step_i < len(time_steps_minutes):
+        time_step = time_steps_minutes[time_step_i] * 60
 
     # Only adjust targets if the flag is set to True
     if adjust_targets:
-        print("\nIteration: ", iteration)
-
+      
         val_bri = fitResult_brinvs(target_medi, target_mder)
         val_cct = fitResult_CCTnvs(target_medi, target_mder)
 
@@ -143,43 +145,45 @@ while True:
     elapsed_time = current_time - start_time
 
     if elapsed_time >= time_step:
-        # Append Medi and Mder
-        Medi_Measured.append(f'measured_medi:.2f')
-        Mder_Measured.append(f'measured_mder:.2f')
+        if not adjust_targets:
+            # Append Medi and Mder
+            Medi_Measured.append(f'measured_medi:.2f')
+            Mder_Measured.append(f'measured_mder:.2f')
 
-        # Increment the time_step_index to use the next time step in the array
-        time_step_i += 1
+            # Increment the time_step_index to use the next time step in the array
+            time_step_i += 1
 
-        # MEDI increment
-        if medi_i < len(medi_steps):
-            new_target_medi = target1 + medi_steps[medi_i]
-            if 0 <= new_target_medi <= 250:
-                target_medi = new_target_medi
-                Medi_Target.append(target_medi)
-                target1 = target_medi
-                medi_i += 1
+            # MEDI increment
+            if medi_i < len(medi_steps):
+                new_target_medi = target1 + medi_steps[medi_i]
+                if 0 <= new_target_medi <= 250:
+                    target_medi = new_target_medi
+                    Medi_Target.append(target_medi)
+                    target1 = target_medi
+                    medi_i += 1
 
-    
-        # MDER increment 
-        if mder_i < len(mder_steps):
-            new_target_mder = target2 + mder_steps[mder_i]
-            if 0 <= new_target_mder <= 200:
-                target_mder = new_target_mder
-                Mder_Target.append(target_mder)
-                target2 = target_mder
-                mder_i += 1
+            # MDER increment 
+            if mder_i < len(mder_steps):
+                new_target_mder = target2 + mder_steps[mder_i]
+                if 0 <= new_target_mder <= 200:
+                    target_mder = new_target_mder
+                    Mder_Target.append(target_mder)
+                    target2 = target_mder
+                    current_time = datetime.datetime.now()
+                    formatted_time = current_time.strftime("%I:%M:%S %p")
+                    time_values.append(formatted_time)
+                    mder_i += 1
 
-        # Add elapsed_time to total_elapsed_time
-        total_elapsed_time += elapsed_time
+            # Add elapsed_time to total_elapsed_time
+            total_elapsed_time += elapsed_time
 
-        # Reset the start_time to current time
-        start_time = time.time()
-        elapsed_time = 0  # Reset elapsed_time
-        adjust_targets = True  # Set the flag to True to adjust targets in the next iteration
+            # Reset the start_time to current time
+            start_time = time.time()
+            elapsed_time = 0  # Reset elapsed_time
+            adjust_targets = True  # Set the flag to True to adjust targets in the next iteration
         
     # Check if it's time to stop the program
     if total_elapsed_time >= time_allocate:
-        # print("Time allocation reached. Stopping the program.")
         break  # Exit the loop and stop the program
 
 # Handle output result
@@ -188,6 +192,7 @@ output_data = {
     "Mder_Target": Mder_Target,
     "Medi_Measured": Medi_Measured,
     "Mder_Measured": Mder_Measured,
+    "Time": time_values
 }
 print(json.dumps(output_data))  # Convert the dictionary to JSON and print it
 sys.stdout.flush()

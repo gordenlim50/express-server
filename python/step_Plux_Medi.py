@@ -10,6 +10,7 @@ import requests as rq
 import numpy as np
 import json
 import time
+import datetime
 import sys
 
 # API links
@@ -48,10 +49,14 @@ Plux_Target = []
 Plux_Measured = []
 Medi_Target = []
 Medi_Measured = []
+time_values = []
 
 # Initialize a flag to track whether to adjust targets
 adjust_targets = True
 start_time = time.time()
+Starting_time_p = datetime.datetime.now()
+formatted_time1 = Starting_time_p.strftime("%I:%M:%S %p")
+time_values.append(formatted_time1)
 total_elapsed_time = 0  # Initialize total elapsed time
 
 Plux_Target.append(target1)
@@ -147,8 +152,8 @@ while True:
     
     if elapsed_time >= time_step:
         # Plux and Medi
-        Plux_Measured.append(f'{measured_CCT[0][0]:.2f}')
-        Medi_Measured.append(f'{measured_medi:.2f}')
+        Plux_Measured.append(round(measured_CCT[0][0], 2))
+        Medi_Measured.append(round(measured_medi, 2))
 
         # Increment the time_step_index to use the next time step in the array
         time_step_i += 1
@@ -169,6 +174,9 @@ while True:
                 target_medi = new_target_medi
                 Medi_Target.append(target_medi)
                 target2 = target_medi
+                current_time = datetime.datetime.now()
+                formatted_time = current_time.strftime("%I:%M:%S %p")
+                time_values.append(formatted_time)
                 medi_i += 1
 
         # Add elapsed_time to total_elapsed_time
@@ -188,7 +196,8 @@ output_data = {
     "Plux_Target": Plux_Target,
     "Medi_Target": Medi_Target,
     "Plux_Measured": Plux_Measured,
-    "Medi_Measured": Medi_Measured
+    "Medi_Measured": Medi_Measured,
+    "Time": time_values
 }
 print(json.dumps(output_data))  # Convert the dictionary to JSON and print it
 sys.stdout.flush()

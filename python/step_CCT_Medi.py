@@ -9,13 +9,17 @@ import requests as rq
 import numpy as np
 import json
 import time
+import datetime
 import sys
 
+# API links
 url_get = 'https://ece4809api.intlightlab.com/get-spectrum-room'
 url_post = 'https://ece4809api.intlightlab.com/set-lights'
 
 headers = {'Authorization': 'Bearer 0d90d4d9-ac95-4339-836b-7b733f2973f7'} #special token
 
+# Initialize variables for time tracking
+# Controller Constant
 Kp_medi = 0.6
 Kp_cct = 0.6 
 iteration = 1
@@ -44,21 +48,24 @@ CCT_Target = []
 CCT_Measured = []
 Medi_Target = []
 Medi_Measured = []
+time_values = []
 
 # Initialize a flag to track whether to adjust targets
 adjust_targets = True
 start_time = time.time()
+Starting_time_p = datetime.datetime.now()
+formatted_time1 = Starting_time_p.strftime("%I:%M:%S %p")
+time_values.append(formatted_time1)
 total_elapsed_time = 0  # Initialize total elapsed time
 
-# print('Target CCT:', "{:.2f}".format(target2))
 CCT_Target.append(target2)
-# print('Target MEDI:', "{:.2f}".format(target1))
 Medi_Target.append(target1)
 
 while True:
 
     # Convert time step from minutes to seconds
-    time_step = time_steps_minutes[time_step_i] * 60
+    if time_step_i < len(time_steps_minutes):
+        time_step = time_steps_minutes[time_step_i] * 60
 
     # Only adjust targets if the flag is set to True
     if adjust_targets:
@@ -127,7 +134,6 @@ while True:
         error_medi = measured_medi - target_medi
         error_cct = measured_CCT - target_cct
         
-
         if diff1 < 20 or diff2 < 200:
             target_medi = target_medi - Kp_medi*diff3
             target_cct = target_cct - Kp_cct*diff4
@@ -150,40 +156,42 @@ while True:
     elapsed_time = current_time - start_time
 
     if elapsed_time >= time_step:
-        CCT_Measured.append(f'measured_CCT[0][0]:.2f')
-        Medi_Measured.append(f'measured_medi:.2f')
+        if not adjust_targets:
+            CCT_Measured.append(round(measured_CCT[0][0], 2))
+            Medi_Measured.append(round(measured_medi, 2))
 
-        # Increment the time_step_index to use the next time step in the array
-        time_step_i += 1
+            # Increment the time_step_index to use the next time step in the array
+            time_step_i += 1
 
-        # CCT increment 
-        if cct_i < len(cct_steps):
-            new_target_cct = target2 + cct_steps[cct_i]
-            if 2500 <= new_target_cct <= 6500:
-                target_cct = new_target_cct
-                CCT_Target.append(target_cct)
-                target2 = target_cct
-                cct_i += 1
+            # CCT increment 
+            if cct_i < len(cct_steps):
+                new_target_cct = target2 + cct_steps[cct_i]
+                if 2500 <= new_target_cct <= 6500:
+                    target_cct = new_target_cct
+                    CCT_Target.append(target_cct)
+                    target2 = target_cct
+                    cct_i += 1
+            
+            # Plux increment
+            if medi_i < len(medi_steps):
+                new_target_medi  = target1 + medi_steps[medi_i]
+                if 0 <= new_target_medi <= 200:
+                    target_medi = new_target_medi
+                    Medi_Target.append(target_medi)
+                    target1 = target_medi
+                    current_time = datetime.datetime.now()
+                    formatted_time = current_time.strftime("%I:%M:%S %p")
+                    time_values.append(formatted_time)
+                    medi_i += 1
+                    
+            # Add elapsed_time to total_elapsed_time
+            total_elapsed_time += elapsed_time
+
+            # Reset the start_time to current time
+            start_time = time.time()
+            elapsed_time = 0  # Reset elapsed_time
+            adjust_targets = True  # Set the flag to True to adjust targets in the next iteration
         
-        # Plux increment
-        if medi_i < len(medi_steps):
-            new_target_medi  = target1 + medi_steps[medi_i]
-            if 0 <= new_target_medi <= 200:
-                target_medi = new_target_medi
-                Medi_Target.append(target_medi)
-                target1 = target_medi
-                medi_i += 1
-                
-        # Add elapsed_time to total_elapsed_time
-        total_elapsed_time += elapsed_time
-
-        # Reset the start_time to current time
-        start_time = time.time()
-        elapsed_time = 0  # Reset elapsed_time
-        adjust_targets = True  # Set the flag to True to adjust targets in the next iteration
-        
-         # Check if both targets are nearly reached and append the measurements for this iteration
-  
     # Check if it's time to stop the program
     if total_elapsed_time >= time_allocate:
         break  # Exit the loop and stop the program
@@ -194,6 +202,7 @@ output_data = {
     "Medi_Target": Medi_Target,
     "CCT_Measured": CCT_Measured,
     "Medi_Measured": Medi_Measured,
+    "Time":time_values
 }
 print(json.dumps(output_data))  # Convert the dictionary to JSON and print it
 sys.stdout.flush()
