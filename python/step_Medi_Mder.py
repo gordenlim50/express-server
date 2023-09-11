@@ -32,12 +32,12 @@ diff2 = 10
 
 # Steps Constant
 medi_steps = [int(sys.argv[4]), int(sys.argv[5]), int(sys.argv[6]), int(sys.argv[7]), int(sys.argv[8])]
-mder_steps = [int(sys.argv[9]), int(sys.argv[10]), int(sys.argv[11]), int(sys.argv[12]), int(sys.argv[13])]
+mder_steps = [float(sys.argv[9]), float(sys.argv[10]), float(sys.argv[11]), float(sys.argv[12]), float(sys.argv[13])]
 medi_i = 0
 mder_i = 0 
 
 # Time step Constant
-time_steps_minutes = [int(sys.argv[14]), int(sys.argv[15]), int(sys.argv[16]), int(sys.argv[17]), int(sys.argv[18]), 5]      # Step in minutes
+time_steps_minutes = [int(sys.argv[14]), int(sys.argv[15]), int(sys.argv[16]), int(sys.argv[17]), int(sys.argv[18])]      # Step in minutes
 time_step_i = 0
 time_allocate = (int(sys.argv[1])+1) * 60     # Allocate 10 minutes
 
@@ -125,7 +125,7 @@ while True:
         error_medi = measured_medi - target_medi
         error_mder = measured_mder - target_mder
 
-        if diff1 < 10:
+        if diff1 < 10 and diff2 < 0.06:
             target_medi = target_medi - Kp1*diff1
             target_mder = target_mder - Kp2*diff2
         else:
@@ -136,7 +136,7 @@ while True:
         time.sleep(5)
 
     # Check if both targets are nearly reached
-    if (diff1 < 4 and diff2 < 0.05) or iteration == 7:
+    if (diff1 < 4 and diff2 < 0.03) or iteration == 7:
         iteration = 1 # Reset iteration
         adjust_targets = False  # Set the flag to False to exit the loop
         
@@ -147,8 +147,8 @@ while True:
     if elapsed_time >= time_step:
         if not adjust_targets:
             # Append Medi and Mder
-            Medi_Measured.append(f'measured_medi:.2f')
-            Mder_Measured.append(f'measured_mder:.2f')
+            Medi_Measured.append(round(measured_medi, 2))
+            Mder_Measured.append(round(measured_mder, 2))
 
             # Increment the time_step_index to use the next time step in the array
             time_step_i += 1

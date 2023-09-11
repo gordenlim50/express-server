@@ -21,7 +21,7 @@ headers = {'Authorization': 'Bearer 0d90d4d9-ac95-4339-836b-7b733f2973f7'} #spec
 # Initialize variables for time tracking
 # Controller Constant
 Kp_plux = 0.65
-Kp_cct = 0.55 #1.65e-4
+Kp_cct = 0.55 
 iteration = 1
 error_plux = 1e5
 error_cct = 1e5
@@ -151,7 +151,7 @@ while True:
 
     if elapsed_time >= time_step:
         if not adjust_targets:
-            # Append CCT and Medi      
+            # Append CCT and Plux     
             CCT_Measured.append(round(measured_CCT[0][0], 2))
             Plux_Measured.append(round(measured_plux,2))
 

@@ -41,7 +41,7 @@ medi_i = 0
 # Time step Constant
 time_steps_minutes = [int(sys.argv[14]), int(sys.argv[15]), int(sys.argv[16]), int(sys.argv[17]), int(sys.argv[18]), 5]       # Step 2 minutes
 time_step_i = 0
-time_allocate = int(sys.argv[1]) * 60                 # Allocate 10 minutes
+time_allocate = (int(sys.argv[1])+1) * 60                 # Allocate 10 minutes
 
 # Results
 CCT_Target = []
@@ -144,7 +144,6 @@ while True:
         iteration += 1
         time.sleep(5)
         
-
     # Check if both targets are nearly reached
     if (diff1 < 4 and diff2 < 50) or iteration == 7:
         iteration = 1 # Reset iteration
@@ -157,6 +156,7 @@ while True:
 
     if elapsed_time >= time_step:
         if not adjust_targets:
+            # Append CCT and Medi  
             CCT_Measured.append(round(measured_CCT[0][0], 2))
             Medi_Measured.append(round(measured_medi, 2))
 

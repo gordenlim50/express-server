@@ -520,6 +520,40 @@ app.post('/get_step_CP', async function(req, res){
     }
 })
 
+// --- CCT and Medi --- //
+app.post('/get_step_CM', async function(req, res){
+    var alltime = req.body.allocatetime;
+    var inCCT = req.body.initialcct;
+    var inMedi = req.body.initialmedi;
+    var stepcct1 = req.body.stepCCT1;
+    var stepcct2 = req.body.stepCCT2;
+    var stepcct3 = req.body.stepCCT3;
+    var stepcct4 = req.body.stepCCT4;
+    var stepcct5 = req.body.stepCCT5;
+    var stepmedi1 = req.body.stepMedi1;
+    var stepmedi2 = req.body.stepMedi2;
+    var stepmedi3 = req.body.stepMedi3;
+    var stepmedi4 = req.body.stepMedi4;
+    var stepmedi5 = req.body.stepMedi5;
+    var steptime1 = req.body.stepTime1;
+    var steptime2 = req.body.stepTime2;
+    var steptime3 = req.body.stepTime3;
+    var steptime4 = req.body.stepTime4;
+    var steptime5 = req.body.stepTime5;
+
+    console.log("Initial CCT: " + inCCT)
+    console.log("Initial Medi: " + inMedi)
+
+    try {
+        const processedData  = await executePython('python/step_CCT_Medi.py', [alltime, inCCT, inMedi, stepcct1, stepcct2, stepcct3, stepcct4, stepcct5, stepmedi1, stepmedi2, stepmedi3, stepmedi4, stepmedi5, steptime1, steptime2, steptime3, steptime4, steptime5]);
+        res.json({ processedData }); 
+        console.log(processedData)
+
+    } catch (error) {
+        res.status(500).json({ error: error }); 
+    }
+})
+
 
 // --- Plux and Medi --- //
 app.post('/get_step_PM', async function(req, res){
@@ -547,7 +581,7 @@ app.post('/get_step_PM', async function(req, res){
     console.log("Initial Medi: " + inMedi)
 
     try {
-        const processedData  = await executePython('python/step_CCT_Medi.py', [alltime, inPlux, inMedi, stepplux1, stepplux2, stepplux3, stepplux4, stepplux5, stepmedi1, stepmedi2, stepmedi3, stepmedi4, stepmedi5, steptime1, steptime2, steptime3, steptime4, steptime5]);
+        const processedData  = await executePython('python/step_Plux_Medi.py', [alltime, inPlux, inMedi, stepplux1, stepplux2, stepplux3, stepplux4, stepplux5, stepmedi1, stepmedi2, stepmedi3, stepmedi4, stepmedi5, steptime1, steptime2, steptime3, steptime4, steptime5]);
         res.json({ processedData }); 
         console.log(processedData)
 
@@ -583,7 +617,7 @@ app.post('/get_step_MM', async function(req, res){
     console.log("Initial Mder: " + inMder)
 
     try {
-        const processedData  = await executePython('python/step_CCT_Medi.py', [alltime, inMedi, inMder, stepmedi1, stepmedi2, stepmedi3, stepmedi4, stepmedi5, stepmder1, stepmder2, stepmder3, stepmder4, stepmder5, steptime1, steptime2, steptime3, steptime4, steptime5]);
+        const processedData  = await executePython('python/step_Medi_Mder.py', [alltime, inMedi, inMder, stepmedi1, stepmedi2, stepmedi3, stepmedi4, stepmedi5, stepmder1, stepmder2, stepmder3, stepmder4, stepmder5, steptime1, steptime2, steptime3, steptime4, steptime5]);
         res.json({ processedData }); 
         console.log(processedData)
 

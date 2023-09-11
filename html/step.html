@@ -42,7 +42,7 @@
         <div id="Steps" class = "Steps">
             <h1> Step Metrics</h1>
 
-            <label for = "alloc_time" class="step_input_select_text"> Allocate Time: </label>
+            <label class="step_input_select_text"> Allocate Time: </label>
             <input type="text" name ="alloc_Time", id="alloc_time", class="step_input_time", placeholder="(minutes)"><br>
     
             <label for="metricsInput" class="step_input_select_text">Desired pairwise metrics: </label>
@@ -102,7 +102,7 @@
 
                 <div id='inputcm-medi_step_cont'>
                     <!--Input container-->
-                    <label class="step_input_select_text"> Step Plux: </label>
+                    <label class="step_input_select_text"> Step Medi: </label>
                     <input class="input_cP_step" id="input_cM_step1">
                 </div>
 
@@ -153,7 +153,7 @@
                 <input type="text" name ="step_get_medi3", id="step_get_medi3", class="step_input_text", placeholder="0lx ~ 200lx", min="0", max="200"><br>
 
                 <!-- MDER -->
-                <label for="step_get_mder" class="step_input_select_text">Desired intial Plux: </label>
+                <label for="step_get_mder" class="step_input_select_text">Desired intial MDER: </label>
                 <input type="text" name ="step_get_mder", id="step_get_mder", class="step_input_text", placeholder="0 ~ 1", min="0", max="1" >
                 
                 <div id='inputmm-medi_step_cont'>
@@ -236,119 +236,12 @@
             const step_Mder_MM1 = document.getElementById("input_mM_step1");
             const step_time_MM1= document.getElementById("input_time_mm_step1");
 
+            // Plotting
+            const Plot1 = document.getElementById('pair1Div');
+            const Plot2 = document.getElementById('pair2Div');
+
             // Result Boxes Constant
             const dataResult = document.getElementById('result-box');
-
-            // Create Plot 1
-            var metric1 = {
-                x: ['01:17:23 AM',
-                    '01:19:23 AM',
-                    '01:21:23 AM',
-                    '01:23:23 AM',
-                    '01:25:23 AM',
-                    '01:27:23 AM'],
-                y: [4000, 4500, 5000, 4500, 4800, 5000],
-                name: 'Target CCT',
-                type: 'lines+steps'
-            }
-
-            var metric2 = {
-                x: ['01:17:23 AM',
-                    '01:19:23 AM',
-                    '01:21:23 AM',
-                    '01:23:23 AM',
-                    '01:25:23 AM',
-                    '01:27:23 AM'],
-                y: [4031.85, 4449.89, 4983.45, 4448.09, 4715.88, 4978.85],
-                name: 'Measured CCT',
-                type: 'lines+steps'
-            }
-
-            
-            var data = [metric1, metric2];
-            var layout = {
-                height: 300,
-                width: 680,
-                margin: {
-                t: 50,  // Top margin
-                b: 55,  // Bottom margin
-                l: 50,  // Left margin
-                r: 10   // Right margin
-                },
-                title: {text: 'Plot of Target CCT versus Measured CCT', 
-                font: {
-                    size: 20, 
-                    //weight: 'bolder'
-                }
-                },
-                xaxis: {
-                title: 'Time',
-                titlefont: {size: 12},
-                tickfont: { size: 10}
-                },
-                yaxis: {
-                title: 'Correlated Color Temperature (K)',
-                titlefont: {size: 12},
-                tickfont: { size: 10}
-                }
-            };
-
-            Plotly.newPlot('pair1Div', data, layout);
-
-            // Create Plot 2
-            var metric3 = {
-                x: ['01:17:23 AM',
-                    '01:19:23 AM',
-                    '01:21:23 AM',
-                    '01:23:23 AM',
-                    '01:25:23 AM',
-                    '01:27:23 AM'],
-                y: [180, 200, 150, 100, 120, 130],
-                name: 'Target Plux',
-                type: 'lines+steps'
-            }
-
-            var metric4 = {
-                x: ['01:17:23 AM',
-                    '01:19:23 AM',
-                    '01:21:23 AM',
-                    '01:23:23 AM',
-                    '01:25:23 AM',
-                    '01:27:23 AM'],
-                y: [179.23, 201.39, 150.81, 101.54, 121.28, 130.10],
-                name: 'Measured Plux',
-                type: 'lines+steps'
-            }
-
-            var data2 = [metric3, metric4];
-            var layout2 = {
-                height: 300,
-                width: 680,
-                margin: {
-                t: 50,  // Top margin
-                b: 52,  // Bottom margin
-                l: 50,  // Left margin
-                r: 10   // Right margin
-                },
-                title: {text: 'Plot of Target Plux versus Measured Plux', 
-                font: {
-                    size: 20, 
-                    //weight: 'bolder'
-                }
-                },
-                xaxis: {
-                title: 'Time',
-                titlefont: {size: 12},
-                tickfont: { size: 10}
-                },
-                yaxis: {
-                title: 'Photopic Illuminance (lx)',
-                titlefont: {size: 12},
-                tickfont: { size: 10}
-                }
-            };
-
-            Plotly.newPlot('pair2Div', data2, layout2);
 
             // Result CCT and Plux
             function createPlot1(xValues, y1Values, y2Values){
@@ -372,7 +265,7 @@
                 width: 680,
                 margin: {
                 t: 50,  // Top margin
-                b: 55,  // Bottom margin
+                b: 52,  // Bottom margin
                 l: 50,  // Left margin
                 r: 10   // Right margin
                 },
@@ -396,22 +289,27 @@
 
             Plotly.newPlot('pair1Div', data, layout);
         }
-            function createPlot2(xValues, y1Values, y2Values){var metric1 = {
-                x: xValues,
-                y: y1Values,
-                name: 'Target Plux',
-                type: 'lines+steps'
+            function createPlot2(xValues, y1Values, y2Values){
+                var metric1 = {
+                    x: xValues,
+                    y: y1Values,
+                    line: {"shape": 'hv'},
+                    mode: 'lines',
+                    name: 'Target Plux',
+                    type: 'scatter'
                 }
 
                 var metric2 = {
                     x: xValues,
                     y: y2Values,
+                    line: {"shape": 'hv'},
+                    mode: 'lines',
                     name: 'Measured Plux',
-                    type: 'lines+steps'
+                    type: 'scatter'
                 }
 
                 var data = [metric1, metric2];
-                var layout2 = {
+                var layout = {
                 height: 300,
                 width: 680,
                 margin: {
@@ -438,7 +336,7 @@
                 }
             };
 
-            Plotly.newPlot('pair2Div', data2, layout2);
+            Plotly.newPlot('pair2Div', data, layout);
         }
 
             function updateResults_CP(results){
@@ -450,6 +348,339 @@
                 `
                 createPlot1(results['Time'], results['CCT_Target'], results['CCT_Measured'])
                 createPlot2(results['Time'], results['Plux_Target'], results['Plux_Measured'])
+            }
+
+            // Result CCT and Medi
+            function createPlot3(xValues, y1Values, y2Values){
+                var metric1 = {
+                    x: xValues,
+                    y: y1Values,
+                    line: {"shape": 'hv'},
+                    mode: 'lines',
+                    name: 'Target CCT',
+                    type: 'scatter'
+                }
+
+                var metric2 = {
+                    x: xValues,
+                    y: y2Values,
+                    line: {"shape": 'hv'},
+                    mode: 'lines',
+                    name: 'Measured CCT',
+                    type: 'scatter'
+                }
+
+                var data = [metric1, metric2];
+                var layout = {
+                height: 300,
+                width: 680,
+                margin: {
+                t: 50,  // Top margin
+                b: 52,  // Bottom margin
+                l: 50,  // Left margin
+                r: 10   // Right margin
+                },
+                title: {text: 'Plot of Target CCT versus Measured CCT', 
+                font: {
+                    size: 20, 
+                    //weight: 'bolder'
+                }
+                },
+                xaxis: {
+                title: 'Time',
+                titlefont: {size: 12},
+                tickfont: { size: 10}
+                },
+                yaxis: {
+                title: 'Correlated Color Temperature (K)',
+                titlefont: {size: 12},
+                tickfont: { size: 10}
+                }
+            };
+
+            Plotly.newPlot('pair1Div', data, layout);
+        }
+            function createPlot4(xValues, y1Values, y2Values){
+                var metric1 = {
+                    x: xValues,
+                    y: y1Values,
+                    line: {"shape": 'hv'},
+                    mode: 'lines',
+                    name: 'Target Medi',
+                    type: 'scatter'
+                }
+
+                var metric2 = {
+                    x: xValues,
+                    y: y2Values,
+                    line: {"shape": 'hv'},
+                    mode: 'lines',
+                    name: 'Measured Medi',
+                    type: 'scatter'
+                }
+
+                var data = [metric1, metric2];
+                var layout = {
+                    height: 300,
+                    width: 680,
+                    margin: {
+                    t: 50,  // Top margin
+                    b: 52,  // Bottom margin
+                    l: 50,  // Left margin
+                    r: 10   // Right margin
+                },
+                title: {text: 'Plot of Target Medi versus Measured Medi', 
+                font: {
+                    size: 20, 
+                    //weight: 'bolder'
+                }
+                },
+                xaxis: {
+                title: 'Time',
+                titlefont: {size: 12},
+                tickfont: { size: 10}
+                },
+                yaxis: {
+                title: 'Melanopic Equivalent Daylight Illuminance (lx)',
+                titlefont: {size: 12},
+                tickfont: { size: 10}
+                }
+            };
+
+            Plotly.newPlot('pair2Div', data, layout);
+        }
+
+            function updateResults_CM(results){
+                dataResult.innerHTML = `
+                <p> Target CCT: ${results['CCT_Target']} </p>
+                <p> Target Plux: ${results['Medi_Target']} </p>
+                <p> Measured CCT: ${results['CCT_Measured']} </p> 
+                <p> Measured Plux: ${results['Medi_Measured']} </p>
+                `
+                createPlot3(results['Time'], results['CCT_Target'], results['CCT_Measured'])
+                createPlot4(results['Time'], results['Medi_Target'], results['Medi_Measured'])
+            }
+
+            // Result Plux and Medi
+            function createPlot5(xValues, y1Values, y2Values){
+                var metric1 = {
+                    x: xValues,
+                    y: y1Values,
+                    line: {"shape": 'hv'},
+                    mode: 'lines',
+                    name: 'Target Plux',
+                    type: 'scatter'
+                }
+
+                var metric2 = {
+                    x: xValues,
+                    y: y2Values,
+                    line: {"shape": 'hv'},
+                    mode: 'lines',
+                    name: 'Measured Plux',
+                    type: 'scatter'
+                }
+
+                var data = [metric1, metric2];
+                var layout = {
+                height: 300,
+                width: 680,
+                margin: {
+                t: 50,  // Top margin
+                b: 52,  // Bottom margin
+                l: 50,  // Left margin
+                r: 10   // Right margin
+                },
+                title: {text: 'Plot of Target Plux versus Measured Plux', 
+                font: {
+                    size: 20, 
+                    //weight: 'bolder'
+                }
+                },
+                xaxis: {
+                title: 'Time',
+                titlefont: {size: 12},
+                tickfont: { size: 10}
+                },
+                yaxis: {
+                title: 'Photopic Illuminance (lx)',
+                titlefont: {size: 12},
+                tickfont: { size: 10}
+                }
+            };
+
+            Plotly.newPlot('pair1Div', data, layout);
+        }
+            function createPlot6(xValues, y1Values, y2Values){
+                var metric1 = {
+                    x: xValues,
+                    y: y1Values,
+                    line: {"shape": 'hv'},
+                    mode: 'lines',
+                    name: 'Target Medi',
+                    type: 'scatter'
+                }
+
+                var metric2 = {
+                    x: xValues,
+                    y: y2Values,
+                    line: {"shape": 'hv'},
+                    mode: 'lines',
+                    name: 'Measured Medi',
+                    type: 'scatter'
+                }
+
+                var data = [metric1, metric2];
+                var layout = {
+                height: 300,
+                width: 680,
+                margin: {
+                t: 50,  // Top margin
+                b: 52,  // Bottom margin
+                l: 50,  // Left margin
+                r: 10   // Right margin
+                },
+                title: {text: 'Plot of Target Medi versus Measured Medi', 
+                font: {
+                    size: 20, 
+                    //weight: 'bolder'
+                }
+                },
+                xaxis: {
+                title: 'Time',
+                titlefont: {size: 12},
+                tickfont: { size: 10}
+                },
+                yaxis: {
+                title: 'Melanopic Equivalent Daylight Illuminance (lx)',
+                titlefont: {size: 12},
+                tickfont: { size: 10}
+                }
+            };
+
+            Plotly.newPlot('pair2Div', data, layout);
+        }
+
+            function updateResults_PM(results){
+                dataResult.innerHTML = `
+                <p> Target Plux: ${results['Plux_Target']} </p>
+                <p> Target Medi: ${results['Medi_Target']} </p>
+                <p> Measured Plux: ${results['Plux_Measured']}</p> 
+                <p> Measured Medi: ${results['Medi_Measured']} </p>
+                `
+                createPlot5(results['Time'], results['Plux_Target'], results['Plux_Measured'])
+                createPlot6(results['Time'], results['Medi_Target'], results['Medi_Measured'])
+            }
+
+            // Result Medi and Mder
+            function createPlot7(xValues, y1Values, y2Values){
+                var metric1 = {
+                    x: xValues,
+                    y: y1Values,
+                    line: {"shape": 'hv'},
+                    mode: 'lines',
+                    name: 'Target Medi',
+                    type: 'scatter'
+                }
+
+                var metric2 = {
+                    x: xValues,
+                    y: y2Values,
+                    line: {"shape": 'hv'},
+                    mode: 'lines',
+                    name: 'Measured Medi',
+                    type: 'scatter'
+                }
+
+                var data = [metric1, metric2];
+                var layout = {
+                height: 300,
+                width: 680,
+                margin: {
+                t: 50,  // Top margin
+                b: 55,  // Bottom margin
+                l: 50,  // Left margin
+                r: 10   // Right margin
+                },
+                title: {text: 'Plot of Target Medi versus Measured Medi', 
+                font: {
+                    size: 20, 
+                    //weight: 'bolder'
+                }
+                },
+                xaxis: {
+                title: 'Time',
+                titlefont: {size: 12},
+                tickfont: { size: 10}
+                },
+                yaxis: {
+                title: 'Melanopic Equivalent Daylight Illuminance (lx)',
+                titlefont: {size: 12},
+                tickfont: { size: 10}
+                }
+            };
+
+            Plotly.newPlot('pair1Div', data, layout);
+        }
+            function createPlot8(xValues, y1Values, y2Values){
+                var metric1 = {
+                    x: xValues,
+                    y: y1Values,
+                    line: {"shape": 'hv'},
+                    mode: 'lines',
+                    name: 'Target Mder',
+                    type: 'scatter'
+                }
+
+                var metric2 = {
+                    x: xValues,
+                    y: y2Values,
+                    line: {"shape": 'hv'},
+                    mode: 'lines',
+                    name: 'Measured Mder',
+                    type: 'scatter'
+                }
+
+                var data = [metric1, metric2];
+                var layout = {
+                height: 300,
+                width: 680,
+                margin: {
+                t: 50,  // Top margin
+                b: 52,  // Bottom margin
+                l: 50,  // Left margin
+                r: 10   // Right margin
+                },
+                title: {text: 'Plot of Target Mder versus Measured Mder', 
+                font: {
+                    size: 20, 
+                    //weight: 'bolder'
+                }
+                },
+                xaxis: {
+                title: 'Time',
+                titlefont: {size: 12},
+                tickfont: { size: 10}
+                },
+                yaxis: {
+                title: 'Melanopic Daylight Efficacy Ratio',
+                titlefont: {size: 12},
+                tickfont: { size: 10}
+                }
+            };
+
+            Plotly.newPlot('pair2Div', data, layout);
+        }
+
+            function updateResults_MM(results){
+                dataResult.innerHTML = `
+                <p> Target Medi: ${results['Medi_Target']} </p>
+                <p> Target Mder: ${results['Mder_Target']} </p>
+                <p> Measured Medi: ${results['Medi_Measured']}</p> 
+                <p> Measured Mder: ${results['Mder_Measured']} </p>
+                `
+                createPlot7(results['Time'], results['Medi_Target'], results['Medi_Measured'])
+                createPlot8(results['Time'], results['Mder_Target'], results['Mder_Measured'])
             }
           
             // Add CCT and Plux function 
@@ -556,7 +787,7 @@
                     inputCount_Pm++;
                     let inputPlux = document.createElement('input');
                     inputPlux.className = 'input_Cp_step';
-                    inputPlux.id = 'input_Cm_step' + (inputCount_Pm);
+                    inputPlux.id = 'input_Pm_step' + (inputCount_Pm);
                     containerPlux.appendChild(inputPlux);
                 }
 
@@ -564,7 +795,7 @@
                     inputCount_pM++;
                     let inputMedi = document.createElement('input');
                     inputMedi.className = 'input_cP_step';
-                    inputMedi.id = 'input_cM_step' + (inputCount_pM);
+                    inputMedi.id = 'input_pM_step' + (inputCount_pM);
                     containerMedi.appendChild(inputMedi);
                     
                 }
@@ -887,8 +1118,10 @@
                     body: JSON.stringify(requestData)
                 }); 
                 const result = await response.json();
-                updateResults_CP(result.processedData)     
-                
+                updateResults_CP(result.processedData);
+                dataResult.style.display = "block";
+                Plot1.style.display = "block";
+                Plot2.style.display = "block";
             })
 
             // CCT & Medi
@@ -1028,8 +1261,11 @@
                     },
                     body: JSON.stringify(requestData)
                 }); 
-                const result = await response.json();     
-
+                const result = await response.json();
+                updateResults_CM(result.processedData); 
+                dataResult.style.display = "block";
+                Plot1.style.display = "block";
+                Plot2.style.display = "block";    
             })
 
             // Plux & Medi
@@ -1041,6 +1277,7 @@
                 } else {
                     step_PLUX2 = 0;
                 }
+                console.log('step_Plux2: '+ step_PLUX2);
 
                 var inputPlux_step3 = document.getElementById('input_Pm_step3');
                 if (inputPlux_step3){
@@ -1048,6 +1285,7 @@
                 } else {
                     step_PLUX3 = 0;
                 }
+                console.log('step_Plux3: '+ step_PLUX3);
 
                 var inputPlux_step4 = document.getElementById('input_Pm_step4');
                 if (inputPlux_step4){
@@ -1149,7 +1387,11 @@
                     },
                     body: JSON.stringify(requestData)
                 }); 
-                const result = await response.json();     
+                const result = await response.json();  
+                updateResults_PM(result.processedData); 
+                dataResult.style.display = "block";
+                Plot1.style.display = "block";
+                Plot2.style.display = "block";   
 
             })
 
@@ -1244,8 +1486,8 @@
 
                 const requestData = {
                     allocatetime: allocate_Time.value,
-                    initialplux: MEDI_mder.value,
-                    initialmedi: medi_MDER.value,
+                    initialmedi: MEDI_mder.value,
+                    initialmder: medi_MDER.value,
                     stepMedi1: step_Medi_MM1.value,
                     stepMedi2: step_MEDI2,
                     stepMedi3: step_MEDI3,
@@ -1271,6 +1513,10 @@
                     body: JSON.stringify(requestData)
                 }); 
                 const result = await response.json(); 
+                updateResults_MM(result.processedData); 
+                dataResult.style.display = "block";
+                Plot1.style.display = "block";
+                Plot2.style.display = "block";  
             })
 
         </script>

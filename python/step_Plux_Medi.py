@@ -42,7 +42,7 @@ medi_i = 0
 # Time step Constant
 time_steps_minutes = [int(sys.argv[14]), int(sys.argv[15]), int(sys.argv[16]), int(sys.argv[17]), int(sys.argv[18]), 5]       # Step in minutes
 time_step_i = 0
-time_allocate = int(sys.argv[1]) * 60                 # Allocate 10 minutes
+time_allocate = (int(sys.argv[1])+1) * 60                 # Allocate 10 minutes
 
 # Results
 Plux_Target = []
@@ -151,41 +151,42 @@ while True:
     elapsed_time = current_time - start_time
     
     if elapsed_time >= time_step:
-        # Plux and Medi
-        Plux_Measured.append(round(measured_CCT[0][0], 2))
-        Medi_Measured.append(round(measured_medi, 2))
+        if not adjust_targets:
+            # Plux and Medi
+            Plux_Measured.append(round(measured_plux, 2))
+            Medi_Measured.append(round(measured_medi, 2))
 
-        # Increment the time_step_index to use the next time step in the array
-        time_step_i += 1
+            # Increment the time_step_index to use the next time step in the array
+            time_step_i += 1
 
-        # Plux increment
-        if plux_i < len(plux_steps):
-            new_target_plux = target1 + plux_steps[plux_i]
-            if 0 <= new_target_plux <= 250:
-                target_plux = new_target_plux
-                Plux_Target.append(target_plux)
-                target1 = target_plux
-                plux_i += 1
+            # Plux increment
+            if plux_i < len(plux_steps):
+                new_target_plux = target1 + plux_steps[plux_i]
+                if 0 <= new_target_plux <= 250:
+                    target_plux = new_target_plux
+                    Plux_Target.append(target_plux)
+                    target1 = target_plux
+                    plux_i += 1
 
-        # Medi increment 
-        if medi_i < len(medi_steps):
-            new_target_medi = target2 + medi_steps[medi_i]
-            if 0 <= new_target_medi <= 200:
-                target_medi = new_target_medi
-                Medi_Target.append(target_medi)
-                target2 = target_medi
-                current_time = datetime.datetime.now()
-                formatted_time = current_time.strftime("%I:%M:%S %p")
-                time_values.append(formatted_time)
-                medi_i += 1
+            # Medi increment 
+            if medi_i < len(medi_steps):
+                new_target_medi = target2 + medi_steps[medi_i]
+                if 0 <= new_target_medi <= 200:
+                    target_medi = new_target_medi
+                    Medi_Target.append(target_medi)
+                    target2 = target_medi
+                    current_time = datetime.datetime.now()
+                    formatted_time = current_time.strftime("%I:%M:%S %p")
+                    time_values.append(formatted_time)
+                    medi_i += 1
 
-        # Add elapsed_time to total_elapsed_time
-        total_elapsed_time += elapsed_time
+            # Add elapsed_time to total_elapsed_time
+            total_elapsed_time += elapsed_time
 
-        # Reset the start_time to current time
-        start_time = time.time()
-        elapsed_time = 0  # Reset elapsed_time
-        adjust_targets = True  # Set the flag to True to adjust targets in the next iteration
+            # Reset the start_time to current time
+            start_time = time.time()
+            elapsed_time = 0  # Reset elapsed_time
+            adjust_targets = True  # Set the flag to True to adjust targets in the next iteration
         
     # Check if it's time to stop the program
     if total_elapsed_time >= time_allocate:
