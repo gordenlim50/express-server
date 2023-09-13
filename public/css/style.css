@@ -1592,8 +1592,7 @@ color:#fff;
     position: absolute;
     bottom: 6%;
     left: 9%;
-    width: 550px;
-    height: 160px;
+    width: 500px;
     background: transparent;
     border: 2px solid rgba(255, 255, 255, .5);
     border-radius: 20px;
@@ -1602,8 +1601,11 @@ color:#fff;
 }
 
 .result-box-step {
-    padding-left: 10px;
-    text-align: justify;
-    font-size: 15px;
     color:#fff;
+    border: 1px solid #ccc; /* Add a border around the box */
+    padding: 10px; /* Add some padding to the box */
+    margin: 10px; /* Add margin to separate multiple result boxes */
+    border-radius: 5px; /* Add rounded corners */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Add a subtle box shadow */
+    background-color: #fff; /* Set background color */
 }
