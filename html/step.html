@@ -179,7 +179,9 @@
         </div>
 
         <div id= "result-content-step"  class="result-content-step" >
-            <div id="result-box" class="result-box-step"></div>
+            <h1> Results:</h1>
+            <div id="result-box" class="result-box-step">
+            </div>
         </div>
 
         <div class= "plotpair1" id='pair1Div'></div>
@@ -247,17 +249,21 @@
             // Result CCT and Plux
             function createPlot1(xValues, y1Values, y2Values){
                 var metric1 = {
-                x: xValues,
-                y: y1Values,
-                name: 'Target CCT',
-                type: 'lines+steps'
+                    x: xValues,
+                    y: y1Values,
+                    line: {"shape": 'hv'},
+                    mode: 'lines',
+                    name: 'Target CCT',
+                    type: 'scatter'
                 }
 
                 var metric2 = {
                     x: xValues,
                     y: y2Values,
+                    line: {"shape": 'hv'},
+                    mode: 'lines',
                     name: 'Measured CCT',
-                    type: 'lines+steps'
+                    type: 'scatter'
                 }
 
                 var data = [metric1, metric2];
@@ -727,7 +733,7 @@
             }   
             
 
-            // Add CCT and Plux function 
+            // Add CCT and Medi function 
             var inputCount_Cm = 1;
             var inputCount_cM = 1;
             var inputCount_tcm = 1;
@@ -1009,7 +1015,7 @@
                 else {
                     var step_CCT5 = 0;
                 }
-                console.log('Value of step_CCT3: ' + step_CCT5);
+                console.log('Value of step_CCT5: ' + step_CCT5);
 
                 // PLux
                 console.log("Value of step_Plux1:", step_PLUX1.value);
