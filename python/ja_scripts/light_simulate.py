@@ -12,6 +12,96 @@ import time
 from relatedFunctions import linear_interpolation, alpha_opic_cal, D_illuminant, reflight, getcri
 from relatedFunctions import window_dist, xyz, xyToCCT, getZonesSPD, getActualSPD, fitResult_bri_cm, fitResult_bri_cp
 
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+from sklearn.preprocessing import StandardScaler
+
+from torchmetrics import Accuracy, MeanSquaredError
+
+from pytorch_lightning.callbacks import EarlyStopping
+from pytorch_lightning import LightningModule, Trainer, seed_everything
+from pytorch_lightning.callbacks.progress import TQDMProgressBar
+from pytorch_lightning.loggers import CSVLogger
+from pytorch_lightning.callbacks import Callback, ModelCheckpoint
+
+class RoomRadiancePredictor(LightningModule):
+    def __init__(self, input_dim=2, hidden_dim=64, output_dim=2, learning_rate=1e-3):
+        super().__init__()
+        
+        self.learning_rate = learning_rate
+        self.criterion = nn.MSELoss()
+        
+        self.fc1 = nn.Linear(input_dim, hidden_dim)
+        
+        self.fc2 = nn.Linear(hidden_dim, hidden_dim)
+        self.fc3 = nn.Linear(hidden_dim, hidden_dim)
+        self.fc4 = nn.Linear(hidden_dim, hidden_dim)
+        
+        self.fc5 = nn.Linear(hidden_dim, output_dim)
+        
+        self.train_mse = MeanSquaredError()
+        self.val_mse = MeanSquaredError()
+        self.test_mse = MeanSquaredError()
+        
+    def forward(self, x):
+        x = x.to(self.fc1.weight.dtype)
+
+        x = F.relu(self.fc1(x))
+        x = F.relu(self.fc2(x))
+        x = F.relu(self.fc3(x))
+        x = F.relu(self.fc4(x))
+        x = self.fc5(x)
+
+        return x
+        
+    def training_step(self, batch, batch_idx):
+        x, y = batch
+        y_hat = self(x)
+        loss = self.criterion(y_hat, y)
+        self.train_mse.update(y_hat, y)
+        
+        self.log('train_loss', loss, prog_bar=True, on_step=False, on_epoch=True)
+        self.log('train_mse', self.train_mse, prog_bar=True, on_step=False, on_epoch=True)
+        
+        return loss
+    
+    def validation_step(self, batch, batch_idx):
+        x, y = batch
+        y_hat = self(x)
+        loss = self.criterion(y_hat, y)
+        self.val_mse.update(y_hat, y)
+        
+        self.log('val_loss', loss, prog_bar=True, on_epoch=True)
+        self.log('val_mse', self.val_mse, prog_bar=True, on_epoch=True)
+        
+        return y_hat
+    
+    def test_step(self, batch, batch_idx):
+        x, y = batch
+        y_hat = self(x)
+        loss = self.criterion(y_hat, y)
+        self.test_mse.update(y_hat, y)
+        
+        self.log('test_loss', loss, prog_bar=True)
+        self.log('test_mse', self.test_mse, prog_bar=True)
+        
+        return y_hat
+    
+    def predict_step(self, batch, batch_idx):
+        x, y = batch
+        y_hat = self(x)
+        
+        return y_hat, x, y
+    
+    def configure_optimizers(self):
+        optimizer = torch.optim.Adam(self.parameters(), lr=self.learning_rate)
+        return optimizer
+    
+    ####################
+    # DATA RELATED HOOKS
+    ####################
+
 # Getting inputs (inputs = [(dk what is this), [indoor daylight spectrum (1 zone)], targetvalues])
 pred_spd = sys.argv[1]
 target_cct = sys.argv[2]
@@ -77,15 +167,61 @@ if target_lx > 0:
     #             set_ct = hue[i][1]
     
     
-    if select == 2:
-        set_bri = fitResult_bri_cm(medi_req, cct_req)
-        set_cct = cct_req
-        set_ct = 1e6 / set_cct
-    elif select == 1:
-        set_bri = fitResult_bri_cp(plux_req, cct_req)
-        set_cct = cct_req
-        set_ct = 1e6 / set_cct
+    # if select == 2:
+    #     set_bri = fitResult_bri_cm(medi_req, cct_req)
+    #     set_cct = cct_req
+    #     set_ct = 1e6 / set_cct
+    # elif select == 1:
+    #     set_bri = fitResult_bri_cp(plux_req, cct_req)
+    #     set_cct = cct_req
+    #     set_ct = 1e6 / set_cct
     
+    # model predictions
+    if select == 2:
+        model = RoomRadiancePredictor.load_from_checkpoint('python/ja_scripts/hue_model_411.ckpt')
+        # Set the model to evaluation mode
+        model = model.to('cuda')
+        model.eval()
+
+        # model inputs
+        model_input = np.array([cct_req, medi_req])
+        scale_values = np.array([1160.96569466, 81.09854713])
+        mean_values = np.array([4080.11539348, 85.84847745])
+        scaled_input = (model_input - mean_values)/ scale_values
+
+        input_data = torch.tensor(scaled_input, dtype=torch.float32)
+
+        # Pass the input data through the model to obtain predictions
+        with torch.no_grad():
+            predictions = model(input_data.to('cuda'))
+            
+        # Process the predictions
+        predictions = predictions.tolist()
+        
+    elif select == 1:
+        model = RoomRadiancePredictor.load_from_checkpoint('python/ja_scripts/hue_model_396_plux.ckpt')
+        # Set the model to evaluation mode
+        model = model.to('cuda')
+        model.eval()
+
+        # model inputs
+        model_input = np.array([cct_req, plux_req])
+        scale_values = np.array([1160.96569466,  122.25173116])
+        mean_values = np.array([4080.11539348,  136.80662954])
+        scaled_input = (model_input - mean_values)/ scale_values
+
+        input_data = torch.tensor(scaled_input, dtype=torch.float32)
+
+        # Pass the input data through the model to obtain predictions
+        with torch.no_grad():
+            predictions = model(input_data.to('cuda'))
+            
+        # Process the predictions
+        predictions = predictions.tolist()
+        
+    
+    set_bri = predictions[0]
+    set_ct = predictions[1]
     
     ## Set Hue lights
     url_get = 'https://ece4809api.intlightlab.com/get-spectrum-room'
