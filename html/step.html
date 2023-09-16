@@ -178,8 +178,10 @@
             <button id="set-step-button-medi-mder" class="set-step-button">Set</button> 
         </div>
 
-        <div class = "result-content-step" >
-            <div id="result-box" class="result-box-step"></div>
+        <div id= "result-content-step"  class="result-content-step" >
+            <h1> Results:</h1>
+            <div id="result-box" class="result-box-step">
+            </div>
         </div>
 
         <div class= "plotpair1" id='pair1Div'></div>
@@ -241,22 +243,27 @@
             const Plot2 = document.getElementById('pair2Div');
 
             // Result Boxes Constant
+            const resultBox = document.getElementById('result-content-step')
             const dataResult = document.getElementById('result-box');
 
             // Result CCT and Plux
             function createPlot1(xValues, y1Values, y2Values){
                 var metric1 = {
-                x: xValues,
-                y: y1Values,
-                name: 'Target CCT',
-                type: 'lines+steps'
+                    x: xValues,
+                    y: y1Values,
+                    line: {"shape": 'hv'},
+                    mode: 'lines',
+                    name: 'Target CCT',
+                    type: 'scatter'
                 }
 
                 var metric2 = {
                     x: xValues,
                     y: y2Values,
+                    line: {"shape": 'hv'},
+                    mode: 'lines',
                     name: 'Measured CCT',
-                    type: 'lines+steps'
+                    type: 'scatter'
                 }
 
                 var data = [metric1, metric2];
@@ -341,10 +348,10 @@
 
             function updateResults_CP(results){
                 dataResult.innerHTML = `
-                <p> Target CCT: ${results['CCT_Target']} </p>
-                <p> Target Plux: ${results['Plux_Target']} </p>
-                <p> Measured CCT: ${results['CCT_Measured']}</p> 
-                <p> Measured Plux: ${results['Plux_Measured']} </p>
+                <p><span style="color: rgba(11, 73, 241, 0.615); font-weight: bold;">Target CCT: </span> ${results['CCT_Target']} </p>
+                <p><span style="color: rgba(11, 73, 241, 0.615); font-weight: bold;">Target Plux: </span> ${results['Plux_Target']} </p>
+                <p><span style="color: rgba(11, 73, 241, 0.615); font-weight: bold;">Measured CCT: </span>${results['CCT_Measured']}</p> 
+                <p><span style="color: rgba(11, 73, 241, 0.615); font-weight: bold;">Measured Plux: </span>${results['Plux_Measured']} </p>
                 `
                 createPlot1(results['Time'], results['CCT_Target'], results['CCT_Measured'])
                 createPlot2(results['Time'], results['Plux_Target'], results['Plux_Measured'])
@@ -452,10 +459,10 @@
 
             function updateResults_CM(results){
                 dataResult.innerHTML = `
-                <p> Target CCT: ${results['CCT_Target']} </p>
-                <p> Target Plux: ${results['Medi_Target']} </p>
-                <p> Measured CCT: ${results['CCT_Measured']} </p> 
-                <p> Measured Plux: ${results['Medi_Measured']} </p>
+                <p><span style="color: rgba(11, 73, 241, 0.615); font-weight: bold;">Target CCT: </span>${results['CCT_Target']} </p>
+                <p><span style="color: rgba(11, 73, 241, 0.615); font-weight: bold;">Target Medi: </span>${results['Medi_Target']} </p>
+                <p><span style="color: rgba(11, 73, 241, 0.615); font-weight: bold;">Measured CCT: </span>${results['CCT_Measured']} </p> 
+                <p><span style="color: rgba(11, 73, 241, 0.615); font-weight: bold;">Measured Medi: </span>${results['Medi_Measured']} </p>
                 `
                 createPlot3(results['Time'], results['CCT_Target'], results['CCT_Measured'])
                 createPlot4(results['Time'], results['Medi_Target'], results['Medi_Measured'])
@@ -563,10 +570,10 @@
 
             function updateResults_PM(results){
                 dataResult.innerHTML = `
-                <p> Target Plux: ${results['Plux_Target']} </p>
-                <p> Target Medi: ${results['Medi_Target']} </p>
-                <p> Measured Plux: ${results['Plux_Measured']}</p> 
-                <p> Measured Medi: ${results['Medi_Measured']} </p>
+                <p><span style="color: rgba(11, 73, 241, 0.615); font-weight: bold;">Target Plux: </span>${results['Plux_Target']} </p>
+                <p><span style="color: rgba(11, 73, 241, 0.615); font-weight: bold;">Target Medi: </span>${results['Medi_Target']} </p>
+                <p><span style="color: rgba(11, 73, 241, 0.615); font-weight: bold;">Measured Plux: </span>${results['Plux_Measured']}</p> 
+                <p><span style="color: rgba(11, 73, 241, 0.615); font-weight: bold;">Measured Medi: </span>${results['Medi_Measured']} </p>
                 `
                 createPlot5(results['Time'], results['Plux_Target'], results['Plux_Measured'])
                 createPlot6(results['Time'], results['Medi_Target'], results['Medi_Measured'])
@@ -674,10 +681,10 @@
 
             function updateResults_MM(results){
                 dataResult.innerHTML = `
-                <p> Target Medi: ${results['Medi_Target']} </p>
-                <p> Target Mder: ${results['Mder_Target']} </p>
-                <p> Measured Medi: ${results['Medi_Measured']}</p> 
-                <p> Measured Mder: ${results['Mder_Measured']} </p>
+                <p><span style="color: rgba(11, 73, 241, 0.615); font-weight: bold;">Target Medi: </span>${results['Medi_Target']} </p>
+                <p><span style="color: rgba(11, 73, 241, 0.615); font-weight: bold;">Target Mder: </span>${results['Mder_Target']} </p>
+                <p><span style="color: rgba(11, 73, 241, 0.615); font-weight: bold;">Measured Medi: </span>${results['Medi_Measured']}</p> 
+                <p><span style="color: rgba(11, 73, 241, 0.615); font-weight: bold;">Measured Mder: </span>${results['Mder_Measured']} </p>
                 `
                 createPlot7(results['Time'], results['Medi_Target'], results['Medi_Measured'])
                 createPlot8(results['Time'], results['Mder_Target'], results['Mder_Measured'])
@@ -726,7 +733,7 @@
             }   
             
 
-            // Add CCT and Plux function 
+            // Add CCT and Medi function 
             var inputCount_Cm = 1;
             var inputCount_cM = 1;
             var inputCount_tcm = 1;
@@ -1008,7 +1015,7 @@
                 else {
                     var step_CCT5 = 0;
                 }
-                console.log('Value of step_CCT3: ' + step_CCT5);
+                console.log('Value of step_CCT5: ' + step_CCT5);
 
                 // PLux
                 console.log("Value of step_Plux1:", step_PLUX1.value);
@@ -1119,7 +1126,7 @@
                 }); 
                 const result = await response.json();
                 updateResults_CP(result.processedData);
-                dataResult.style.display = "block";
+                resultBox.style.display = "block";
                 Plot1.style.display = "block";
                 Plot2.style.display = "block";
             })
@@ -1263,7 +1270,7 @@
                 }); 
                 const result = await response.json();
                 updateResults_CM(result.processedData); 
-                dataResult.style.display = "block";
+                resultBox.style.display = "block";
                 Plot1.style.display = "block";
                 Plot2.style.display = "block";    
             })
@@ -1389,7 +1396,7 @@
                 }); 
                 const result = await response.json();  
                 updateResults_PM(result.processedData); 
-                dataResult.style.display = "block";
+                resultBox.style.display = "block";
                 Plot1.style.display = "block";
                 Plot2.style.display = "block";   
 
@@ -1514,7 +1521,7 @@
                 }); 
                 const result = await response.json(); 
                 updateResults_MM(result.processedData); 
-                dataResult.style.display = "block";
+                resultBox.style.display = "block";
                 Plot1.style.display = "block";
                 Plot2.style.display = "block";  
             })
