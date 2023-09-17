@@ -106,19 +106,6 @@ class RoomRadiancePredictor(LightningModule):
     # DATA RELATED HOOKS
     ####################
 
-def normalise_array(data, means, stds):
-    norm_data = []
-    for i in range(len(data)):
-        norm_data.append((data[i]-means[i])/stds[i])
-
-    return norm_data
-
-def denormalise_array(data, means, stds):
-    denorm_data = []
-    for i in range(len(data)):
-        denorm_data.append((data[i]*stds[i])+means[i])
-
-    return denorm_data
 
 
 # Getting inputs
@@ -128,10 +115,13 @@ curtain_perc = int(sys.argv[1])
 curtain = curtain_perc / 100
 
 # Z score means and standard devs
-means = [10.962074543139346, 29.265374952679217, 2.553206666273283, 167.44713127263873, 282.91571320532455, 
-         62.22259857967276, 264.02854424043846, 1650.2812919434216, 2848.818008569364, 0.5743710637712083, 226.9186813463907]
-stds = [6.704830439183178, 17.553829417056985, 43.35674816020464, 128.14641402749257, 323.36304028278727, 
-        70.58132868625997, 335.6562081333591, 813.1405597595017, 1520.5974886111605, 0.32774445442743255, 1305.3745242649566]
+mean_values = np.array([1.09569436e+01, 2.92771377e+01, 2.58521377e+00, 1.67235231e+02, 
+                        2.82840246e+02, 6.21957825e+01, 2.63857199e+02, 1.65025000e+03, 
+                        2.84883333e+03, 5.83333333e-01])
+
+scale_values = np.array([6.69802352e+00, 1.75571897e+01, 4.32981001e+01, 1.28092506e+02, 
+                         3.23282316e+02, 7.05515983e+01, 3.35475164e+02, 8.13146166e+02, 
+                         1.52060048e+03, 3.29983165e-01])
 
 
 # defining URL parameters
@@ -248,7 +238,7 @@ if dni != 0 and curtain != 0:
 
     #-----------------------------------Indoor Daylight Illuminance Model Prediction----------------------------------
     # Load the trained model
-    model = RoomRadiancePredictor.load_from_checkpoint('python/ja_scripts/model_2h_128_48.ckpt')
+    model = RoomRadiancePredictor.load_from_checkpoint('python/ja_scripts/daylight_2h_128_292.ckpt')
 
     # Set the model to evaluation mode
     model = model.to('cuda')
@@ -262,12 +252,11 @@ if dni != 0 and curtain != 0:
         dwr, dwb = window_dist(position)
         
         # model inputs
-        model_input = [retrieve_time.hour, retrieve_time.minute, altitude, azimuth, dni, dhi, ghi, dwr, dwb, curtain]
-        
+        model_input = np.array([retrieve_time.hour, retrieve_time.minute, altitude, azimuth, dni, dhi, ghi, dwr, dwb, curtain])
         # normalise model inputs
-        model_input_norm = normalise_array(model_input, means, stds)
-        
-        new_data = model_input_norm
+        model_input -= mean_values
+        model_input /= scale_values
+        new_data = model_input  # Load or create new data for prediction
         input_data = torch.tensor(new_data, dtype=torch.float32)
 
         # Pass the input data through the model to obtain predictions
@@ -277,11 +266,8 @@ if dni != 0 and curtain != 0:
         # Process the predictions
         predictions = predictions.tolist()
         
-        # denormalise output
-        denorm_prediction = (predictions[0] * stds[-1]) + means[-1]
-        
         # Illuminance values for every zones
-        zones_illum.append(denorm_prediction)
+        zones_illum.append(predictions[0])
 
     #----------------------------------------------------------------------------------------------------------
     avg_illum = statistics.mean(zones_illum)

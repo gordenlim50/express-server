@@ -25,8 +25,8 @@ from pytorch_lightning.callbacks.progress import TQDMProgressBar
 from pytorch_lightning.loggers import CSVLogger
 from pytorch_lightning.callbacks import Callback, ModelCheckpoint
 
-class RoomRadiancePredictor(LightningModule):
-    def __init__(self, input_dim=2, hidden_dim=64, output_dim=2, learning_rate=1e-3):
+class HueLights(LightningModule):
+    def __init__(self, input_dim=4, hidden_dim=512, output_dim=2, learning_rate=1e-5, dropout_prob=0.25):
         super().__init__()
         
         self.learning_rate = learning_rate
@@ -34,11 +34,16 @@ class RoomRadiancePredictor(LightningModule):
         
         self.fc1 = nn.Linear(input_dim, hidden_dim)
         
-        self.fc2 = nn.Linear(hidden_dim, hidden_dim)
-        self.fc3 = nn.Linear(hidden_dim, hidden_dim)
-        self.fc4 = nn.Linear(hidden_dim, hidden_dim)
+        self.fc2 = nn.Linear(hidden_dim, hidden_dim//2)
+        self.fc3 = nn.Linear(hidden_dim//2, hidden_dim//4)
+#         self.fc4 = nn.Linear(hidden_dim//2, hidden_dim//4)
         
-        self.fc5 = nn.Linear(hidden_dim, output_dim)
+        self.dropout1 = nn.Dropout(p=dropout_prob)
+        self.dropout2 = nn.Dropout(p=dropout_prob)
+        self.dropout3 = nn.Dropout(p=dropout_prob)
+#         self.dropout4 = nn.Dropout(p=dropout_prob)
+        
+        self.fc4 = nn.Linear(hidden_dim//4, output_dim)
         
         self.train_mse = MeanSquaredError()
         self.val_mse = MeanSquaredError()
@@ -48,10 +53,15 @@ class RoomRadiancePredictor(LightningModule):
         x = x.to(self.fc1.weight.dtype)
 
         x = F.relu(self.fc1(x))
+        x = self.dropout1(x)
         x = F.relu(self.fc2(x))
+        x = self.dropout2(x)
         x = F.relu(self.fc3(x))
-        x = F.relu(self.fc4(x))
-        x = self.fc5(x)
+        x = self.dropout3(x)
+#         x = F.relu(self.fc4(x))
+#         x = self.dropout4(x)
+        
+        x = self.fc4(x)
 
         return x
         
@@ -95,12 +105,8 @@ class RoomRadiancePredictor(LightningModule):
         return y_hat, x, y
     
     def configure_optimizers(self):
-        optimizer = torch.optim.Adam(self.parameters(), lr=self.learning_rate)
+        optimizer = torch.optim.AdamW(self.parameters(), lr=self.learning_rate)
         return optimizer
-    
-    ####################
-    # DATA RELATED HOOKS
-    ####################
 
 # Getting inputs (inputs = [(dk what is this), [indoor daylight spectrum (1 zone)], targetvalues])
 pred_spd = sys.argv[1]
@@ -178,47 +184,30 @@ if target_lx > 0:
     
     # model predictions
     if select == 2:
-        model = RoomRadiancePredictor.load_from_checkpoint('python/ja_scripts/hue_model_411.ckpt')
-        # Set the model to evaluation mode
-        model = model.to('cuda')
-        model.eval()
-
-        # model inputs
-        model_input = np.array([cct_req, medi_req])
-        scale_values = np.array([1160.96569466, 81.09854713])
-        mean_values = np.array([4080.11539348, 85.84847745])
-        scaled_input = (model_input - mean_values)/ scale_values
-
-        input_data = torch.tensor(scaled_input, dtype=torch.float32)
-
-        # Pass the input data through the model to obtain predictions
-        with torch.no_grad():
-            predictions = model(input_data.to('cuda'))
-            
-        # Process the predictions
-        predictions = predictions.tolist()
-        
+        plux_req = 0
     elif select == 1:
-        model = RoomRadiancePredictor.load_from_checkpoint('python/ja_scripts/hue_model_396_plux.ckpt')
-        # Set the model to evaluation mode
-        model = model.to('cuda')
-        model.eval()
+        medi_req = 0
+    
+    model = HueLights.load_from_checkpoint('python/ja_scripts/hue_model_best_300.ckpt')
 
-        # model inputs
-        model_input = np.array([cct_req, plux_req])
-        scale_values = np.array([1160.96569466,  122.25173116])
-        mean_values = np.array([4080.11539348,  136.80662954])
-        scaled_input = (model_input - mean_values)/ scale_values
+    # Set the model to evaluation mode
+    model = model.to('cuda')
+    model.eval()
 
-        input_data = torch.tensor(scaled_input, dtype=torch.float32)
+    # model inputs
+    model_input = np.array([cct_req, plux_req, medi_req, target_cri])
+    scale_values = np.array([1160.96569466,  122.25173116,   81.09854713,   16.51505755])
+    mean_values = np.array([4080.11539348,  136.80662954,   85.84847745,   79.40112052])
+    scaled_input = (model_input - mean_values)/ scale_values
 
-        # Pass the input data through the model to obtain predictions
-        with torch.no_grad():
-            predictions = model(input_data.to('cuda'))
+    input_data = torch.tensor(scaled_input, dtype=torch.float32)
+
+    # Pass the input data through the model to obtain predictions
+    with torch.no_grad():
+        predictions = model(input_data.to('cuda'))
             
-        # Process the predictions
-        predictions = predictions.tolist()
-        
+    # Process the predictions
+    predictions = predictions.tolist()
     
     set_bri = predictions[0]
     set_ct = predictions[1]
@@ -296,7 +285,9 @@ output_data = {
     'resultant_cri': f'{cri_measured:.2f}',
     'target_spectrum': outputs_process[0],
     'required_led_spectrum': outputs_process[1],
-    'resultant_spectrum': outputs_process[2]
+    'resultant_spectrum': outputs_process[2],
+    'set_bri': f'{set_bri:.2f}',
+    'set_ct': f'{set_ct:.2f}'
 }
 # output_data = {
 #     'required_led_spectrum': required_spec,
