@@ -1,0 +1,42 @@
+# model predictions
+    if select == 2:
+        model = RoomRadiancePredictor.load_from_checkpoint('python/ja_scripts/hue_model_411.ckpt')
+        # Set the model to evaluation mode
+        model = model.to('cuda')
+        model.eval()
+
+        # model inputs
+        model_input = np.array([cct_req, medi_req])
+        scale_values = np.array([1160.96569466, 81.09854713])
+        mean_values = np.array([4080.11539348, 85.84847745])
+        scaled_input = (model_input - mean_values)/ scale_values
+
+        input_data = torch.tensor(scaled_input, dtype=torch.float32)
+
+        # Pass the input data through the model to obtain predictions
+        with torch.no_grad():
+            predictions = model(input_data.to('cuda'))
+            
+        # Process the predictions
+        predictions = predictions.tolist()
+        
+    elif select == 1:
+        model = RoomRadiancePredictor.load_from_checkpoint('python/ja_scripts/hue_model_396_plux.ckpt')
+        # Set the model to evaluation mode
+        model = model.to('cuda')
+        model.eval()
+
+        # model inputs
+        model_input = np.array([cct_req, plux_req])
+        scale_values = np.array([1160.96569466,  122.25173116])
+        mean_values = np.array([4080.11539348,  136.80662954])
+        scaled_input = (model_input - mean_values)/ scale_values
+
+        input_data = torch.tensor(scaled_input, dtype=torch.float32)
+
+        # Pass the input data through the model to obtain predictions
+        with torch.no_grad():
+            predictions = model(input_data.to('cuda'))
+            
+        # Process the predictions
+        predictions = predictions.tolist()
