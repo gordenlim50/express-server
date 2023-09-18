@@ -270,7 +270,7 @@ if dni != 0 and curtain != 0:
         zones_illum.append(predictions[0])
 
     #----------------------------------------------------------------------------------------------------------
-    avg_illum = statistics.mean(zones_illum)
+    avg_illum = np.mean(zones_illum)
     # Spectrum inside the room (spectrum after transmitting through windows)
     spd_room = spectrum_inside(plt_spectrum)
     #spd_room = getActualSPD(spd_room, avg_illum)
@@ -281,6 +281,7 @@ if dni != 0 and curtain != 0:
 else:
     wavelengths = np.arange(380, 781, 5)
     zones_illum = [0] * 24
+    avg_illum = 0
     plt_spectrum = [0] * 81
     norm_spec = [0] * 81
     zones_spec = [plt_spectrum] * 24
@@ -381,6 +382,7 @@ output_data = {
     'normalised_daylight': norm_spec,
     'zones_spectrum': zones_spec,
     'zones_illuminance': zones_illum,
+    'average_illuminance': f'{avg_illum:.2f}',
     'plux_all': plux_all,
     'cct_all': cct_all,
     'medi_all': medi_all,
