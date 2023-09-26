@@ -238,7 +238,7 @@ if dni != 0 and curtain != 0:
 
     #-----------------------------------Indoor Daylight Illuminance Model Prediction----------------------------------
     # Load the trained model
-    model = RoomRadiancePredictor.load_from_checkpoint('python/ja_scripts/daylight_2h_128_292.ckpt')
+    model = RoomRadiancePredictor.load_from_checkpoint('python/ja_scripts/daylight_5h_512_84.ckpt')
 
     # Set the model to evaluation mode
     model = model.to('cuda')

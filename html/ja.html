@@ -201,6 +201,8 @@
             
             let zonesSelection = 0;
             let selectedZone_spec = [];
+            let zone_plux = 0;
+            let zone_medi = 0;
 
             // Function to generate 'count' random numbers between 'min' and 'max'
             function getRandomNumbers(count, min, max) {
@@ -268,6 +270,7 @@
             setButton.addEventListener("click", async () => {
                 let valid = true;
                 const errorMessage = "Please select or fill in all required fields.";
+                const errorMessage2 = "Too much daylight! Unable to control lighting condidtion."
           
                 if (curtainInput.value === "-1") {
                   valid = false;
@@ -285,7 +288,19 @@
                     valid = false;
                     alert(errorMessage);
                 }
-          
+                
+                if (metricsInput.value === "0") {
+                    if (zone_plux >= pluxInput.value) {
+                        valid = false
+                        alert(errorMessage2)
+                    }
+                } else if (metricsInput.value === "1") {
+                    if (zone_medi >= mediInput.value) {
+                        valid = false
+                        alert(errorMessage2)
+                    }
+                }
+
                 if (valid) {
                     loading.style.display = "block";
                     // Proceed with your action here
@@ -376,6 +391,9 @@
                     daylightPlot.innerHTML = "";
                     selectedZone_spec = zones_spec[zonesSelection-1];
                     createPlot('daylightSpectrum', zones_spec[zonesSelection-1], `Indoor Daylight Spectrum at Zone ${zonesSelection}`, 'Wavelength (nm)', 'Spectral Power Density (W/m^2/nm)')
+
+                    zone_plux = plux_all[zonesSelection-1]
+                    zone_medi = medi_all[zonesSelection-1]
 
                     pluxDaylight.innerHTML = `Photopic lux: ${plux_all[zonesSelection-1].toFixed(2)} lx`;
                     mediDaylight.innerHTML = `MEDI: ${medi_all[zonesSelection-1].toFixed(2)} lx`;
