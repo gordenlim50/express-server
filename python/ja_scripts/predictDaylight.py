@@ -30,7 +30,7 @@ from pytorch_lightning.callbacks import Callback, ModelCheckpoint
 
 
 class RoomRadiancePredictor(LightningModule):
-    def __init__(self, input_dim=10, hidden_dim=128, output_dim=1, learning_rate=1e-4):
+    def __init__(self, input_dim=10, hidden_dim=512, output_dim=1, learning_rate=1e-4):
         super().__init__()
         
         self.learning_rate = learning_rate
@@ -39,10 +39,11 @@ class RoomRadiancePredictor(LightningModule):
         self.fc1 = nn.Linear(input_dim, hidden_dim)
         
         self.fc2 = nn.Linear(hidden_dim, hidden_dim)
-        self.fc3 = nn.Linear(hidden_dim, hidden_dim)
-        #self.fc4 = nn.Linear(hidden_dim, hidden_dim)
+        self.fc3 = nn.Linear(hidden_dim, hidden_dim//2)
+        self.fc4 = nn.Linear(hidden_dim//2, hidden_dim//4)
+        self.fc5 = nn.Linear(hidden_dim//4, hidden_dim//4)
         
-        self.fc4 = nn.Linear(hidden_dim, output_dim)
+        self.fc6 = nn.Linear(hidden_dim//4, output_dim)
         
         self.train_mse = MeanSquaredError()
         self.val_mse = MeanSquaredError()
@@ -54,8 +55,9 @@ class RoomRadiancePredictor(LightningModule):
         x = F.relu(self.fc1(x))
         x = F.relu(self.fc2(x))
         x = F.relu(self.fc3(x))
-        #x = F.relu(self.fc4(x))
-        x = self.fc4(x)
+        x = F.relu(self.fc4(x))
+        x = F.relu(self.fc5(x))
+        x = self.fc6(x)
 
         return x
         
