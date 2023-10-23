@@ -367,6 +367,11 @@
                             cct_all[i] = NaN;
                         }
                     }
+                    if (cri_all[0] < 0) {
+                        for (let i = 0; i < cri_all.length; i++) {
+                            cri_all[i] = NaN;
+                        }
+                    }
                     daylightPlot.innerHTML = "";
                     selectedZone_spec = zones_spec[zonesSelection-1];
                     createPlot('daylightSpectrum', zones_spec[zonesSelection-1], `Indoor Daylight Spectrum at Zone ${zonesSelection}`, 'Wavelength (nm)', 'Spectral Power Density (W/m^2/nm)')
