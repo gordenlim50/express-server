@@ -137,13 +137,13 @@
                 <label for="ja_get_cct" class="ja_input_select_text">Desired CCT: </label>
                 <input type="text" name ="ja_get_cct", id="ja_get_cct", class="ja_input_text", placeholder="2000K ~ 6500K", min="2000", max="6500" ><br>
                 <label for="ja_get_plux" class="ja_input_select_text">Desired Plux: </label>
-                <input type="text" name ="ja_get_plux", id="ja_get_plux", class="ja_input_text", placeholder="0lx ~ 250lx", min="0", max="250" ><br>
+                <input type="text" name ="ja_get_plux", id="ja_get_plux", class="ja_input_text", placeholder="0lx ~ 500lx", min="0", max="500" ><br>
             </div>
             <div id="ja_selected_pair2" style="display: none;">
                 <label for="ja_get_cct2" class="ja_input_select_text">Desired CCT: </label>
                 <input type="text" name ="ja_get_cct2", id="ja_get_cct2", class="ja_input_text", placeholder="2000K ~ 6500K", min="2000", max="6500" ><br>
                 <label for="ja_get_medi" class="ja_input_select_text">Desired MEDI: </label>
-                <input type="text" name ="ja_get_medi", id="ja_get_medi", class="ja_input_text", placeholder="0lx ~ 200lx", min="0", max="200" ><br>
+                <input type="text" name ="ja_get_medi", id="ja_get_medi", class="ja_input_text", placeholder="0lx ~ 400lx", min="0", max="400" ><br>
             </div>
             
             <br><button id="ja_input_set" class="ja_input_button">Set</button>
@@ -249,7 +249,7 @@
             setButton.addEventListener("click", async () => {
                 let valid = true;
                 const errorMessage = "Please select or fill in all required fields.";
-                const errorMessage2 = "Too much daylight! Unable to control lighting condidtion."
+                const errorMessage2 = "Too much daylight! Unable to control lighting condition in the room.\n Suggest to lower down with curtains"
           
                 if (curtainInput.value === "-1") {
                   valid = false;
@@ -269,11 +269,15 @@
                 }
                 
                 if (metricsInput.value === "0") {
+                    cctInput2.value = "";
+                    mediInput.value = "";
                     if (zone_plux >= pluxInput.value) {
                         valid = false
                         alert(errorMessage2)
                     }
                 } else if (metricsInput.value === "1") {
+                    cctInput1.value = "";
+                    pluxInput.value = "";
                     if (zone_medi >= mediInput.value) {
                         valid = false
                         alert(errorMessage2)

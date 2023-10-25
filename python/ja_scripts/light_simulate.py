@@ -25,6 +25,10 @@ from pytorch_lightning.callbacks.progress import TQDMProgressBar
 from pytorch_lightning.loggers import CSVLogger
 from pytorch_lightning.callbacks import Callback, ModelCheckpoint
 
+url_get = 'https://ece4809api.intlightlab.com/get-spectrum-room'
+url_post = 'https://ece4809api.intlightlab.com/set-lights'
+headers = {'Authorization': 'Bearer 0d90d4d9-ac95-4339-836b-7b733f2973f7'} #special token
+
 class HueLights(LightningModule):
     def __init__(self, input_dim=4, hidden_dim=512, output_dim=2, learning_rate=1e-5, dropout_prob=0.25):
         super().__init__()
@@ -193,6 +197,15 @@ target_medi = sys.argv[4]
 
 # Processing inputs 
 pred_spd = ast.literal_eval(pred_spd)
+
+##
+# response = requests.get(url_get, headers=headers)
+# data = response.json()
+# # read measured data
+# pred_spd= data['SPM']
+# pred_spd = pred_spd[::5]
+
+
 target_cct = float(target_cct)
 if not target_medi:
     target_plux = float(target_plux)
@@ -340,10 +353,6 @@ if target_lx > 0:
         set_ct = predictions[1]
         
         ## Set Hue lights
-        url_get = 'https://ece4809api.intlightlab.com/get-spectrum-room'
-        url_post = 'https://ece4809api.intlightlab.com/set-lights'
-        headers = {'Authorization': 'Bearer 0d90d4d9-ac95-4339-836b-7b733f2973f7'} #special token
-        
         set_light = {
             "bri": set_bri,
             "ct": set_ct
